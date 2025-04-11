@@ -1,0 +1,194 @@
+\begin{filecontents*}{\jobname.xmpdata}
+    \Title{Context Pruning for More Robust SMT-based Program Verification}
+    \Author{Yi Zhou\sep Jay Bosamiya\sep Jessica Li\sep Marijn \sep Bryan Parno}
+    \Publisher{TU Wien Academic Press}
+  \end{filecontents*}
+  
+  \PassOptionsToPackage{dvipsnames}{xcolor}
+  \documentclass[year=25,pdfa]{fmcad}
+  
+  \usepackage{cite}
+  \usepackage{amsmath,amssymb,amsfonts,amsthm}
+  % \usepackage{algorithmic}
+  \usepackage{graphicx}
+  \usepackage{textcomp}
+  \usepackage[dvipsnames]{xcolor}
+  
+  % \usepackage[margin=1in]{geometry}    % Exert more control over the margins
+  % \usepackage{mathptm}     % Puts math text into the postscript Times font and symbol font (else uses the metafont-generated characters)
+  % \usepackage{amsmath}     % Provides various features to facilitate writing math formulas and to improve the typographical quality of their output
+  % \usepackage{float}       % Basic package for floating objects like figures and tables
+  % \usepackage{psfrag}      % Used to insert text into figures
+  % \usepackage{floatflt}    % Used to wrap text around figures
+  % \usepackage{graphicx}    % Used to display graphic figures and such
+  \usepackage{xspace}      % Intelligently adds space after a word via \xspace
+  % \usepackage{color}       % Used to highlight comments
+  % \usepackage{pifont}      % Provides the ding symbol used for comments
+  % \usepackage{subfigure}   % Place two related figures side-by-side
+  % \usepackage{url}         % Properly formats URLs
+  % \usepackage{array}       % Add more space to the tables
+  % \usepackage{algorithm}   % Defines algorithm float environment
+  % \usepackage{algpseudocode}
+  \usepackage{multirow}    % Use to create table with a column that spans multiple rows
+  \usepackage{enumerate}   % Control the numbering for enumerated lists
+  \usepackage[square,comma,numbers,sort&compress]{natbib}      % Offers more control over citation appearance and bib spacing
+  % \usepackage{enumitem}
+  \usepackage{diagbox}
+  % \usepackage{makecell}
+  \usepackage{booktabs}
+  % \usepackage[T1]{fontenc}
+  \usepackage[noend]{algpseudocode}
+  % \usepackage{algpseudocode}
+  % \usepackage{authblk}
+  \usepackage{pifont}
+  % \usepackage[switch]{lineno} % Line numbering for draft-mode
+  % \usepackage{tikz}
+  % \usetikzlibrary{shapes.geometric, arrows}
+  % \usetikzlibrary{decorations.pathreplacing,calligraphy}
+  \usepackage{outlines}
+  \usepackage{listings}
+  \usepackage[caption=false]{subfig}
+  \usepackage{soul}
+  \usepackage{microtype}
+  
+  \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+      T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+  
+  % Used for displaying a sample figure. If possible, figure files should
+  % be included in EPS format.
+  %
+  % If you use the hyperref package, please uncomment the following line
+  % to display URLs in blue roman font according to Springer's eBook style:
+  % \renewcommand\UrlFont{\color{blue}\rmfamily}
+  
+  
+  \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+  % \SetAlCapSkip{1em} % or 10pt, 12pt, etc.
+  \usepackage{hyperref}
+  \hypersetup{
+  %\ifpdf
+  %        pdftex,
+  %\else
+  %        dvipdf,
+  %\fi
+    %pdftex,              % using ps2pdf vs pdftex
+    %ps2pdf,              % using ps2pdf vs pdftex
+          %hypertex,
+    colorlinks=true,     % color the words instead of use a colored box
+    urlcolor=blue,       % \href{...}{...} external (URL)
+  %  filecolor=blue,      % \href{...} local file
+    linkcolor=blue,     % \ref{...} and \pageref{...}
+    citecolor=blue,     % \cite{}
+  % letterpaper=true,
+    plainpages=false,
+  %    plainpages          boolean         true
+  %    Forces page anchors to be named by the arabic form of the page number,
+  %    rather than the formatted form.
+    breaklinks=true,
+  %    breaklinks          boolean         false
+  %    Allows link text to break across lines; since this cannot be accommodated in
+  %    PDF, it is only set true by default if the pdftex driver is used. This makes
+  %    links on multiple lines into different PDF links to the same target.
+  % pagebackref=true,
+  %     Adds ?backlink? text to the end of each item in the bibliography, as a list
+  %     of section numbers. This can only work properly if there is a blank line
+  %     after each \bibitem.
+    bookmarksnumbered=true,
+  %    bookmarksnumbered   boolean         false
+  %    If Acrobat bookmarks are requested, include section numbers.
+    bookmarksopen=true,
+  %    bookmarksopen       boolean         false
+  %    If Acrobat bookmarks are requested, show them with all the subtrees expanded.
+    pdftitle={},
+    pdfauthor={},
+    pdfkeywords={},
+  % pdfpagelabels=true,
+    pdfpagemode=UseOutlines  % None, UseThumbs, UseOutlines, FullScreen
+  }
+
+  \renewcommand{\sectionautorefname}{Section}
+  \renewcommand{\subsectionautorefname}{Subsection}
+  \renewcommand{\algorithmautorefname}{Algorithm}
+
+
+  
+  \usepackage[capitalise]{cleveref}
+%   \usepackage{stys/dafny}
+%   \usepackage{stys/smtlib}
+  % \usepackage{array}
+  \usepackage{tabularx}
+  
+%   \input{00-common-preamble.tex}
+  
+  % \algrenewcommand\algorithmicindent{0.65em}%
+
+  \newtheorem{definition}{Definition}
+  \newtheorem{theorem}{Theorem}
+  \newtheorem{lemma}{Lemma}
+  \newtheorem{claim}{Claim}
+
+
+  
+  \newcommand{\unsat}{\texttt{unsat}\xspace}
+  \newcommand{\sat}{\texttt{sat}\xspace}
+  \newcommand{\tool}{CA\textsc{uti}C\textsc{al}\xspace}
+  \newcommand{\pr}{\texttt{PR}\xspace}
+  \newcommand{\impunit}{\vdash_1}
+  \newcommand{\lingeling}{\textsc{lingeling}\xspace}
+  \newcommand{\cadical}{C\textsc{a}D\textsc{i}C\textsc{aL}\xspace}
+  \newcommand{\sadical}{S\textsc{a}D\textsc{i}C\textsc{aL}\xspace}
+  \newcommand{\prelearn}{PR\textsc{e}L\textsc{earn}\xspace}
+
+
+
+  
+  \begin{document}
+  \title{Learning Propagation Redundant SAT clauses via Conditional Autarkies}
+  
+  \author{TODO: add authors and orcid \\
+%   \author{Yi Zhou \orcid{0000-0001-7597-1176}, Jay Bosamiya \orcid{0000-0002-5596-6828}, Jessica Li, Marijn J.\ H.\ Heule \orcid{0000-0002-5587-8801}, Bryan Parno \orcid{0000-0002-9113-1684}\\
+  \emph{Carnegie Mellon University, Pittsburgh, PA, USA}\\
+  \texttt{\{email1,email2,email3,email4\}@cmu.edu}}
+  
+  \maketitle
+  
+  \begin{abstract}
+    % \input{texs/abstract}
+    TODO: write abstract
+    % \keywords{Program Verification \and SMT \and Proof Stability.}
+  \end{abstract}
+    
+  % \begin{IEEEkeywords}
+  % component, formatting, style, styling, insert
+  % \end{IEEEkeywords}
+  
+  \input{texs/1.introduction}
+  \input{texs/2.background}
+  \input{texs/3.clauseaddition.tex}
+  \input{texs/4.optimizations}
+  \input{texs/5.motivatingexample}
+  \input{texs/6.implementation}
+  \input{texs/7.evaluation}
+  \input{texs/8.conclusion}
+
+%   \input{texs/back}
+%   % \input{texs/method}
+%   \input{texs/context}
+%   \input{texs/shake}
+%   \input{texs/eval}
+%   \input{texs/related}
+%   \input{texs/limit}
+%   \input{texs/conclude}
+
+  
+  \newpage
+  
+  \clearpage
+  
+  \bibliographystyle{IEEEtran}
+  \bibliography{base}
+  
+  % \input{texs/appendix}
+  
+  \end{document}
+  

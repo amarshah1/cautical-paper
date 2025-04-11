@@ -1,0 +1,70 @@
+\section{Background}~\label{sec:background}
+
+We begin with some SAT preliminaries. Variables $x_1, x_2, ...$ can take values true ($\top$) or false ($\bot$). A literal $l$ can be a variables $x$ or its negation $\overline{x}$. A clause $C$ is a disjunction of literals, e.g. $x_1 \lor \overline{x_4} \lor x_6$. A formula $\phi$ is a conjunction of clauses. We notate $var(\phi)$ as the set of variables that occur in formula $\phi$.
+
+For some $V \subseteq var(\phi)$, an assignment $\alpha : V \rightarrow \{\top, \bot\}$  maps some variables from a formula $\phi$ to \emph{true} or \emph{false}. If $V = var(\phi)$, we say $\alpha$ is a total assignment. We denote a formula restricted to an assignment $\phi|_\alpha$ which is the formula where every variable $x$ in the domain of $\alpha$ is assigned to $\alpha(x)$. Note that we can simplify such a formula by removing all literals that are assigned to false and all clauses with a literal assigned to true.
+
+We say that an assignment $\alpha$ touches a clause $C$ if there is a variable $x$ in the domain of $\alpha$ such that $x$ or $\overline{x}$ occurs in $C$. We say $\alpha$ satisfies $C$ if $\alpha(x) = \top$ and $x \in C$ or $\alpha(x) = \bot$ and $\overline{x} \in C$.
+
+A total assignemnt $\alpha$ satisfies formula $\phi$ if it satisfies every clause in $\phi$. If there is such a satisfying assignment, we say $\phi$ is \emph{satisfiable}. The boolean satisfiability problem asks whether a given formula $\phi$ is satisfiable.
+
+\subsection{Autarkies and Globally Blocked Clauses}~\label{subsec:autarkies}
+
+\begin{definition}[Autarky]
+    A nonempty assignment $\alpha$ is an autarky for a formula $\phi$ if every clause $C \in \phi$ touched by $\alpha$ is satisfied.
+\end{definition}
+
+% An autarky $\alpha_a = a_1, ..., a_m$ can be very useful as $a_1 \land ... \land a_m$ is an equisatisfiable clause. However, these can be difficult to find.
+
+\begin{definition}[Conditional Autarky]
+    A nonempty assignment $\alpha = \alpha_c \sqcup \alpha_a$ (disjoint union) is a conditional autarky for a formula $\phi$ if $\alpha_a$ is an autarky for $\phi|_{\alpha_c}$.
+\end{definition}
+
+Conditional autarkies can be very useful for learning equisatisfiable clauses, for instance if $\alpha_c = c_1, ..., c_n$ and $\alpha_a = a_1, ..., a_m$, we add clauses of the form:
+
+\begin{equation*}
+    c_1 \land ... \land c_n \rightarrow a_1 \land ... \land a_m
+\end{equation*}
+
+We repeat the following theorem from Kiesel et al~\cite{conditionalautarkies}:
+
+\begin{theorem}~\label{thm:gbcequisat}
+    Formula $\phi$ and $\phi \land \bigwedge_{1 \leq i \leq m} (\overline{c_1} \lor ... \overline{c_n} \lor a_i)$ are equisatisfiable.
+\end{theorem}
+
+This means that $\phi$ is satisfiable if and only if $\phi \land \bigwedge_{1 \leq i \leq m} (\overline{c_1} \lor ... \overline{c_n} \lor a_i)$ is satisfiable. Thus, the solver can add any of the $m$ clauses $\overline{c_1} \lor ... \overline{c_n} \lor a_i$.
+
+\subsection{Propagation Redundant}~\label{subsec:pr}
+
+\emph{Unit propagation} is one of the core reasoning techniques of a SAT solver. If a formula $\phi$, contains a unit clause $l$, i.e. a clause with only a single literal, then it can be propagated, i.e. every clause with $l$ can be removed and every literal $\overline{l}$ can be removed. We repeat this process until there are no unit clauses remaining.
+
+Given a formula $\phi$ and clause $C = l_1 \lor ... \lor l_k$, we can say $\phi \impunit C$, i.e. ``$\phi$ implies $C$ via unit propagation,'' if $\phi \land \overline{l_1} \land ... \land \overline{l_k}$ can be shown to be unsatisfiable via unit propagation. Additionaly for two formulas we can say $\phi \impunit \psi$ if for every clause $C \in \psi$, $\phi \impunit C$. For literals $l_1$ and $l_2$, we sometimes notate $l_1 \impunit^\phi l_2$, i.e. ``$l_1$ implies $l_2$ via unit propagation on $\phi$,'' which means that $\phi \land l_1 \land \overline{l_2}$ can be shown to be unsatisfiable only using unit propagation.  % see definition here: https://www.cs.cmu.edu/~mheule/publications/prencode.pdf
+
+% The propagation redundant (\pr)
+
+We say that clause $C = l_1 \lor ... \lor l_m$ is blocked by the partial assignment $\alpha$ that assigns each $l_i$ to false ($\bot$).
+
+\begin{definition}[Propagation Redundant (\pr) clauses]
+    For formula $\phi$, we say that clause $C$ (blocked by $\beta$) is propagation redundant (\pr) w.r.t. $\phi$ if there exists an assignment $\omega$ known as the witness such that $F|_\beta \impunit F_\omega$ and $\omega$ satisfies $C$
+\end{definition}
+
+If $C$ is a \pr clause w.r.t $\phi$, then $\phi$ and $\phi \land C$ are equisatisfiable. Indeed, the clause defined in \autoref{thm:gbcequisat} is \pr with witness $\alpha_a$. Checking if a clause is \pr without a witness is NP-complete~\cite{prclause}, so witnesses are typically provided when given a \pr proof to check.
+
+\begin{theorem}~\label{thm:totalassignmnet}
+    For $1 \leq i \leq m$, the clause $C = \overline{c_1} \lor ... \overline{c_n} \lor a_i$ is a \pr clause w.r.t $\phi$ with witness $\alpha_a$
+\end{theorem}
+
+\begin{proof}
+   Since $a_i \in \alpha_a$, $\alpha_a$ satisfies $C$.
+   
+   Define the assignment that blocks $C$ as $\beta = c_1, ..., c_n, \overline{a_i}$. Now we want to show that: $F|_\beta \impunit F|_{\alpha_a}$. Take a clause $C \in F|_{\alpha_a}$. We know that
+\end{proof}
+
+
+\subsection{Related Work}~\label{subsec:relatedwork}
+
+\pr clause learning was first introduced in an extension of the solver \lingeling~\cite{prclause}. After propagating an assignment, they would check if the clause $C$ that was blocked by this assignment was \pr. This was done by creating a new sat formula called the \emph{positive reduct}. If the positive reduct was satisfiable, then $C$ is a \pr clause and it was added. This approach was shown to scale well on pigeonhole benchmarks.
+
+This was generalized by \sadical which provided two new variants of the positive reduct for more aggressive pruning of the search space \cite{sadical}. Finally, this was extended by \prelearn, which added unary and binary \pr clauses in a preprocessing step \cite{prelearn}. This was done by initially considering all possible clauses and querying \sadical to see which were \pr.
+
+Our work differs as we do not use a \emph{positive reduct} to test is a clause is \pr. Instead, our clauses \pr by construction since they come from a conditional autarkies. This has the potential downside that our clause may be very large. To remedy this we apply a shrinking technique to reduce the size of a clause. Additionally, prior techniques are sensitive to the encoding of the problem. Minor changes such as literal and clause reordering can tank performance. We provide two \emph{symmetry hardening} techniques to handle reordering. We compare our implementation \tool to \sadical and \prelearn in \autoref{sec:evaluation}.
