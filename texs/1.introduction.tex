@@ -4,18 +4,20 @@
 Satisfiability (SAT) solving is a core tool in computer science, with applications in program verification \cite{BillionQueries}, planning \cite{planning}, and resolving long-standing mathematical conjectures \cite{chromaticnumber}. As its use grows, so has the need for more powerful and specialized solving techniques.
 
 % It is most commonly solved using the conflict-driven clause learning (CDCL) framework. This framework explores the state space of possible solutions, while learning clauses when it reaches a conflict, to aid future explorations.
-One such class of techniques is clause learning, where new, equisatisfiable clauses are added to the formula, shrinking the space of potential solutions. These learned clauses can act like lemmas for the solver to leverage. Crucially, they must preserve satisfiability: the original formula is satisfiable if and only if the formula with the additional clause is satisfiable.
+One such class of techniques is clause learning, where new, satisfiability-preserving clauses are added to the formula, shrinking the space of potential solutions. These learned clauses can act like lemmas that the solver can leverage. Crucially, they must preserve satisfiability: the original formula is satisfiable if and only if the formula with the additional clause is satisfiable.
 
 % One can ensure that these clauses are satisfiable within the given proof system.
 
 % for instance vivification and blocked clause addition. These techinques use other facts about the formula to learn clauses which are often useful for solving.
-% However, the strength of these clauses is limited by the capabilities of the underlying proof system. Traditional SAT solvers typically use clausal proof systems based on resolution, which are known to lack polynomial-sized proofs for certain well-studied problems, such as the pigeonhole principle and the mutilated chessboard. To address this, a more expressive system based on propagation redundant (\pr) clauses has been proposed, offering short proofs for these challenging benchmarks. Despite their theoretical appeal, \pr clauses are hard to learn in practice. Existing methods require invoking another SAT solver to verify whether a clause is indeed \pr—a process that, due to the inherent intractability of SAT, can take exponential time in the worst case and remains difficult to integrate into modern, high-performance solvers.
 
-The usefulness of clause learning, however, is fundamentally tied to the strength of the underlying proof system. Most SAT solvers rely on resolution-based proofs, which are ineffective for many hard instances. In particular, problems like the pigeonhole principle and the mutilated chessboard are known to require exponentially large resolution proofs. To overcome this limitation, researchers have proposed more expressive systems based on propagation redundant (\pr) clauses, which can admit short proofs for such problems.
+However, the power of clause learning is tied to the strength of the underlying proof system. Most SAT solvers rely on resolution-based proof systems, which are ineffective for many hard instances. In particular, problems like the pigeonhole principle and the mutilated chessboard are known to require exponentially large resolution proofs. To overcome this limitation, researchers have proposed more expressive systems based on propagation redundant (\pr) clauses, which can admit short proofs for such problems.
 
-Despite their theoretical power, learning \pr clauses remains a challenge. State-of-the-art techniques such as Satisfiability Driven Clause Learning (SDCL) rely on expensive SAT solver calls to verify that a candidate clause is \pr \cite{sadical}. This makes integration into high-performance solvers difficult and limits their practical impact.
+Despite their theoretical power, learning \pr clauses remains a challenge. State-of-the-art techniques such as Satisfiability Driven Clause Learning (SDCL) rely on expensive SAT solver calls to verify that a candidate clause is \pr \cite{sadical}. In the worst case, we may have to spend exponential time learning a single \pr clause. This makes integration into high-performance solvers difficult and limits their practical impact. As of today, the most popular SAT solvers such as \cadical~\cite{cadical}, Kissat~\cite{kissat}, and Lingeling~\cite{lingeling} do not support \pr clause learning.
+% maybe cite cryptominisat instead of lingeling?
 
-In this work, we propose a new, more efficient approach to learning \pr clauses based on conditional autarkies. Our method identifies globally blocked clauses, which are guaranteed to preserve satisfiability. While globally blocked clauses can be too large and unwieldy, we introduce a shrinking procedure to extract compact, useful \pr clauses.
+In this work, we propose a new, more efficient approach to learning \pr clauses based on conditional autarkies. Given a partial assignment to a SAT formula, our method divides the assignment into a ``conditional part'' and an ``autarky part.'' Using this divide, we can learn a class of identifies globally blocked clauses, which are guaranteed to preserve satisfiability. This technique gives a linear time algorithm for identifying a \pr clause.
+
+While this technique solves the theoretical gap in identifying \pr clauses, it is not clear that it learns clauses that are actually useful. Indeed, there are two major practical limitations namely: (1) globally blocked clauses can be too large and hence not shrink the search space in any meaningful way, and (2) there are many potential globally blocked clauses and it is not clear which are the most useful. We solve (1) by introducing a shrinking procedure to extract compact, useful \pr clauses. We solve (2) by introducing a number of heuristics.
 
 % Integrating \pr clause learning into a SAT solver is still an active area of study
 
@@ -23,7 +25,7 @@ In this work, we propose a new, more efficient approach to learning \pr clauses 
 To summarize, we make the following contributions: 
 
 \begin{enumerate} 
-    \item We introduce a method for learning globally blocked clauses in polynomial time using conditional autarkies. 
-    \item We develop a shrinking technique to extract concise and useful \pr clauses from globally blocked clauses. 
-    \item We implement these techniques in a tool, \tool, and evaluate it on a suite of benchmarks, demonstrating substantial performance improvements ... 
+    \item We introduce a method for learning \pr clauses in linear time in the size of the formula. 
+    \item We develop a number of heuristics, including a shrinking technique to extract concise and useful \pr clauses from globally blocked clauses. 
+    \item We implement these techniques in a solver, \tool (a fork of the popular SAT solver \cadical), and evaluate it on a suite of benchmarks, demonstrating substantial performance improvements ... 
 \end{enumerate}

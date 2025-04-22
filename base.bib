@@ -382,3 +382,100 @@ abstract="A packing k-coloring is a natural variation on the standard notion of 
 isbn="978-3-031-30823-9"
 }
 
+@inproceedings{cadical,
+author = {Biere, Armin and Faller, Tobias and Fazekas, Katalin and Fleury, Mathias and Froleyks, Nils and Pollitt, Florian},
+title = {CaDiCaL 2.0},
+year = {2024},
+isbn = {978-3-031-65626-2},
+publisher = {Springer-Verlag},
+address = {Berlin, Heidelberg},
+url = {https://doi.org/10.1007/978-3-031-65627-9_7},
+doi = {10.1007/978-3-031-65627-9_7},
+abstract = {The SAT solver CaDiCaL provides a rich feature set with a clean library interface. It has been adopted by many users, is well documented and easy to extend due to its effective testing and debugging infrastructure. In this tool paper we give a high-level introduction into the solver architecture and then go briefly over implemented techniques. We describe basic features and novel advanced usage scenarios. Experiments confirm that CaDiCaL despite this flexibility has state-of-the-art performance both in a stand-alone as well as incremental setting.},
+booktitle = {Computer Aided Verification: 36th International Conference, CAV 2024, Montreal, QC, Canada, July 24–27, 2024, Proceedings, Part I},
+pages = {133–152},
+numpages = {20},
+location = {Montreal, QC, Canada}
+}
+
+@article{kissat,
+  title={Cadical, kissat, paracooba, plingeling and treengeling entering the sat competition 2020},
+  author={Fleury, ABKFM and Heisinger, Maximilian},
+  journal={Sat Competition},
+  volume={2020},
+  pages={50},
+  year={2020}
+}
+
+@inproceedings{lingeling,
+  title={Lingeling, Plingeling, PicoSAT and PrecoSAT at SAT Race 2010},
+  author={Armin Biere},
+  year={2010},
+  url={https://api.semanticscholar.org/CorpusID:1087401}
+}
+
+@inproceedings{cryptominisat,
+author = {Soos, Mate and Nohl, Karsten and Castelluccia, Claude},
+title = {Extending SAT Solvers to Cryptographic Problems},
+year = {2009},
+isbn = {9783642027765},
+publisher = {Springer-Verlag},
+address = {Berlin, Heidelberg},
+url = {https://doi.org/10.1007/978-3-642-02777-2_24},
+doi = {10.1007/978-3-642-02777-2_24},
+abstract = {Cryptography ensures the confidentiality and authenticity of information but often relies on unproven assumptions. SAT solvers are a powerful tool to test the hardness of certain problems and have successfully been used to test hardness assumptions. This paper extends a SAT solver to efficiently work on cryptographic problems. The paper further illustrates how SAT solvers process cryptographic functions using automatically generated visualizations, introduces techniques for simplifying the solving process by modifying cipher representations, and demonstrates the feasibility of the approach by solving three stream ciphers.To optimize a SAT solver for cryptographic problems, we extended the solver's input language to support the XOR operation that is common in cryptography. To better understand the inner workings of the adapted solver and to identify bottlenecks, we visualize its execution. Finally, to improve the solving time significantly, we remove these bottlenecks by altering the function representation and by pre-parsing the resulting system of equations.The main contribution of this paper is a new approach to solving cryptographic problems by adapting both the problem description and the solver synchronously instead of tweaking just one of them. Using these techniques, we were able to solve a well-researched stream cipher 26 times faster than was previously possible.},
+booktitle = {Proceedings of the 12th International Conference on Theory and Applications of Satisfiability Testing},
+pages = {244–257},
+numpages = {14},
+location = {Swansea, UK},
+series = {SAT '09}
+}
+
+@article{rat,
+title = {On a generalization of extended resolution},
+journal = {Discrete Applied Mathematics},
+volume = {96-97},
+pages = {149-176},
+year = {1999},
+issn = {0166-218X},
+doi = {https://doi.org/10.1016/S0166-218X(99)00037-2},
+url = {https://www.sciencedirect.com/science/article/pii/S0166218X99000372},
+author = {O. Kullmann},
+keywords = {Propositional logic, Extended resolution, Blocked clauses, Generalized extended resolution, Lower bounds},
+abstract = {Motivated by improved SAT algorithms ((O. Kullmann, DIMACS Series, vol. 35, Amer. Math. Soc., Providence, RI, 1997; O. Kullmann, Theoret. Comput. Sci. (1999); O. Kullmann, Inform. Comput., submitted); yielding new worst-case upper bounds) a natural parameterized generalization GER of Extended Resolution (ER) is introduced. ER can simulate polynomially GER, but GER allows special cases for which exponential lower bounds can be proven.}
+}
+
+@inproceedings{setblocked,
+author = {Kiesl, Benjamin and Seidl, Martina and Tompits, Hans and Biere, Armin},
+title = {Super-Blocked Clauses},
+year = {2016},
+isbn = {9783319402284},
+publisher = {Springer-Verlag},
+address = {Berlin, Heidelberg},
+url = {https://doi.org/10.1007/978-3-319-40229-1_5},
+doi = {10.1007/978-3-319-40229-1_5},
+abstract = {In theory and practice of modern SAT solving, clause-elimination procedures are essential for simplifying formulas in conjunctive normal form CNF. Such procedures identify redundant clauses and faithfully remove them, either before solving in a preprocessing phase or during solving, resulting in a considerable speed up of the SAT solver. A wide number of effective clause-elimination procedures is based on the clause-redundancy property called blocked clauses. For checking if a clause C is blocked in a formula F, only those clauses of F that are resolvable with C have to be considered. Hence, the blocked-clauses redundancy property can be said to be local. In this paper, we argue that the established definitions of blocked clauses are not in their most general form. We introduce more powerful generalizations, called set-blocked clauses and super-blocked clauses, respectively. Both can still be checked locally, and for the latter it can even be shown that it is the most general local redundancy property. Furthermore, we relate these new notions to existing clause-redundancy properties and give a detailed complexity analysis.},
+booktitle = {Proceedings of the 8th International Joint Conference on Automated Reasoning - Volume 9706},
+pages = {45–61},
+numpages = {17}
+}
+
+@InProceedings{blockedclause,
+author="J{\"a}rvisalo, Matti
+and Heule, Marijn J. H.
+and Biere, Armin",
+editor="Gramlich, Bernhard
+and Miller, Dale
+and Sattler, Uli",
+title="Inprocessing Rules",
+booktitle="Automated Reasoning",
+year="2012",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="355--370",
+abstract="Decision procedures for Boolean satisfiability (SAT), especially modern conflict-driven clause learning (CDCL) solvers, act routinely as core solving engines in various real-world applications. Preprocessing, i.e., applying formula rewriting/simplification rules to the input formula before the actual search for satisfiability, has become an essential part of the SAT solving tool chain. Further, some of the strongest SAT solvers today add more reasoning to search by interleaving formula simplification and CDCL search. Such inprocessing SAT solvers witness the fact that implementing additional deduction rules in CDCL solvers leverages the efficiency of state-of-the-art SAT solving further. In this paper we establish formal underpinnings of inprocessing SAT solving via an abstract inprocessing framework that covers a wide range of modern SAT solving techniques.",
+isbn="978-3-642-31365-3"
+}
+
+
+

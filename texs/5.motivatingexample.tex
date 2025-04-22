@@ -1,1 +1,12 @@
 \section{Motivating Example}~\label{sec:motivatex}
+
+We discuss the pigeonhole principle as a motivating example. The question asks 
+whether we can put $m$ pigeons in $n$ holes such that (1)~every pigeon is in a 
+hole, and (2)~no hole contains more than one pigeon. This can be easily 
+encoded as a SAT problem with variable $x_{i, j}$ represents putting the 
+$i$-th pigeon into the $j$-th hole. We can represent constraint (1) as 
+$\overline{x_{i, j}} \lor \overline{x_{k, j}}$ for each $ 1 \leq i \neq k \leq 
+m$ and constraint (2) as $\bigwedge_{1 \leq j \leq n} x_{i, j}$ for each $1 
+\leq i \leq m$
+
+For this work, we will only care about the case where $m = n + 1$. While it is easy to see that this is unsatisfiable, famously this is an in
