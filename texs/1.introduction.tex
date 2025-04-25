@@ -3,6 +3,8 @@
 
 Satisfiability (SAT) solving is a core tool in computer science, with applications in program verification \cite{BillionQueries,sat-hardwareverification,ic3,bmc}, planning \cite{planning,planningassat}, cryptography~\cite{cryptominisat}, and mathematics \cite{chromaticnumber,pythagoreantriples,kellersconjecture,emptyhexagon}. As its use expands, so has the need for more powerful and specialized solving techniques.
 
+
+
 % It is most commonly solved using the conflict-driven clause learning (CDCL) framework. This framework explores the state space of possible solutions, while learning clauses when it reaches a conflict, to aid future explorations.
 One such class of techniques is propagation redundant (\pr) clause learning, where new, satisfiability-preserving clauses are added to the formula, shrinking the space of potential solutions. These learned clauses act like lemmas for that solver can leverage. Crucially, they must preserve satisfiability: the original formula is satisfiable if and only if the formula with the additional clause is satisfiable. For instance, in the pigeonhole problem, one may learn the clause stating \emph{pigeon 1 is not in hole 1}. This is useful since it restricts the search space for pigeon 1, but it preserves satisfiability as hole 1 is symmetrically the same as any other hole.
 
@@ -16,6 +18,8 @@ Despite their theoretical power, learning \pr clauses remains a challenge. State
 % This is both expensive and difficult to integrate into existing tools. 
 In the worst case, the solver takes exponential time to learn a single \pr clause. This makes integration into high-performance solvers difficult and limits their practical impact. As of today, the most popular SAT solvers such as \cadical~\cite{cadical}, Kissat~\cite{kissat}, CryptoMiniSat~\cite{cryptominisat}, and Lingeling~\cite{lingeling} do not support \pr clause learning.
 % maybe cite cryptominisat instead of lingeling?
+% todo : check crypto mini sat to see if it uses PR clauses
+
 
 In this work, we propose a new, more efficient approach to learn \pr clauses based on conditional autarkies. Given a partial assignment to a SAT formula, our method divides the assignment into a ``conditional part'' and an ``autarky part.'' Using this distinction, we can learn a globally blocked clause (a type of \pr clause) in linear time.
 
