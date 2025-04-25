@@ -1,8 +1,8 @@
-\begin{filecontents*}{\jobname.xmpdata}
-    \Title{Context Pruning for More Robust SMT-based Program Verification}
-    \Author{Yi Zhou\sep Jay Bosamiya\sep Jessica Li\sep Marijn \sep Bryan Parno}
-    \Publisher{TU Wien Academic Press}
-  \end{filecontents*}
+% \begin{filecontents*}{\jobname.xmpdata}
+%     \Title{Context Pruning for More Robust SMT-based Program Verification}
+%     \Author{Yi Zhou\sep Jay Bosamiya\sep Jessica Li\sep Marijn \sep Bryan Parno}
+%     \Publisher{TU Wien Academic Press}
+%   \end{filecontents*}
   
   \PassOptionsToPackage{dvipsnames}{xcolor}
   \documentclass[year=25,pdfa]{fmcad}
@@ -13,11 +13,13 @@
   \usepackage{graphicx}
   \usepackage{textcomp}
   \usepackage[dvipsnames]{xcolor}
+  \usepackage{bussproofs}  % For natural deduction proofs with \inferrule
+  \usepackage{mathpartir}
   
   % \usepackage[margin=1in]{geometry}    % Exert more control over the margins
   % \usepackage{mathptm}     % Puts math text into the postscript Times font and symbol font (else uses the metafont-generated characters)
   % \usepackage{amsmath}     % Provides various features to facilitate writing math formulas and to improve the typographical quality of their output
-  % \usepackage{float}       % Basic package for floating objects like figures and tables
+  \usepackage{float}       % Basic package for floating objects like figures and tables
   % \usepackage{psfrag}      % Used to insert text into figures
   % \usepackage{floatflt}    % Used to wrap text around figures
   % \usepackage{graphicx}    % Used to display graphic figures and such
@@ -45,9 +47,34 @@
   % \usepackage{tikz}
   % \usetikzlibrary{shapes.geometric, arrows}
   % \usetikzlibrary{decorations.pathreplacing,calligraphy}
+  \usepackage{tikz}
+  \usetikzlibrary{matrix}
+
+  % ------------------------------------------------------------------
+  % Dot grid styles 
+  \newcommand*\dotdiam{15pt}      % <— tweak this for bigger / smaller circles
+  \newcommand*\dotgap {4pt}      % <— negative → dots touch; 0pt = tangent
+
+  \tikzset{
+    cell/.style   = {draw,circle,fill=gray!60,
+                    minimum size=\dotdiam, inner sep=0pt, outer sep=0pt},
+    redcell/.style= {cell,fill=red!60},
+    greencell/.style  = {cell,fill=green!60},
+    graycell/.style = {cell,fill=gray!40},
+    gridmatrix/.style = {
+        matrix of nodes,
+        nodes   = {cell},
+        column sep=\dotgap, row sep=\dotgap,
+        % ampersand replacement=\&,                      % enable & inside matrix
+        nodes in empty cells,                          % draw every entry
+    },
+  }
+  \usepackage{subcaption}
+  
+% }
   \usepackage{outlines}
   \usepackage{listings}
-  \usepackage[caption=false]{subfig}
+  % \usepackage[caption=false]{subfig}
   \usepackage{soul}
   \usepackage{microtype}
   
@@ -133,11 +160,14 @@
   \newcommand{\sat}{\texttt{sat}\xspace}
   \newcommand{\tool}{CA\textsc{uti}C\textsc{al}\xspace}
   \newcommand{\pr}{\texttt{PR}\xspace}
+  \newcommand{\er}{\texttt{ER}\xspace}
   \newcommand{\impunit}{\vdash_1}
   \newcommand{\lingeling}{\textsc{lingeling}\xspace}
   \newcommand{\cadical}{C\textsc{a}D\textsc{i}C\textsc{aL}\xspace}
   \newcommand{\sadical}{S\textsc{a}D\textsc{i}C\textsc{aL}\xspace}
+  \newcommand{\glucoser}{G\textsc{lucos}ER\xspace}
   \newcommand{\prelearn}{PR\textsc{e}L\textsc{earn}\xspace}
+  \newcommand{\ph}[1]{\ensuremath{\mathrm{PHP}(#1)}}
 
 
 
@@ -154,7 +184,10 @@
   
   \begin{abstract}
     % \input{texs/abstract}
-    TODO: write abstract
+    Propagation redundant (\pr) clauses are a class of satisfiability-preserving clauses that can be learned by modern SAT solvers.  Crucially, these techniques admit short proofs for important benchmark families, such as the pigeonhole principle and the mutilated chessboard. However, existing \pr clause learning techniques require calling a second SAT solver. Hence they are computationally expensive and difficult to integrate into existing tools.
+
+    We propose a new method for learning \pr clauses based on conditional autarkies. Our method is easy to implement and learns \pr clauses in linear time. Additionally, we introduce a number of heuristics including a clause-shrinking technique to ensure that the learned clauses are useful. We show that it is competitive with state-of-the-art \pr clause learning techniques on a suite of SAT instances.
+    % todo : I would like a better way to talk about the heuristics
     % \keywords{Program Verification \and SMT \and Proof Stability.}
   \end{abstract}
     

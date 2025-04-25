@@ -1,0 +1,121 @@
+\begin{subfigure}[t]{0.23\textwidth}
+    \centering
+    \begin{tikzpicture}
+      % Draw the 4×5 grid and name it "M"
+      \matrix (M) [gridmatrix] {
+        % row 1
+        |[graycell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 2
+        |[redcell]|  & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 3
+        |[graycell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 4
+        |[graycell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 5
+        |[graycell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+      };
+
+      % Column labels: attach ABOVE the north anchor of row 1 cells
+      \foreach \c [count=\i from 1] in {$h_1$,$h_2$,$h_3$,$h_4$} {
+        \node[anchor=south] at (M-1-\i.north) {\c};
+      }
+
+      % Row labels: attach LEFT of the west anchor of column 1 cells
+      \foreach \r [count=\j from 1] in {$p_1$,$p_2$,$p_3$,$p_4$,$p_5$} {
+        \node[anchor=east] at (M-\j-1.west) {\r};
+      }
+    \end{tikzpicture}
+    \captionsetup{width=0.8\textwidth}  % override for this one only
+    \caption{The first unit learned is of the form $x_{2, 1}$}~\label{subfig:pigeonhole-a}  
+\end{subfigure}
+\begin{subfigure}[t]{0.23\textwidth}
+    \centering
+    \begin{tikzpicture}
+        % Draw the 4×5 grid and name it "M"
+        \matrix (M) [gridmatrix] {
+            % row 1
+            |[graycell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+            % row 2
+            |[redcell]|  & |[graycell]| & |[graycell]| & |[graycell]| \\
+            % row 3
+            |[redcell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+            % row 4
+            |[redcell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+            % row 5
+            |[graycell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+        };
+
+        % Column labels: attach ABOVE the north anchor of row 1 cells
+        \foreach \c [count=\i from 1] in {$h_1$,$h_2$,$h_3$,$h_4$} {
+            \node[anchor=south] at (M-1-\i.north) {\c};
+        }
+
+        % Row labels: attach LEFT of the west anchor of column 1 cells
+        \foreach \r [count=\j from 1] in {$p_1$,$p_2$,$p_3$,$p_4$,$p_5$} {
+            \node[anchor=east] at (M-\j-1.west) {\r};
+        }
+    \end{tikzpicture}
+    \captionsetup{width=0.8\textwidth}  % override for this one only
+    \caption{In a similar fashion we then learn the units $\overline{x_{3, 1}}$ and $\overline{x_{4, 1}}$}~\label{subfig:pigeonhole-b} 
+\end{subfigure}
+\begin{subfigure}[t]{0.23\textwidth}
+    \centering
+    \begin{tikzpicture}
+    % Draw the 4×5 grid and name it "M"
+    \matrix (M) [gridmatrix] {
+        % row 1
+        |[graycell]| & |[redcell]| & |[redcell]| & |[redcell]| \\
+        % row 2
+        |[redcell]|  & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 3
+        |[redcell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 4
+        |[redcell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 5
+        |[graycell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+    };
+
+    % Column labels: attach ABOVE the north anchor of row 1 cells
+    \foreach \c [count=\i from 1] in {$h_1$,$h_2$,$h_3$,$h_4$} {
+        \node[anchor=south] at (M-1-\i.north) {\c};
+    }
+
+    % Row labels: attach LEFT of the west anchor of column 1 cells
+    \foreach \r [count=\j from 1] in {$p_1$,$p_2$,$p_3$,$p_4$,$p_5$} {
+        \node[anchor=east] at (M-\j-1.west) {\r};
+    }
+    \end{tikzpicture}
+    \captionsetup{width=0.8\textwidth}  % override for this one only
+    \caption{By the symmetry argument, we learn units $\overline{x_{1, 2}}$, $\overline{x_{1, 3}}$, and $\overline{x_{1, 4}}$}~\label{subfig:pigeonhole-c}
+\end{subfigure}
+\begin{subfigure}[t]{0.23\textwidth}
+    \centering
+    \begin{tikzpicture}
+    % Draw the 4×5 grid and name it "M"
+    \matrix (M) [gridmatrix] {
+        % row 1
+        |[greencell]| & |[redcell]| & |[redcell]| & |[redcell]| \\
+        % row 2
+        |[redcell]|  & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 3
+        |[redcell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 4
+        |[redcell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 5
+        |[redcell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+    };
+
+    % Column labels: attach ABOVE the north anchor of row 1 cells
+    \foreach \c [count=\i from 1] in {$h_1$,$h_2$,$h_3$,$h_4$} {
+        \node[anchor=south] at (M-1-\i.north) {\c};
+    }
+
+    % Row labels: attach LEFT of the west anchor of column 1 cells
+    \foreach \r [count=\j from 1] in {$p_1$,$p_2$,$p_3$,$p_4$,$p_5$} {
+        \node[anchor=east] at (M-\j-1.west) {\r};
+    }
+    \end{tikzpicture}
+    \captionsetup{width=0.8\textwidth}  % override for this one only
+    \caption{Constraint (1) gives $x_{1, 1}$, then constraint (2) gives $\overline{x_{5, 1}}$, completing the reduction to \ph{3}}~\label{subfig:pigeonhole-d}
+\end{subfigure}
+
