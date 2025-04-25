@@ -73,8 +73,6 @@ We want learn the clause $\bigvee_{c \in C \backslash C_0} \overline{c} \lor \bi
 As mentioned in \autoref{subsec:shrinking}, our choice for $A_0$ can matter a lot for which clause we learn. 
 
 
-
-
 \noindent \textbf{Greedy Set Cover:} %~\label{subsubsec:greedysetcover}
 In order to minimize the size of the clause, we may want the smallest possible $A_0$ that maximizes $C_0$. Say for each $a \in \alpha_a$, we define $\alpha_a^{SETS}(a) = \{ c \in \alpha_c \; | \; \overline{a} \impunit^\phi c\}$. 
 
@@ -124,3 +122,4 @@ Thus, greedy set cover could pick $\{a_1\}$ or $\{a_2\}$ as singleton sets. Howe
 We employ several other heuristics:
 
 \noindent \textbf{Checking if trivial:} Introducing globally blocked clauses can affect how we divide $\alpha = \alpha_c \sqcup \alpha_a$ as done in \autoref{alg:leastcond}. Thus, it is better to avoid introducing globally blocked clauses if they are not useful. We do this by checking if $\phi \impunit C$ for each potential clause $C$. If it is implied by unit propagation, we do not learn it since we consider it easy to learn.
+
