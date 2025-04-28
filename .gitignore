@@ -12,6 +12,8 @@
 auto-save-list
 tramp
 .\#*
+*.pdf
+
 
 # Org-mode
 .org-id-locations
