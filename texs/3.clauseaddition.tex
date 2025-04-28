@@ -1,5 +1,29 @@
 \section{Methodology}~\label{sec:method}
 
+Our methodology is based on four steps:
+\begin{algorithm}
+    \caption{Our Methodology}\label{alg:methodology}
+    \SetAlgoNoLine
+    \SetKwFunction{Method}{Method}
+    \SetKwFunction{LCP}{LCP}
+    \SetKwFor{For}{for}{:}{}
+    \SetKwFor{If}{if}{:}{}
+    \SetKwProg{Fn}{Function}{:}{}
+    \SetKwBlock{Begin}{}{}
+
+    \Fn{LearnClause($\psi$, $\alpha$)}{
+        \For{$i \in vars(\psi)$}{
+            \For{$j \in vars(\psi)$}{
+                propagate($i$)
+                propagate($j$)
+                $\alpha_c, \alpha_a := \LCP(\alpha)$
+                clause := shrink($\alpha_c, \alpha_a$)
+                $\psi := \psi \land clause$
+            }
+        }
+    }
+\end{algorithm}
+
 \subsection{Learning Clauses}~\label{subsec:learning}
 
 As described in \autoref{subsec:autarkies}, we can split a partial assignment $\alpha = \alpha_c \sqcup \alpha_a$ and use this to learn a \pr clause. Since all of $\alpha_c$ appears in such a clause, we must try to keep in as small as possible.
