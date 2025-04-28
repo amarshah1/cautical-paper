@@ -563,4 +563,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+#pdf
+paper.pdf
+
 # End of https://www.gitignore.io/api/vim,latex,emacs,linux,macos,python,windows,sublimetext
