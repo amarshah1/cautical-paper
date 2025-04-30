@@ -62,7 +62,8 @@ Given a formula $\phi$ and clause $C = l_1 \lor ... \lor l_k$, we can say $\phi 
 
 
 
-For two formulas we say $\phi \impunit \psi$ if for every clause $C \in \psi$, $\phi \impunit C$. For literals $l_1$ and $l_2$, we sometimes notate $l_1 \impunit^\phi l_2$ to mean $\phi \vdash_1 \overline{l_1} \land l_2$. Informally, we can think of this as saying ``$l_1$ implies $l_2$ via unit propagation on $\phi$,'' which means that .
+For two formulas we say $\phi \impunit \psi$ if for every clause $C \in \psi$, $\phi \impunit C$. 
+% For literals $l_1$ and $l_2$, we sometimes notate $l_1 \impunit^\phi l_2$ to mean $\phi \vdash_1 \overline{l_1} \land l_2$. Informally, we can think of this as saying ``$l_1$ implies $l_2$ via unit propagation on $\phi$,'' which means that .
 % see definition here: https://www.cs.cmu.edu/~mheule/publications/prencode.pdf
 % However, this is not very useful as it is quiet easy for the solver to figure this out. Instead, we must appeal to a more complicated notion of redundancy.
 

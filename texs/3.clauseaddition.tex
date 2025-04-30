@@ -1,24 +1,56 @@
 \section{Methodology}~\label{sec:method}
 
-Our methodology is based on four steps:
-\begin{algorithm}
-    \caption{Our Methodology}\label{alg:methodology}
+\subsection{Motivating Example}~\label{sec:motivatex}
+
+\begin{figure*}[!t]
+    \centering
+    \input{figs/pigeonhole.tex}
+    \caption{Process for reducing \ph{4} to \ph{3}}
+  \end{figure*}
+
+We discuss the pigeonhole principle as a motivating example. The problem $\ph{n}$ asks 
+whether we can put $n+1$ pigeons in $n$ holes such that (1)~every pigeon is in a 
+hole, and (2)~no hole contains more than one pigeon. This can be 
+encoded as a SAT problem where variable $x_{i, j}$ represents putting the 
+$i$-th pigeon into the $j$-th hole. Thus, constraint (1) is $\bigvee_{1 \leq j \leq n} x_{i, j}$ for each $1 \leq i \leq n+1$ and constraint (2) is $\overline{x}_{i, j} \lor \overline{x}_{k, j}$ for each $ 1 \leq i \neq k \leq n+1$ and $1 \leq j \leq n$.
+
+We represent this diagrammatically in \autoref{fig:pigeonhole}, where the rows represent the pigeons and the columns represent the holes. The cell in row $i$ and column $j$ represents the literal $x_{i, j}$, 
+% i.e. whether the $i$-th pigeon is in the $j$-th hole.
+If the $(i, j)$-th cell is green this represents $x_{i, j}$ is set to true and if it is red this represents $x_{i, j}$ is set to false. Thus, constraint (1) asks that each row has at least one green cell and constraint (2) asks that no two green cells share a column.
+
+% We only consider the case where $m = n + 1$ which we denote \ph{n}. 
+For any $n$, $\ph{n}$ is clearly unsatisfiable. However, there are no polynomial-sized resolution proofs of \ph{n}~\cite{hakenpigeonhole}. Our methodology obtains an $O(n^3)$ \pr proof of \ph{n} matching the best know result~\cite{prclauses}. Additionally, we provide a proof with very small constant factor and our method is insensitive to the encoding.
+%  todo: add a forward reference to where we evaluate this
+%  todo: is this the best possible result theoretically?
+
+% There are $O(n^3)$ \pr proofs of the pigeonhole principle, but this is difficult to achieve in practice and requires specific techniques~\cite{prclauses}. We can learn these proofs, with a very low constant factor and little sensitivity to the encoding.
+
+\subsection{Algorithm}~\label{subsec:methodology}
+
+
+At a high level, \autoref{alg:methodology} learns a \pr clause by: (I) propagating on two variables $i$ and $j$, (II) learning the least conditional autarky of the partial assignment, (III) shrinking the clause, and (IV) adding the clause to the formula. 
+
+The \texttt{propagate} function represents unit propagation. II follows prior work, and we discuss the  in more detail in \autoref{subsec:learning}. III is our contribution and we discuss it in \autoref{subsec:shrinking}. All four stages rely on a number of heuristics, which we discuss in \autoref{sec:implementation}.
+
+\begin{algorithm}~\label{alg:methodology}
+    \caption{Learning \pr clauses}\label{alg:methodology}
     \SetAlgoNoLine
-    \SetKwFunction{Method}{Method}
-    \SetKwFunction{LCP}{LCP}
+    \SetKwFunction{Learn}{LearnClause}
+    \SetKwFunction{LCP}{LeastConditional}
+    \SetKwFunction{Propagate}{propagate}
+    \SetKwFunction{Shrink}{shrink}
     \SetKwFor{For}{for}{:}{}
     \SetKwFor{If}{if}{:}{}
     \SetKwProg{Fn}{Function}{:}{}
     \SetKwBlock{Begin}{}{}
-
-    \Fn{LearnClause($\psi$, $\alpha$)}{
+    \Fn{\Learn{$\psi$, $\alpha$}}{
         \For{$i \in vars(\psi)$}{
             \For{$j \in vars(\psi)$}{
-                propagate($i$)
-                propagate($j$)
-                $\alpha_c, \alpha_a := \LCP(\alpha)$
-                clause := shrink($\alpha_c, \alpha_a$)
-                $\psi := \psi \land clause$
+                \Propagate($i$); \\
+                \Propagate($j$); \\
+                $\alpha_c, \alpha_a := \LCP(\alpha)$; \\
+                $C := \Shrink(\alpha_c, \alpha_a)$; \\
+                $\psi := \psi \land C$;
             }
         }
     }
@@ -26,13 +58,13 @@ Our methodology is based on four steps:
 
 \subsection{Learning Clauses}~\label{subsec:learning}
 
-As described in \autoref{subsec:autarkies}, we can split a partial assignment $\alpha = \alpha_c \sqcup \alpha_a$ and use this to learn a \pr clause. Since all of $\alpha_c$ appears in such a clause, we must try to keep in as small as possible.
+As described in \autoref{subsec:autarkies}, we can split a partial assignment $\alpha = \alpha_c \sqcup \alpha_a$ to learn a \pr clause $\alpha_C \lor a$ for any $a \in \alpha_a$. Notice that all of $\alpha_c$ appears in such a clause, so we must try to keep in as small as possible.
 
-We present this algorihtm from Kiesel et al \cite{conditionalautarkies} to find the smallest possible $\alpha_c$:
+\autoref{alg:leastcond} from Kiesel et al \cite{conditionalautarkies} to find the smallest possible $\alpha_c$:
 
 
 \begin{algorithm}
-    \caption{Minimiazing $\alpha_c$ in $\alpha = \alpha_c \sqcup \alpha_a$}\label{alg:leastcond}
+    \caption{Minimizing $\alpha_c$ in $\alpha = \alpha_c \sqcup \alpha_a$}\label{alg:leastcond}
     \SetAlgoNoLine
     \SetKwFunction{LCP}{LeastConditional}
     \SetKwFor{For}{for}{:}{}
@@ -48,17 +80,17 @@ We present this algorihtm from Kiesel et al \cite{conditionalautarkies} to find 
                 $\alpha_c := \alpha_c \cup (\alpha \cap \overline{C})$\;
             }
         }
-        \Return{$\alpha_c$}\;
+        \Return{$\alpha_c$, $\alpha \backslash \alpha_c$}\;
     }
 \end{algorithm}
 
-We can then compute $\alpha_a := \alpha \backslash \alpha_c$. It is pretty easy to see why this is a conditional autarky, since every clause that $\alpha_a$ touches, must be satisfied by some literal in $\alpha$.
+This is a conditional autarky, since every clause that $\alpha_a$ touches, is satisfied by some literal in $\alpha$.
 
-We can see that $\alpha_c$ is minimal since for each clause that is touched, we add in those literals from the assignment that touch and do not satisfy the clause. They must be in $\alpha_c$, since otherwise $\alpha_a$ will touch a clause that is not satisfied in $\alpha_a$ and $\alpha_c$, violating the conditional autarky property.
+Additionally, $\alpha_c$ is minimal: for each clause that is touched but not satisfied, we add to $\alpha_c$ literals from the assignment that touch and do not satisfy this clause. They must be in $\alpha_c$, since otherwise $\alpha_a$ will touch a clause that is not satisfied by $\alpha$, violating the conditional autarky property.
 
 \subsection{Shrinking Clauses}~\label{subsec:shrinking}
 
-While we minimize $\alpha_c$, this still leads to a long clause in many cases. However, we can shrink the clause using some clever techniques. Notice that if $\alpha_c = c_1, ..., c_n$ and $\alpha_a = a_1, ..., a_m$, we could add clauses of the form $\overline{c_1} \lor ... \lor \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
+While we do minimize $\alpha_c$, this may still lead to a long clause. We aim to shrink this clause. Notice that if $\alpha_c = c_1, ..., c_n$ and $\alpha_a = a_1, ..., a_m$, we could add clauses of the form $\overline{c_1} \lor ... \lor \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
 
 
 % Consider $\overline{\alpha_a}$, the negation of the literals in $\alpha_a$. 
@@ -89,8 +121,10 @@ We want learn the clause $\bigvee_{c \in C \backslash C_0} \overline{c} \lor \bi
 
     We claim $\beta$ is a satisfying assignment for $\phi \land (\bigvee_{c \in C \backslash C_0} \overline{c} \lor \bigvee_{a \in A_0} a)$. This could only not be the case if (1)~for all $a \in A_0$ $\overline{a} \in \beta$ and (2)~there is some $c \in C_0$ such that $\overline{c} \in \beta$. 
 
-    But by definition there is some $a \in A_0$ such that $\overline{a} \impunit^\phi c$. Thus $\phi \land \overline{a} \land \overline{c}$ is unsatisfiable via unit propagation. However, this cannot be the case since $\overline{a}, \overline{c} \in \beta$ and $\beta$ is a satisfying assignment for $\phi$.
+    But by definition there is some $a \in A_0$ such that $\phi \vdash a \lor c$. Thus $\phi \land \overline{a} \land \overline{c}$ is unsatisfiable via unit propagation. However, this cannot be the case since $\overline{a}, \overline{c} \in \beta$ and $\beta$ is a satisfying assignment for $\phi$.
 \end{proof}
+
+Another way to see this is: starting with $\bigvee_{c \in C} \overline{c} \lor \bigvee_{a \in A_0} a$, we notice that if some clause $c_i \lor a_i$ is implied via unit propagation, then we can remove $c_i$ from $C$ in the clause.
 
 \subsection{Resilience to Encoding}~\label{subsec:sym}
 
@@ -111,8 +145,6 @@ In the case that $C_0 = \alpha_C$, finding the smallest $A_0$ is exactly the set
     \SetKwFor{For}{for}{:}{}
     \SetKwFor{If}{if}{:}{}
     \SetKwProg{Fn}{Function}{:}{}
-    \SetKwBlock{Begin}{}{}
-
     \Fn{\FindA{$\psi$, $\alpha_a$, $\alpha_c$}}{
         $\alpha_a$ := \texttt{sort($\alpha_a$)}\;
         $\alpha_a^{SETS}$ := init \texttt{Array[len($\alpha_a$)]}\;
