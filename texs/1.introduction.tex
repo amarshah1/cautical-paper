@@ -1,12 +1,12 @@
 \section{Introduction}~\label{sec:intro}
 
 
-Satisfiability (SAT) solving is a core tool in computer science, with applications in program verification \cite{BillionQueries,sat-hardwareverification,ic3,bmc}, planning \cite{planning,planningassat}, cryptography~\cite{cryptominisat}, and mathematics \cite{chromaticnumber,pythagoreantriples,kellersconjecture,emptyhexagon}. As its use expands, so has the need for more powerful and specialized solving techniques.
+Satisfiability (SAT) solving is a core tool in computer science, with applications in program verification~\cite{BillionQueries,sat-hardwareverification,ic3,bmc}, planning~\cite{planning,planningassat}, cryptography~\cite{cryptominisat}, and mathematics~\cite{chromaticnumber,pythagoreantriples,kellersconjecture,emptyhexagon}. As its usage expands, so too does the need for more powerful and specialized solving techniques.
 
 
 
 % It is most commonly solved using the conflict-driven clause learning (CDCL) framework. This framework explores the state space of possible solutions, while learning clauses when it reaches a conflict, to aid future explorations.
-One such class of techniques is propagation redundant (\pr) clause learning, where new, satisfiability-preserving clauses are added to the formula, shrinking the space of potential solutions. These learned clauses act like lemmas for that solver can leverage. Crucially, they must preserve satisfiability: the original formula is satisfiable if and only if the formula with the additional clause is satisfiable. For instance, in the pigeonhole problem, one may learn the clause stating \emph{pigeon 1 is not in hole 1}. This is useful since it restricts the search space for pigeon 1, but it preserves satisfiability as hole 1 is symmetrically the same as any other hole.
+One such class of techniques is propagation redundant (\pr) clause learning, wherin the solver generates and adds satisfiability-preserving clauses to the formula. The solver aims to attain clauses that shrink the potential solution space while preserving satisfiability. That is, the formula with the additional clause must be satisfiable if and only if the original formula is satisfiable. For instance, in the pigeonhole problem, one may learn a clause equivalent to the lemma \emph{pigeon 1 is not in hole 1}. This restricts the search space for the first pigeon (and thus the entire number of possibilities), but it preserves satisfiability as hole 1 is symmetric to all holes.
 
 % One can ensure that these clauses are satisfiable within the given proof system.
 
