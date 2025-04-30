@@ -165,6 +165,7 @@
   \newcommand{\er}{\texttt{ER}\xspace}
   \newcommand{\impunit}{\vdash_1}
   \newcommand{\lingeling}{\textsc{lingeling}\xspace}
+%  \newcommand{\cadical}{{\sf CaDiCaL}\xspace}
   \newcommand{\cadical}{C\textsc{a}D\textsc{i}C\textsc{aL}\xspace}
   \newcommand{\sadical}{S\textsc{a}D\textsc{i}C\textsc{aL}\xspace}
   \newcommand{\glucoser}{G\textsc{lucos}ER\xspace}
@@ -180,22 +181,24 @@
   % \author{TODO: add authors and orcid \\
   \author{Amar Shah \orcidlink{0009-0008-8282-2142}, Twain Byrnes \orcidlink{0009-0000-7939-1195}, Joseph Reeves \orcidlink{0000-0002-4585-0565}, Marijn J.\ H.\ Heule \orcidlink{0000-0002-5587-8801} \\
   \emph{Carnegie Mellon University, Pittsburgh, PA, USA} \\
-  \texttt{\{amarshah,binarynewts,jereeves,marijn\}@cmu.edu}}  
+  \texttt{\small amarshah@cmu.edu, binarynewts@cmu.edu, jereeves@andrew.cmu.edu, marijn@cmu.edu}}
+  
   \maketitle
   
   \begin{abstract}
     % \input{texs/abstract}
-    State-of-the-art Boolean satisfiability (SAT) solvers increasingly use techniques that go beyond resolution. These admit short proofs for benchmark families with exponentially large resolution proofs, such as the pigeonhole principle and mutilated chessboard. 
+    State-of-the-art Boolean satisfiability (SAT) solvers increasingly use techniques that go beyond resolution.
+    One of the strongest such techniques is Propagation Redundancy (\pr) learning.
     %
-    One of the strongest such techniques is Propagation Redundancy (PR) learning. However, existing \pr clause learning techniques require an NP-hard check. Hence they are computationally expensive and difficult to integrate into existing tools.
+    Solvers utilizing PR learning may admit short proofs for benchmark families with exponentially large resolution proofs, such as pigeonhole and mutilated chessboard. However, existing \pr clause learning techniques require an NP-hard check; hence, they are computationally expensive and difficult to integrate into existing tools.
  
     % todo: I need to cite some paper that introduces pigeonhole and mutilated chessboard
     % Propagation redundant (\pr) clauses are a class of satisfiability-preserving clauses that can be learned by modern SAT solvers.  
 
-    We propose a new method for learning \pr clauses based on conditional autarkies and implement it in the SAT solver \cadical. Our method is modular and learns \pr clauses in linear time. Additionally, we introduce a number of heuristics, including a clause-shrinking technique, to ensure that the learned clauses are useful.
+    We propose a new method for learning \pr clauses based on conditional autarkies and implement it in the SAT solver \cadical. Our method is modular, allowing for cross-solver compatibility, and learns \pr clauses in linear time. Additionally, we introduce a number of heuristics, including a clause-shrinking technique, to ensure that our method learns useful clauses.
     %
     % todo: add that the we added our thing into cadical
-    We show that we are competitive with state-of-the-art \pr clause learning techniques, improving the performance on a large portion of SAT competition benchmarks.
+    We show that our method is competitive with state-of-the-art \pr clause learning techniques, and improves performance on a large portion of SAT competition benchmarks.
     % todo : I would like a better way to talk about the heuristics
     % \keywords{Program Verification \and SMT \and Proof Stability.}
   \end{abstract}
