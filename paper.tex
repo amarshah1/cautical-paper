@@ -59,10 +59,29 @@
 
   \tikzset{
     cell/.style   = {draw,circle,fill=gray!60,
-                    minimum size=\dotdiam, inner sep=0pt, outer sep=0pt},
+                    minimum size=\dotdiam, inner sep=0pt, outer sep=0pt,
+                    text height=1.5ex, text depth=0.5ex},
     redcell/.style= {cell,fill=red!60},
+    redpluscell/.style= {cell,fill=red!60,execute at begin node={\Large +}},
+    redminuscell/.style= {cell,fill=red!60,execute at begin node={\Large -}},
     greencell/.style  = {cell,fill=green!60},
+    greenpluscell/.style  = {cell,fill=green!60,execute at begin node={\Large +}},
+    greenminuscell/.style  = {cell,fill=green!60,execute at begin node={\Large -}},
     graycell/.style = {cell,fill=gray!40},
+    graypluscell/.style = {cell,fill=gray!40,execute at begin node={\Large +}},
+    grayminuscell/.style = {cell,fill=gray!40,execute at begin node={\Large -}},
+    bluecell/.style = {cell,fill=blue!20},
+    bluepluscell/.style = {cell,fill=blue!20,execute at begin node={\Large +}},
+    blueminuscell/.style = {cell,fill=blue!20,execute at begin node={\Large -}},
+    yellowcell/.style = {cell,fill=yellow!60},
+    yellowpluscell/.style = {cell,fill=yellow!60,execute at begin node={\Large +}},
+    yellowminuscell/.style = {cell,fill=yellow!60,execute at begin node={\Large -}},
+    purplecell/.style = {cell,fill=purple!60},
+    purplepluscell/.style = {cell,fill=purple!60,execute at begin node={\Large +}},
+    purpleminuscell/.style = {cell,fill=purple!60,execute at begin node={\Large -}},
+    orangecell/.style = {cell,fill=orange!60},
+    orangepluscell/.style = {cell,fill=orange!60,execute at begin node={\Large +}},
+    orangeminuscell/.style = {cell,fill=orange!60,execute at begin node={\Large -}},
     gridmatrix/.style = {
         matrix of nodes,
         nodes   = {cell},
@@ -164,6 +183,7 @@
   \newcommand{\pr}{\textsf{PR}\xspace}
   \newcommand{\er}{\texttt{ER}\xspace}
   \newcommand{\impunit}{\vdash_1}
+  \newcommand{\impunitclause}[3]{#1 \impunit #2 \lor #3}
   \newcommand{\lingeling}{\textsc{lingeling}\xspace}
 %  \newcommand{\cadical}{{\sf CaDiCaL}\xspace}
   \newcommand{\cadical}{C\textsc{a}D\textsc{i}C\textsc{aL}\xspace}
@@ -211,7 +231,7 @@
   \input{texs/2.background}
   \input{texs/3.clauseaddition.tex}
   % \input{texs/4.optimizations}
-  % \input{texs/5.motivatingexample}
+  \input{texs/5.motivatingexample}
   \input{texs/6.implementation}
   \input{texs/7.evaluation}
   \input{texs/8.conclusion}
@@ -232,6 +252,11 @@
   
   \bibliographystyle{IEEEtran}
   \bibliography{base}
+
+  \appendix
+
+  \input{texs/A.pigeonhole}
+
   
   % \input{texs/appendix}
   

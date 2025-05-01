@@ -1,0 +1,121 @@
+\begin{subfigure}[t]{0.23\textwidth}
+    \centering
+    \begin{tikzpicture}
+      % Draw the 4×5 grid and name it "M"
+      \matrix (M) [gridmatrix] {
+        % row 1
+        |[bluepluscell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 2
+        |[graycell]|  & |[bluepluscell]| & |[graycell]| & |[graycell]| \\
+        % row 3
+        |[graycell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 4
+        |[graycell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 5
+        |[graycell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+      };
+
+      % Column labels: attach ABOVE the north anchor of row 1 cells
+      \foreach \c [count=\i from 1] in {$h_1$,$h_2$,$h_3$,$h_4$} {
+        \node[anchor=south] at (M-1-\i.north) {\c};
+      }
+
+      % Row labels: attach LEFT of the west anchor of column 1 cells
+      \foreach \r [count=\j from 1] in {$p_1$,$p_2$,$p_3$,$p_4$,$p_5$} {
+        \node[anchor=east] at (M-\j-1.west) {\r};
+      }
+    \end{tikzpicture}
+    \captionsetup{width=0.8\textwidth}  % override for this one only
+    \caption{We initially propagate on $x_{1, 1}$ and $x_{2, 2}$}~\label{subfig:pigeonholeclause-a}  
+\end{subfigure}
+\begin{subfigure}[t]{0.23\textwidth}
+    \centering
+    \begin{tikzpicture}
+        % Draw the 4×5 grid and name it "M"
+        \matrix (M) [gridmatrix] {
+        % row 1
+        |[bluepluscell]| & |[yellowminuscell]| & |[graycell]| & |[graycell]| \\
+        % row 2
+        |[yellowminuscell]|  & |[bluepluscell]| & |[graycell]| & |[graycell]| \\
+        % row 3
+        |[yellowminuscell]| & |[yellowminuscell]| & |[graycell]| & |[graycell]| \\
+        % row 4
+        |[yellowminuscell]| & |[yellowminuscell]| & |[graycell]| & |[graycell]| \\
+        % row 5
+        |[yellowminuscell]| & |[yellowminuscell]| & |[graycell]| & |[graycell]| \\
+        };
+
+        % Column labels: attach ABOVE the north anchor of row 1 cells
+        \foreach \c [count=\i from 1] in {$h_1$,$h_2$,$h_3$,$h_4$} {
+            \node[anchor=south] at (M-1-\i.north) {\c};
+        }
+
+        % Row labels: attach LEFT of the west anchor of column 1 cells
+        \foreach \r [count=\j from 1] in {$p_1$,$p_2$,$p_3$,$p_4$,$p_5$} {
+            \node[anchor=east] at (M-\j-1.west) {\r};
+        }
+    \end{tikzpicture}
+    \captionsetup{width=0.8\textwidth}  % override for this one only
+    \caption{Then unit propagation gives us $\overline{x}_{2,1}, \ldots, \overline{x}_{5,1},$ $\overline{x}_{1, 2}, \overline{x}_{3, 2}, \ldots, \overline{x}_{5, 2}$}~\label{subfig:pigeonholeclause-b} 
+\end{subfigure}
+\begin{subfigure}[t]{0.23\textwidth}
+    \centering
+    \begin{tikzpicture}
+    % Draw the 4×5 grid and name it "M"
+    \matrix (M) [gridmatrix] {
+        % row 1
+        |[orangepluscell]| & |[orangeminuscell]| & |[graycell]| & |[graycell]| \\
+        % row 2
+        |[orangeminuscell]|  & |[orangepluscell]| & |[graycell]| & |[graycell]| \\
+        % row 3
+        |[purpleminuscell]| & |[purpleminuscell]| & |[graycell]| & |[graycell]| \\
+        % row 4
+        |[purpleminuscell]| & |[purpleminuscell]| & |[graycell]| & |[graycell]| \\
+        % row 5
+        |[purpleminuscell]| & |[purpleminuscell]| & |[graycell]| & |[graycell]| \\
+    };
+
+    % Column labels: attach ABOVE the north anchor of row 1 cells
+    \foreach \c [count=\i from 1] in {$h_1$,$h_2$,$h_3$,$h_4$} {
+        \node[anchor=south] at (M-1-\i.north) {\c};
+    }
+
+    % Row labels: attach LEFT of the west anchor of column 1 cells
+    \foreach \r [count=\j from 1] in {$p_1$,$p_2$,$p_3$,$p_4$,$p_5$} {
+        \node[anchor=east] at (M-\j-1.west) {\r};
+    }
+    \end{tikzpicture}
+    \captionsetup{width=0.8\textwidth}  % override for this one only
+    \caption{$\overline{x}_{3, 1}, \ldots, \overline{x}_{5, 1},$ $\overline{x}_{3, 2}, \ldots, \overline{x}_{5, 2}$ are in $\alpha_c$ by their respective constraint (1). The rest are in $\alpha_a$.}~\label{subfig:pigeonholeclause-c}
+\end{subfigure}
+\begin{subfigure}[t]{0.23\textwidth}
+    \centering
+    \begin{tikzpicture}
+    % Draw the 4×5 grid and name it "M"
+    \matrix (M) [gridmatrix] {
+        % row 1
+        |[graycell]| & |[orangeminuscell]| & |[graycell]| & |[graycell]| \\
+        % row 2
+        |[orangeminuscell]|  & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 3
+        |[graycell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 4
+        |[graycell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+        % row 5
+        |[graycell]| & |[graycell]| & |[graycell]| & |[graycell]| \\
+    };
+
+    % Column labels: attach ABOVE the north anchor of row 1 cells
+    \foreach \c [count=\i from 1] in {$h_1$,$h_2$,$h_3$,$h_4$} {
+        \node[anchor=south] at (M-1-\i.north) {\c};
+    }
+
+    % Row labels: attach LEFT of the west anchor of column 1 cells
+    \foreach \r [count=\j from 1] in {$p_1$,$p_2$,$p_3$,$p_4$,$p_5$} {
+        \node[anchor=east] at (M-\j-1.west) {\r};
+    }
+    \end{tikzpicture}
+    \captionsetup{width=0.8\textwidth}  % override for this one only
+    \caption{Finally, we shrink and learn the clause $\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$}~\label{subfig:pigeonholeclause-d}
+\end{subfigure}
+

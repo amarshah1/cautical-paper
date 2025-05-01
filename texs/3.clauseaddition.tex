@@ -4,7 +4,7 @@
 
 \begin{figure*}[!t]
     \centering
-    \input{figs/pigeonhole.tex}
+    \input{figs/pigeonholeclause.tex}
     \caption{Process for reducing \ph{4} to \ph{3}}
   \end{figure*}
 
@@ -14,31 +14,31 @@ hole, and (2)~no hole contains more than one pigeon. This can be
 encoded as a SAT problem where variable $x_{i, j}$ represents putting the 
 $i$-th pigeon into the $j$-th hole. Thus, constraint (1) is $\bigvee_{1 \leq j \leq n} x_{i, j}$ for each $1 \leq i \leq n+1$ and constraint (2) is $\overline{x}_{i, j} \lor \overline{x}_{k, j}$ for each $ 1 \leq i \neq k \leq n+1$ and $1 \leq j \leq n$.
 
-We represent this diagrammatically in \autoref{fig:pigeonhole}, where the rows represent the pigeons and the columns represent the holes. The cell in row $i$ and column $j$ represents the literal $x_{i, j}$, 
+We represent this diagrammatically in \autoref{fig:pigeonholeclauses}, where the rows represent the pigeons and the columns represent the holes. The cell in row $i$ and column $j$ represents the literal $x_{i, j}$
 % i.e. whether the $i$-th pigeon is in the $j$-th hole.
-If the $(i, j)$-th cell is green this represents $x_{i, j}$ is set to true and if it is red this represents $x_{i, j}$ is set to false. Thus, constraint (1) asks that each row has at least one green cell and constraint (2) asks that no two green cells share a column.
+If the $(i, j)$-th cell has a $+$ symbol this represents $x_{i, j}$ is set to true and if it has a $-$ symbol this represents $x_{i, j}$ is set to false. Thus, constraint (1) asks that each row has at least one green cell and constraint (2) asks that no two green cells share a column.
 
 % We only consider the case where $m = n + 1$ which we denote \ph{n}. 
 For any $n$, $\ph{n}$ is clearly unsatisfiable. However, there are no polynomial-sized resolution proofs of \ph{n}~\cite{hakenpigeonhole}. Our methodology obtains an $O(n^3)$ \pr proof of \ph{n} matching the best know result~\cite{prclauses}. Additionally, we provide a proof with very small constant factor and our method is insensitive to the encoding.
 %  todo: add a forward reference to where we evaluate this
 %  todo: is this the best possible result theoretically?
 
-% There are $O(n^3)$ \pr proofs of the pigeonhole principle, but this is difficult to achieve in practice and requires specific techniques~\cite{prclauses}. We can learn these proofs, with a very low constant factor and little sensitivity to the encoding.
+% There are $O(n^3)$ \pr proofs of the pigeonhole principle, but this is difficult to achieve in practice and requires specific techniques~\cite{prclauses}. We can learn these proofs, with a very low constant factor and little sensitivity to the encoding. 
 
 \subsection{Algorithm}~\label{subsec:methodology}
 
 
 At a high level, \autoref{alg:methodology} learns a \pr clause by: (I) propagating on two variables $i$ and $j$, (II) learning the least conditional autarky of the partial assignment, (III) shrinking the clause, and (IV) adding the clause to the formula. 
 
-The \texttt{propagate} function represents unit propagation. II follows prior work, and we discuss the  in more detail in \autoref{subsec:learning}. III is our contribution and we discuss it in \autoref{subsec:shrinking}. All four stages rely on a number of heuristics, which we discuss in \autoref{sec:implementation}.
+The \texttt{propagate} function represents unit propagation. II is done via the \texttt{LeastConditional} function, following prior work, and we discuss the  in more detail in \autoref{subsec:learning}. III is done by the \texttt{Shrink} function and we discuss it in \autoref{subsec:shrinking}. All four stages rely on a number of heuristics, which we discuss in \autoref{sec:implementation}.
 
 \begin{algorithm}~\label{alg:methodology}
     \caption{Learning \pr clauses}\label{alg:methodology}
     \SetAlgoNoLine
     \SetKwFunction{Learn}{LearnClause}
     \SetKwFunction{LCP}{LeastConditional}
-    \SetKwFunction{Propagate}{propagate}
-    \SetKwFunction{Shrink}{shrink}
+    \SetKwFunction{Propagate}{Propagate}
+    \SetKwFunction{Shrink}{Shrink}
     \SetKwFor{For}{for}{:}{}
     \SetKwFor{If}{if}{:}{}
     \SetKwProg{Fn}{Function}{:}{}
@@ -56,9 +56,16 @@ The \texttt{propagate} function represents unit propagation. II follows prior wo
     }
 \end{algorithm}
 
+For motivation, we will discuss the pigeonhole example \ph{4}, where we make decisions $i = x_{1, 1}$ and $j = x_{2, 2}$. This lets us learn the clause $\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$ (see \autoref{figs/pigeonholeclause.tex}), which is necessary in the canonical \pr proof for pigeonhole \cite{prclauses}. We explain our proof in more detail and how this clause can be more useful in \autoref{app:pigeonhole}.
+
+
+We start by propagating on $x_{1, 1}$ and $x_{2, 2}$ (see \autoref{subfig:pigeonholeclause-a}), which assigns $\overline{x}_{2, 1}, \ldots, \overline{x}_{5, 1}, \overline{x}_{1, 2}, \overline{3, 2} \ldots, \overline{x}_{5, 2}$ by constraint (2) (see \autoref{subfig:pigeonholeclause-b}).
+
 \subsection{Learning Clauses}~\label{subsec:learning}
 
-As described in \autoref{subsec:autarkies}, we can split a partial assignment $\alpha = \alpha_c \sqcup \alpha_a$ to learn a \pr clause $\alpha_C \lor a$ for any $a \in \alpha_a$. Notice that all of $\alpha_c$ appears in such a clause, so we must try to keep in as small as possible.
+
+As described in \autoref{subsec:autarkies}, we can split a partial assignment $\alpha = \alpha_c \sqcup \alpha_a$ to learn a \pr clause $\alpha_C \lor a$ for any $a \in \alpha_a$. Notice that all of $\alpha_c$ appears in such a clause, so we must try to keep in as small as possible. 
+
 
 \autoref{alg:leastcond} from Kiesel et al \cite{conditionalautarkies} to find the smallest possible $\alpha_c$:
 
@@ -88,18 +95,28 @@ This is a conditional autarky, since every clause that $\alpha_a$ touches, is sa
 
 Additionally, $\alpha_c$ is minimal: for each clause that is touched but not satisfied, we add to $\alpha_c$ literals from the assignment that touch and do not satisfy this clause. They must be in $\alpha_c$, since otherwise $\alpha_a$ will touch a clause that is not satisfied by $\alpha$, violating the conditional autarky property.
 
+From our pigeonhole example, we can see the rows in \autoref{subfig:pigeonholeclause-c} with no $+$, will have their constraint (1) touched but not satisfied and thus are in $\alpha_c$. However, the rows with a $+$ will have their constraint (1) satisfied and thus are in $\alpha_a$. Thus, $\alpha_a = \{x_{1, 1}, \overline{x}_{1, 2}, \overline{x}_{2, 1}, x_{2, 2}\}$ and $\alpha_a = \{\overline{x}_{3, 1}, \ldots, \overline{x}_{5, 1}, \overline{3, 2} \ldots, \overline{x}_{5, 2}\}$.
+
 \subsection{Shrinking Clauses}~\label{subsec:shrinking}
 
-While we do minimize $\alpha_c$, this may still lead to a long clause. We aim to shrink this clause. Notice that if $\alpha_c = c_1, ..., c_n$ and $\alpha_a = a_1, ..., a_m$, we could add clauses of the form $\overline{c_1} \lor ... \lor \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
+Unfortunately a clause $\alpha_c \lor a$ might still be too long. We aim to shrink this clause. Notice that if $\alpha_c = c_1, ..., c_n$ and $\alpha_a = a_1, ..., a_m$, we can consider the set $C_0 = \{c_j \in C| \exists a_i \in \alpha_a \text{ s.t. } \impunitclause{\phi}{a_i}{c_j} \}$.
+%  todo : provide some intutition for how we pick this set
+
+% This is essentially the set of literals in $\alpha_c$ that can be implied by unit propagation by negating some literal in $\alpha_a$.
+
+% we could add clauses of the form $\overline{c_1} \lor ... \lor \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
+
+% , this may still lead to a long clause. We aim to shrink this clause. Notice that if $\alpha_c = c_1, ..., c_n$ and $\alpha_a = a_1, ..., a_m$, we could add clauses of the form $\overline{c_1} \lor ... \lor \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
 
 
 % Consider $\overline{\alpha_a}$, the negation of the literals in $\alpha_a$. 
-We consider the set $C_0 = \{c_j \in C| \exists a_i \in \alpha_a \; \overline{a_i} \impunit^\phi c_j \}$. This is essentially the set of literals in $\alpha_c$ that can be implied by unit propagation by negating some literal in $\alpha_a$.
+
 %  in the code we propagate -alpha_a[i]
 %  then if val (neg_alpha_c[j]) < 0, we add neg_alpha_c[j] to propagated and
 %  alpha_a[i] to useful
 
-We also define $A_0 \subseteq \alpha_a$ as a set such that for each $c \in C_0$, there is some $a \in A_0$ such that $\overline{a} \impunit^\phi c$. By definition, there must be some $A_0$, but there could be many possible $A_0$. We will discuss how we pick $A_0$ in \autoref{subsec:sym} as it will be very important for having a technique resistant to different encodings. 
+We also define $A_0 \subseteq \alpha_a$ as a set such that for each $c \in C_0$, there is some $a \in A_0$ such that $\impunitclause{\phi}{a}{c}$. By definition, there exists such an $A_0$, but there are many possible options. We discuss how we pick $A_0$ in \autoref{subsec:sym}.
+%  as it will be important for having a technique resistant to different encodings. 
 
 
 % Instead we look at $\overline{I} = \{x_{2, 1}, x_{1, 2}\}$. Then take the set $\overline{I} \vdash_1 C_0 \subseteq C$, i.e., the maximal subset of $C$ that $\overline{I}$ implies via unit propagation.
@@ -119,22 +136,26 @@ We want learn the clause $\bigvee_{c \in C \backslash C_0} \overline{c} \lor \bi
 
     Thus we can assume $\phi \land (\bigvee_{c \in C} \overline{c} \lor \bigvee_{a \in A_0} a)$ is satisfiable by some satisfying assignment $\beta$.
 
-    We claim $\beta$ is a satisfying assignment for $\phi \land (\bigvee_{c \in C \backslash C_0} \overline{c} \lor \bigvee_{a \in A_0} a)$. This could only not be the case if (1)~for all $a \in A_0$ $\overline{a} \in \beta$ and (2)~there is some $c \in C_0$ such that $\overline{c} \in \beta$. 
+    We claim $\beta$ is a satisfying assignment for $\phi \land (\bigvee_{c \in C \backslash C_0} \overline{c} \lor \bigvee_{a \in A_0} a)$. If this was not the cse then: (1)~for all $a \in A_0$ $\overline{a} \in \beta$ and (2)~there is some $c \in C_0$ such that $\overline{c} \in \beta$. 
 
-    But by definition there is some $a \in A_0$ such that $\phi \vdash a \lor c$. Thus $\phi \land \overline{a} \land \overline{c}$ is unsatisfiable via unit propagation. However, this cannot be the case since $\overline{a}, \overline{c} \in \beta$ and $\beta$ is a satisfying assignment for $\phi$.
+    But by definition there is some $a \in A_0$ such that $\impunitclause{\phi}{a}{c}$. Thus $\phi \land \overline{a} \land \overline{c}$ is unsatisfiable via unit propagation. However, this cannot be the case since $\overline{a}, \overline{c} \in \beta$ and $\beta$ is a satisfying assignment for $\phi$.
 \end{proof}
 
 Another way to see this is: starting with $\bigvee_{c \in C} \overline{c} \lor \bigvee_{a \in A_0} a$, we notice that if some clause $c_i \lor a_i$ is implied via unit propagation, then we can remove $c_i$ from $C$ in the clause.
 
-\subsection{Resilience to Encoding}~\label{subsec:sym}
+\subsection{Clause Shrinking Algorithm}~\label{subsec:sym}
 
-As mentioned in \autoref{subsec:shrinking}, our choice for $A_0$ can matter a lot for which clause we learn. 
+As mentioned in \autoref{subsec:shrinking}, our choice for $A_0$ is very important.. 
 
 
 \noindent \textbf{Greedy Set Cover:} %~\label{subsubsec:greedysetcover}
-In order to minimize the size of the clause, we may want the smallest possible $A_0$ that maximizes $C_0$. Say for each $a \in \alpha_a$, we define $\alpha_a^{SETS}(a) = \{ c \in \alpha_c \; | \; \overline{a} \impunit^\phi c\}$. 
+In order to minimize the size of the clause, we may want the smallest possible $A_0$ that maximizes $C_0$. Say for each $a \in \alpha_a$, we define $\alpha_a^{SETS}(a) = \{ c \in \alpha_c \; | \; \impunitclause{\phi}{a}{c}\}$. 
 
-In the case that $C_0 = \alpha_C$, finding the smallest $A_0$ is exactly the set cover problem with $\alpha_a^{SETS}$. This is NP-hard and we do not want to spend time figuring this out. Instead, we can use the greedy algorithm to solve, which is a $1 + \ln |\alpha_c|$ approximation algorithm. Specifically, the greedy algorithm will find the largest set in $\{\alpha_a^{SETS} \cap (\alpha_c \backslash C_0) | a \in \alpha_a \}$ at each step and add it to $C_0$. It stops when each of the $\alpha_a^{SETS} \cap (\alpha_c \backslash C_0)$ are empty.
+When $C_0 = \alpha_C$, finding the smallest $A_0$ is exactly the set cover problem with $\alpha_a^{SETS}$. This is NP-hard. We can approximate using the greedy algorithm, which returns a set cover at most roughly $(\ln |\alpha_c| + 1)$-times the size of the smallest set cover~\cite{greedysetcover}. 
+%  in actuality it is $\ln |\alpha_c| - \ln \ln |\alpha_c| + O(1)$
+
+
+Specifically, the greedy algorithm will find the largest set in $\{\alpha_a^{SETS} \cap (\alpha_c \backslash C_0) | a \in \alpha_a \}$ at each step and add it to $C_0$. It stops when each of the $\alpha_a^{SETS} \cap (\alpha_c \backslash C_0)$ are empty.
 % either $C_0 = \alpha_C$ or there are no terms 
 
 
@@ -164,18 +185,22 @@ In the case that $C_0 = \alpha_C$, finding the smallest $A_0$ is exactly the set
 \end{algorithm}
 % todo : this algorithm is not actually what we do, since we don't propagate on c -> see if this is a problem ever
 
-In \autoref{alg:finda0}, we describe our process for calculating $A_0$. We initially pre-sort $alpha_a$ by implication, which we will later discuss in more detail. Then we intialize $\alpha_a^{SETS}$ as an array, we iterate the counter $i$ through $\alpha_a$, populating $\alpha_a^{SETS}[i]$ with the set of literals in $\alpha_c$ that are implied by $-\alpha_a^{SETS}[i]$. Finally, we apply \texttt{greedySetCover}
+In \autoref{alg:finda0}, we describe our process for calculating $A_0$. We initially pre-sort $\alpha_a$ by implication, which we will discuss in more detail. Then we initialize $\alpha_a^{SETS}$ as an array, we iterate the counter $i$ through $\alpha_a$, populating $\alpha_a^{SETS}[i]$ with the set of literals in $\alpha_c$ that are implied by $-\alpha_a^{SETS}[i]$. Finally, we apply \texttt{greedySetCover}
 
+Finally, we can look at this in the context of our pigeonhole example. We can see that out of the $\alpha_a$, we get that $\overline{x}_{2, 1}$ can be used to remove $\overline{x}_{3, 1}, \ldots, \overline{x}_{5, 1}$ from $\alpha_c$. Additionally, $\overline{x}_{1, 2}$ can be used to remove $\overline{x}_{3, 2}, \ldots, \overline{x}_{5, 2}$ from $\alpha_c$. However, $x_{1, 1}$ and $x_{2, 2}$ do not remove anythings. Thus, the greedy set cover algorithm will give us the final clause 
 
-
-\noindent \textbf{Sorting $\alpha_a$ by Implication:}%~\label{subsubsec:impordering}
-The greedy set cover algorithm described above is almost sufficient for being insensitive to heuristics, but there is one other optimization that we made. \autoref{alg:finda0} describes sorting $\alpha_a$ as an initial step. This is important for cases where there are more than one cover of the same size. The most common occurence of this is for $a_1, a_2 \in \alpha_a$, we may have that $\overline{a_2} \impunit^\phi \overline{a_1} \impunit^\phi c_1, ..., c_n$. 
-
-Thus, greedy set cover could pick $\{a_1\}$ or $\{a_2\}$ as singleton sets. However, since $a_1 \impunit^\phi a_2$, we really want to learn the unit clause $a_1$ since it is much more powerful.
+% \subsection{Algorithm on Pigeonhole Principle}~\label{subsec:pigeonhole}
 
 \subsection{Other Heuristics}~\label{subsec:heuristics}
 
 We employ several other heuristics:
+
+% todo: maybe move these two paragraphs to implementation section
+
+% \noindent \textbf{Sorting $\alpha_a$ by Implication:}%~\label{subsubsec:impordering}
+% The greedy set cover algorithm described above is almost sufficient for being insensitive to heuristics, but there is one other optimization that we made. \autoref{alg:finda0} describes sorting $\alpha_a$ as an initial step. This is important for cases where there are more than one cover of the same size. The most common occurence of this is for $a_1, a_2 \in \alpha_a$, we may have that $\overline{a_2} \impunit^\phi \overline{a_1} \impunit^\phi c_1, ..., c_n$. 
+
+% Thus, greedy set cover could pick $\{a_1\}$ or $\{a_2\}$ as singleton sets. However, since $a_1 \impunit^\phi a_2$, we really want to learn the unit clause $a_1$ since it is much more powerful.
 
 \noindent \textbf{Checking if trivial:} Introducing globally blocked clauses can affect how we divide $\alpha = \alpha_c \sqcup \alpha_a$ as done in \autoref{alg:leastcond}. Thus, it is better to avoid introducing globally blocked clauses if they are not useful. We do this by checking if $\phi \impunit C$ for each potential clause $C$. If it is implied by unit propagation, we do not learn it since we consider it easy to learn.
 
