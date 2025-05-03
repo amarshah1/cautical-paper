@@ -1,20 +1,34 @@
 \section{Motivating Example}~\label{sec:motivatex}
 
-\begin{figure*}[!t]
+\begin{figure}[!t]
     \centering
     \input{figs/pigeonhole.tex}
-    \caption{Process for reducing \ph{4} to \ph{3}}
-  \end{figure*}
+    \caption{Process for reducing \ph{4} to \ph{3}}~\label{fig:pigeonhole}
+  \end{figure}
 
-We discuss the pigeonhole principle as a motivating example. The problem asks 
-whether we can put $m$ pigeons in $n$ holes such that (1)~every pigeon is in a 
-hole, and (2)~no hole contains more than one pigeon. This can be easily 
-encoded as a SAT problem where variable $x_{i, j}$ represents putting the 
-$i$-th pigeon into the $j$-th hole. We can translate constraint (1) as $\bigvee_{1 \leq j \leq n} x_{i, j}$ for each $1 \leq i \leq m$. We can also translate constraint (2) as $\overline{x_{i, j}} \lor \overline{x_{k, j}}$ for each $ 1 \leq i \neq k \leq m$ and $1 \leq j \leq n$.
+We will interleave our methodology with the pigeonhole principle as a motivating
+example. The problem \ph{n} asks whether we can put $n+1$ pigeons in $n$ holes
+such that (1)~every pigeon is in a hole, and (2)~no hole contains more than one
+pigeon. This can be easily encoded as a SAT problem where variable $x_{i, j}$
+represents putting the $i$-th pigeon into the $j$-th hole. We can translate
+constraint (1) as $\bigvee_{1 \leq j \leq n} x_{i, j}$ for each $1 \leq i \leq
+m$. We can also translate constraint (2) as $\overline{x_{i, j}} \lor
+\overline{x_{k, j}}$ for each $ 1 \leq i \neq k \leq m$ and $1 \leq j \leq n$.
 
-We represent this diagrammatically as in \autoref{fig:pigeonhole}, where the rows are the pigeons and the columns are the holes. The cell in row $i$ and column $j$ represents the literal $x_{i, j}$, i.e. whether the $i$-th pigeon is in the $j$-th hole. If the $(i, j)$-th cell is green this represents $x_{i, j}$ is set to true and if it is red this represents $x_{i, j}$ is set to false. Thus, constraint (1) asks that each row has at least one green cell and constraint (2) asks that no two green cells share a column.
+We represent this diagrammatically as in \autoref{fig:pigeonhole}, where the
+rows are the pigeons and the columns are the holes. The cell in row $i$ and
+column $j$ represents the literal $x_{i, j}$, i.e. whether the $i$-th pigeon is
+in the $j$-th hole. If the $(i, j)$-th cell is green this represents $x_{i, j}$
+is set to true and if it is red this represents $x_{i, j}$ is set to false.
+Thus, constraint (1) asks that each row has at least one green cell and
+constraint (2) asks that no two green cells share a column.
 
-We will only consider the case where $m = n + 1$ which we denote \ph{n}. This is clearly unsatisfiable, however there are no polynomial-sized resolution proofs of \ph{n}~\cite{hakenpigeonhole}. There are $O(n^3)$ \pr proofs of the pigeonhole principle, but this is difficult to achieve in practice and requires specific techniques~\cite{prclauses}. We can learn these proofs, with a very low constant factor and little sensitivity to the encoding.
+We will only consider the case where $m = n + 1$ which we denote \ph{n}. This is
+clearly unsatisfiable, however there are no polynomial-sized resolution proofs
+of \ph{n}~\cite{hakenpigeonhole}. There are $O(n^3)$ \pr proofs of the
+pigeonhole principle, but this is difficult to achieve in practice and requires
+specific techniques~\cite{prclauses}. We can learn these proofs, with a very low
+constant factor and little sensitivity to the encoding.
 
 
 \subsection{Pigeonhole Setup}~\label{subsec:pigeonhole-setup}

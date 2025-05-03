@@ -1,25 +1,57 @@
 \section{Background}~\label{sec:background}
 
-We begin with some SAT preliminaries. Variables $x_1, x_2, ...$ can take values \emph{true} ($\top$) or \emph{false} ($\bot$). A literal $l$ can be a variable $x$ or its negation $\overline{x}$. A clause $C$ is a disjunction of literals, e.g. $x_1 \lor \overline{x_4} \lor x_6$. Occasionally, we will use set notation and may represent $C = \{x_1, \overline{x_4}, x_6\}$ and denote that a literal $l$ is present in clause $C$ with $l \in C$. A conjunctive normal form (CNF) formula $\phi$ is a conjunction of clauses. We will assume that any formula $\phi$ is in CNF for the rest of this paper.
+We begin with some SAT preliminaries. Variables $x_1, x_2, ...$ can take values
+\emph{true} ($\top$) or \emph{false} ($\bot$). A literal $l$ can be a variable
+$x$ or its negation $\overline{x}$. A clause $C$ is a disjunction of literals,
+e.g. $x_1 \lor \overline{x_4} \lor x_6$. Occasionally, we will use set notation
+and may represent $C = \{x_1, \overline{x_4}, x_6\}$ and denote that a literal
+$l$ is present in clause $C$ with $l \in C$. A conjunctive normal form (CNF)
+formula $\phi$ is a conjunction of clauses. We will assume that any formula
+$\phi$ is in CNF for the rest of this paper.
 
-We notate $var(\phi)$ as the set of variables that occur in formula $\phi$. For some $V \subseteq var(\phi)$, a partial assignment $\alpha : V \rightarrow \{\top, \bot\}$  maps some variables of a formula $\phi$ to true or false. If $V = var(\phi)$, then $\alpha$ is a (total) assignment. We abuse notation by denoting $\alpha(l) = \alpha(x)$ if $l = x$ and $\alpha(l) = \neg \alpha(x)$ if $l = \overline{x}$.
+We notate $var(\phi)$ as the set of variables that occur in formula $\phi$. For
+some $V \subseteq var(\phi)$, a partial assignment $\alpha : V \rightarrow
+\{\top, \bot\}$  maps some variables of a formula $\phi$ to true or false. If $V
+= var(\phi)$, then $\alpha$ is a (total) assignment. We abuse notation by
+denoting $\alpha(l) = \alpha(x)$ if $l = x$ and $\alpha(l) = \neg \alpha(x)$ if
+$l = \overline{x}$.
 
-A formula restricted to a partial assignment $\phi|_\alpha$ is the formula where every variable $x$ in the domain of $\alpha$ is assigned to $\alpha(x)$. We can simplify such a formula by removing all literals that are assigned to false and all clauses with a literal assigned to true. For example, with formula $\phi = (x_1 \lor \overline{x_4} \lor x_6) \land (x_2 \lor x_3) \land \overline{x_5}$ and assignment $\alpha$ with $\alpha(x_1) = \bot$ and $\alpha(x_2) = \top$. Then, $\phi|_\alpha = (\overline{x_4} \lor x_6) \land \overline{x_5}$.
+A formula restricted to a partial assignment $\phi|_\alpha$ is the formula where
+every variable $x$ in the domain of $\alpha$ is assigned to $\alpha(x)$. We can
+simplify such a formula by removing all literals that are assigned to false and
+all clauses with a literal assigned to true. For example, with formula $\phi =
+(x_1 \lor \overline{x_4} \lor x_6) \land (x_2 \lor x_3) \land \overline{x_5}$
+and assignment $\alpha$ with $\alpha(x_1) = \bot$ and $\alpha(x_2) = \top$.
+Then, $\phi|_\alpha = (\overline{x_4} \lor x_6) \land \overline{x_5}$.
 
-A clause $C = l_1 \lor ... \lor l_m$ is blocked by the partial assignment $\alpha$ that assigns each $l_i$ to false ($\bot$).
-An assignment $\alpha$ \emph{touches} a clause $C$ if there is a variable $x$ in the domain of $\alpha$ such that $x \in C$ or $\overline{x} \in C$. We say $\alpha$ \emph{satisfies} $C$ if $\alpha(l) = \top$ and $l \in C$.
+A clause $C = l_1 \lor ... \lor l_m$ is blocked by the partial assignment
+$\alpha$ that assigns each $l_i$ to false ($\bot$). An assignment $\alpha$
+\emph{touches} a clause $C$ if there is a variable $x$ in the domain of $\alpha$
+such that $x \in C$ or $\overline{x} \in C$. We say $\alpha$ \emph{satisfies}
+$C$ if $\alpha(l) = \top$ and $l \in C$.
 
-An assignment $\alpha$ \emph{satisfies} formula $\phi$ if it satisfies every clause $C \in \phi$. If there is such a satisfying assignment, then $\phi$ is \emph{satisfiable}. The boolean satisfiability problem asks whether a given formula $\phi$ is satisfiable.
+An assignment $\alpha$ \emph{satisfies} formula $\phi$ if it satisfies every
+clause $C \in \phi$. If there is such a satisfying assignment, then $\phi$ is
+\emph{satisfiable}. The boolean satisfiability problem asks whether a given
+formula $\phi$ is satisfiable.
 
 \subsection{Redundant Clauses}~\label{subsec:redundant}
 
-A clause $C$ is \emph{redundant} (or \emph{satisfiability-preserving}) with respect to a formula $\phi$ if the formulas $\phi$ and $\phi \land C$ are \emph{equisatisfiable}, i.e. $\phi$ is satisfiable if and only if $\phi \land C$ is satisfiable.
+A clause $C$ is \emph{redundant} (or \emph{satisfiability-preserving}) with
+respect to a formula $\phi$ if the formulas $\phi$ and $\phi \land C$ are
+\emph{equisatisfiable}, i.e. $\phi$ is satisfiable if and only if $\phi \land C$
+is satisfiable.
 
-In a \emph{clausal proof system}, each step will add or remove a redundant clause $C$. The step may contain extra information, such as a boolean witness, justifying why $C$ is redundant. A list of redundant clauses ending with the empty clause $\bot$ is a proof of unsatisfiability for formula $\phi$.
+In a \emph{clausal proof system}, each step will add or remove a redundant
+clause $C$. The step may contain extra information, such as a boolean witness,
+justifying why $C$ is redundant. A list of redundant clauses ending with the
+empty clause $\bot$ is a proof of unsatisfiability for formula $\phi$.
 
 % If $\phi$ is unsatisfiable, then any clause $C$ will be redundant. However, when solving, we do not know whether $\phi$ is satisfiable a priori. Clausal proof systems can justify that a clause is redundant.
 
-Adding redundant clauses may be helpful in certain cases, since adding a clause will constrain the set of possible solutions. However, it could be harmful as new clauses may negatively interact with solver heuristics.
+Adding redundant clauses may be helpful in certain cases, since adding a clause
+will constrain the set of possible solutions. However, it could be harmful as
+new clauses may negatively interact with solver heuristics.
 
 % \subsection{Reasoning Steps}~\label{subsec:reasoning-steps}
 
@@ -140,7 +172,12 @@ This means that $\phi$ is satisfiable if and only if $\phi \land \bigwedge_{1 \l
 
 \subsection{Related Work}~\label{subsec:relatedwork}
 
-The pigeonhole problem can ask if $n+1$ pigeons can fit into $n$ holes. The mutilated chessboard problem asks if a $2n \times 2n$ board with two diagonally opposite corners removed can be tiled with $2 \times 1$ rectangular dominoes. Both are unsatisfiable and it is easy for a human to see why. However, it has been shown there are no polynomial-sized resolution proofs for either problem~\cite{hakenpigeonhole,mutilatedchessboard-exponential}.
+The pigeonhole problem asks if $n+1$ pigeons can fit into $n$ holes. The
+mutilated chessboard problem asks if a $2n \times 2n$ board with two diagonally
+opposite corners removed can be tiled with $2 \times 1$ rectangular dominoes.
+Both are unsatisfiable and it is easy for a human to see why. However, it has
+been shown there are no polynomial-sized resolution proofs for either
+problem~\cite{hakenpigeonhole,mutilatedchessboard-exponential}.
 % todo: need to clarify if I should say that there are not polynomial-sized resolution proofs for these problems or if there are no sub-exponential-sized resolution proofs for these problems.
 
 % todo: need to be consistent about whether I am using terminology "pigeonhole principle" or "pigeonhole problem"
@@ -148,21 +185,29 @@ The pigeonhole problem can ask if $n+1$ pigeons can fit into $n$ holes. The muti
 % todo: I need to cite some paper that introduces pigeonhole and mutilated chessboard
 
 
- While, proof systems like extended resolution (\er) provided $O(n^4)$ for the pigeonhole problems, the proof system involved introducing new variables~\cite{er}. In general, the search space for new variables is infinite and thus tools like \glucoser~\cite{glucoser} based on \er did not scale well.
+ While, extended resolution (\er) provided $O(n^4)$ for the pigeonhole problems, the proof system involved introducing new variables~\cite{er}. In general, the search space for new variables is infinite and thus tools like \glucoser based on \er did not scale well~\cite{glucoser}.
 
-The \pr proof system remedies this by producing $O(n^3)$ proofs for the pigeonhole formula~\cite{prclauses} without learning any new clauses. Later, this was shown to produce short proofs for mutilated chessboard~\cite{mutilatedchessboard-pr}. 
+The \pr proof system remedies this by producing $O(n^3)$ proofs for the pigeonhole formula~\cite{prclauses} without learning any new variables. Later, this was shown to produce short proofs for mutilated chessboard~\cite{mutilatedchessboard-pr}. 
 % todo we use O(n^_) where n is formula, but also where n is the number of variables.
 
-The satisfaction-driven clause learning (SDCL) framework~\cite{sdcl}, extends the conflict-driven clause learning (CDCL) framework~\cite{cdcl} with \pr clause learning. 
+Solvers that implement the \pr proof system typically use the satisfaction-driven clause learning (SDCL) framework~\cite{sdcl}, which extends conflict-driven clause learning (CDCL)~\cite{cdcl}. 
 % Here, if unit propagation does not lead to a conflict, then they attempt to learn a \pr clause instead.
 % \pr clause learning was first introduced in an extension of the solver \lingeling~\cite{prclause}.
 After propagating an assignment, they would check if the clause $C$ that was blocked by this assignment was \pr. This was done by creating a new SAT formula called the \emph{positive reduct}. If the positive reduct was satisfiable, then $C$ is a \pr clause and it was added. This was implemented in an extension of the solver \lingeling and was shown to scale well on pigeonhole benchmarks.
 
-Later, two new variants of the positive reduct were proposed for more aggressive pruning of the search space \cite{sadical}. This allowed SDCL to solve other difficult problems such as Tseitin formulas~\cite{hardexamplesresolution} and mutilated chessboard. This was implemented in a new SDCL solver called \sadical.
+Later, two new variants of the positive reduct were proposed for more aggressive pruning of the search space \cite{sadical}. This allowed SDCL to solve other difficult problems such as Tseitin formulas~\cite{hardexamplesresolution}. This was implemented in a new SDCL solver \sadical.
 
 
-Additionally, this was extended by \prelearn, which is a preprocessing technique for \pr clauses~\cite{prelearn}. This was done by initially considering many possible clauses and querying \sadical to see which were \pr.
+\prelearn is a preprocessing technique for \pr clauses~\cite{prelearn}. It initially considers many possible clauses and queries \sadical to see which were \pr.
 
-Our work differs as we do not use a \emph{positive reduct} to test if a clause is \pr. Instead, our clauses \pr by construction as they come from a conditional autarky. This has the potential downside that our clause may be very large. To remedy this we apply a shrinking technique to reduce the size of a clause. Additionally, prior techniques are sensitive to the encoding of the problem. Minor changes such as literal and clause reordering can tank performance. We provide two \emph{symmetry hardening} techniques to handle reordering. We compare our implementation \tool to \sadical and \prelearn in \autoref{sec:evaluation}.
+Our work differs as we do not use a \emph{positive reduct} to test if a clause
+is \pr. Instead, our clauses \pr by construction as they come from a conditional
+autarky. This has the potential downside that our clause may be very large. To
+remedy this we apply a shrinking technique to reduce the size of a clause.
+Additionally, prior techniques are sensitive to the encoding of the problem.
+Minor changes such as literal and clause reordering can tank performance. We
+provide two \emph{symmetry hardening} techniques to handle reordering. We
+compare our implementation \tool to \sadical and \prelearn in
+\autoref{sec:evaluation}.
 
-Finally, Kiesel et al~\cite{conditionalautarkies} first introduced conditional autarkies to identify globally blocked clauses. Their aim was to eliminate globally blocked clauses from a formula. This technique allowed them to simulate circuit-simplification techniques. Our work differs from this as we add clauses instead of removing them and we target a different class of benchmarks.
+Kiesel et al~\cite{conditionalautarkies} first introduced conditional autarkies to identify globally blocked clauses. Their aim was to eliminate globally blocked clauses from a formula. This technique allowed them to simulate circuit-simplification techniques. Our work differs from this as we add clauses instead of removing them and we target a different class of benchmarks.

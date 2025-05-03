@@ -191,16 +191,5 @@ Finally, we can look at this in the context of our pigeonhole example. We can se
 
 % \subsection{Algorithm on Pigeonhole Principle}~\label{subsec:pigeonhole}
 
-\subsection{Other Heuristics}~\label{subsec:heuristics}
 
-We employ several other heuristics:
-
-% todo: maybe move these two paragraphs to implementation section
-
-% \noindent \textbf{Sorting $\alpha_a$ by Implication:}%~\label{subsubsec:impordering}
-% The greedy set cover algorithm described above is almost sufficient for being insensitive to heuristics, but there is one other optimization that we made. \autoref{alg:finda0} describes sorting $\alpha_a$ as an initial step. This is important for cases where there are more than one cover of the same size. The most common occurence of this is for $a_1, a_2 \in \alpha_a$, we may have that $\overline{a_2} \impunit^\phi \overline{a_1} \impunit^\phi c_1, ..., c_n$. 
-
-% Thus, greedy set cover could pick $\{a_1\}$ or $\{a_2\}$ as singleton sets. However, since $a_1 \impunit^\phi a_2$, we really want to learn the unit clause $a_1$ since it is much more powerful.
-
-\noindent \textbf{Checking if trivial:} Introducing globally blocked clauses can affect how we divide $\alpha = \alpha_c \sqcup \alpha_a$ as done in \autoref{alg:leastcond}. Thus, it is better to avoid introducing globally blocked clauses if they are not useful. We do this by checking if $\phi \impunit C$ for each potential clause $C$. If it is implied by unit propagation, we do not learn it since we consider it easy to learn.
 
