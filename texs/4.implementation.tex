@@ -1,10 +1,10 @@
 \section{Implementation}~\label{sec:implementation}
 
-We implement our technique in a tool \tool (a fork of \cadical
+We implement our technique as a preprocessing step in a tool \tool (a fork of \cadical
 %  commit f13d74439a5b5c963ac5b02d05ce93a8098018b8
-) as a preprocessing step. By default, \tool will run the preprocessing step for
+). By default, \tool runs the preprocessing step for
 30 seconds. After this time, it will exit and commence normal solving,
-regardless of whether it has found any \pr clauses. This implementation adds ??
+regardless of whether it has found any \pr clauses. This adds ??
 lines of C++ code to \cadical and we believe it is implementable within any CDCL
 SAT solver. We experimented with other heuristics, which we briefly describe. We
 include an evaluation of the heuristics in \autoref{subsec:heuristics}.
@@ -19,17 +19,20 @@ include an evaluation of the heuristics in \autoref{subsec:heuristics}.
 % Thus, greedy set cover could pick $\{a_1\}$ or $\{a_2\}$ as singleton sets. However, since $a_1 \impunit^\phi a_2$, we really want to learn the unit clause $a_1$ since it is much more powerful.
 
 \subsubsection{Sorting $\alpha_a$ by Implication}~\label{subsubsec:impordering}
-The greedy set cover algorithm described above is almost sufficient for being
-insensitive to heuristics, but there is one other optimization that we made.
-\autoref{alg:finda0} describes sorting $\alpha_a$ as an initial step. This is
-important for cases where there are more than one cover of the same size. The
-most common occurence of this is for $a_1, a_2 \in \alpha_a$, we may have that
-$\overline{a_2} \impunit^\phi \overline{a_1} \impunit^\phi c_1, ..., c_n$. 
+% The greedy set cover algorithm described above is almost sufficient for being
+% insensitive to heuristics, but there is one other optimization that we made.
+Before \autoref{alg:finda0} \autoref{line:sort-alphaa} we could sort $\alpha_a$.
+This is important for cases where there are more than one set cover of the same
+size. The most common occurence of this is when for $a_1, a_2 \in \alpha_a$, we
+may have that $\impunitclause{\psi}{a_1}{a_2}$ and
+$\impunitclause{\psi}{a_2}{c}$. Hence, we would also have $\impunitclause{\psi}{a_1}{c}$
+and $a_1 \lor c$ is the more ``powerful'' clause, so it is better to learn.
 
+% todo: talk about the multiple propagation heuristic used for mutilated chessboard
 
 \subsubsection{Filtering Trivial Clauses}~\label{subsubsec:filteringtriv}
 Introducing globally blocked clauses can affect how we divide $\alpha = \alpha_c
-\sqcup \alpha_a$ as done in \autoref{alg:leastcond}. Thus, it is better to avoid
+\sqcup \alpha_a$ as in \autoref{alg:leastcond}. Thus, it is better to avoid
 introducing globally blocked clauses if they are not useful. We do this by
 checking if $\phi \impunit C$ for each potential clause $C$. If it is implied by
 unit propagation, we do not learn it since we consider it easy to learn.
@@ -49,11 +52,11 @@ clause as $i$ or a variable propagate by $i$. This was originally proposed in
 Reeves et al ~\cite{prelearn}.
 
 \subsubsection{Alternative Shrinking techniques}~\label{subsubsec:shrink-techniques}
-We discussed in \autoref{subsec:shrink} that we can shrink a checking if $\phi
+We discussed in \autoref{subsec:shrinking} that we can shrink a checking if $\phi
 \impunit a \lor c$, where $a \in \alpha_a$ and $c \in \alpha_c$. While, this is
 not the most expensive check, it can be made cheaper. Essentially, we just check
 if there is a clause $a \lor c$ in the original formula. While, there may be
-pairs $a \lor c$ that were missed, this is fast and good enough for certain
+pairs $a, c$ that were missed, this is sufficient for certain
 benchmarks such as the pigeonhole principle. Another alternative is to not
 shrink the clause at all.
 

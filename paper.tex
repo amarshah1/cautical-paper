@@ -16,6 +16,7 @@
   \usepackage{bussproofs}  % For natural deduction proofs with \inferrule
   \usepackage{mathpartir}
   \usepackage{orcidlink}
+  % \usepackage{appendix}
 
   
   % \usepackage[margin=1in]{geometry}    % Exert more control over the margins
@@ -183,7 +184,7 @@
   \newcommand{\pr}{\textsf{PR}\xspace}
   \newcommand{\er}{\texttt{ER}\xspace}
   \newcommand{\impunit}{\vdash_1}
-  \newcommand{\impunitclause}[3]{#1 \impunit #2 \lor #3}
+  \newcommand{\impunitclause}[3]{#1 \land \overline{#2} \impunit #3}
   \newcommand{\lingeling}{\textsc{lingeling}\xspace}
 %  \newcommand{\cadical}{{\sf CaDiCaL}\xspace}
   \newcommand{\cadical}{C\textsc{a}D\textsc{i}C\textsc{aL}\xspace}
@@ -229,12 +230,10 @@
   
   \input{texs/1.introduction}
   \input{texs/2.background}
-  \input{texs/3.clauseaddition.tex}
-  % \input{texs/4.optimizations}
-  % \input{texs/5.motivatingexample}
-  \input{texs/6.implementation}
-  \input{texs/7.evaluation}
-  \input{texs/8.conclusion}
+  \input{texs/3.methodology}
+  \input{texs/4.implementation}
+  \input{texs/5.evaluation}
+  \input{texs/6.conclusion}
 
 %   \input{texs/back}
 %   % \input{texs/method}

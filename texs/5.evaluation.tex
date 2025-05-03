@@ -1,0 +1,40 @@
+\section{Evaluation}~\label{sec:evaluation}
+
+In this section, we aim to answer the following research questions:
+
+
+\begin{enumerate}
+    \item Can conditional autarkies provide short \pr proofs for pigeonhole or mutilated chessboard?
+    \item Is our technique less sensitive to encoding choices compared to other
+    \pr learning techniques?
+    \item Can these techniques underperfrom or outperform SAT solvers on other certain benchmark
+    families?
+\end{enumerate}
+
+% We do so by implementing our technique in a tool \tool (a fork of \cadical
+% commit f13d74439a5b5c963ac5b02d05ce93a8098018b8). 
+
+In \autoref{subsec:eval-pigeonhole}, we compare \tool to \cadical and \sadical
+on the pigeonhole principle. We evaluate based on time taken, the length of
+the proof, and the sensitivity to renaming variables and reordering clauses. 
+
+In \autoref{subsec:eval-pigeonhole}, we compare augment \tool with fixed
+heuristics to discover $O(n^3)$ proofs of mutilated chessboard. We compare to the best known
+mutilated chessboard \pr proof~\cite{mutilatedchessboard-pr}.
+
+In \autoref{subsec:eval-chess}, we compare \tool to other \cadical and \prelearn
+on the benchmarks from the annual Satisfiability competition from the years
+2022, 2023, and 2024. we analyze the use of specific heuristic choices in \tool by turning
+heuristics off one by one and observing the effect on the performance of \tool (\autoref{subsec:eval-heuristics}). Finally, we discuss which families
+of benchmarks our technique performs well and poorly (\autoref{subsec:eval-discussion}).
+
+\subsection{Pigeonhole results}~\label{subsec:eval-pigeonhole}
+
+\subsection{Pigeonhole results}~\label{subsec:eval-chess}
+
+
+\subsection{SATCOMP results}~\label{subsec:eval-satcomp}
+
+\subsection{Analysis of heuristics}~\label{subsec:eval-heuristics}
+
+\subsection{Discussion of Benchmark Families}~\label{subsec:eval-discussion}

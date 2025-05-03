@@ -18,26 +18,31 @@ m$. We can also translate constraint (2) as $\overline{x_{i, j}} \lor
 We represent this diagrammatically as in \autoref{fig:pigeonhole}, where the
 rows are the pigeons and the columns are the holes. The cell in row $i$ and
 column $j$ represents the literal $x_{i, j}$, i.e. whether the $i$-th pigeon is
-in the $j$-th hole. If the $(i, j)$-th cell is green this represents $x_{i, j}$
-is set to true and if it is red this represents $x_{i, j}$ is set to false.
-Thus, constraint (1) asks that each row has at least one green cell and
-constraint (2) asks that no two green cells share a column.
+in the $j$-th hole. If the $(i, j)$-th cell has a $+$ this represents $x_{i, j}$
+is set to true and if it has a $-$ this represents $x_{i, j}$ is set to false.
+Thus, constraint (1) asks that each row has at least one $+$ cell and
+constraint (2) asks that no two $+$ cells share a column.
 
-We will only consider the case where $m = n + 1$ which we denote \ph{n}. This is
-clearly unsatisfiable, however there are no polynomial-sized resolution proofs
-of \ph{n}~\cite{hakenpigeonhole}. There are $O(n^3)$ \pr proofs of the
-pigeonhole principle, but this is difficult to achieve in practice and requires
-specific techniques~\cite{prclauses}. We can learn these proofs, with a very low
-constant factor and little sensitivity to the encoding.
+We achieve an $O(n^3)$ \pr proof of pigeonhole, matching the best known
+result~\cite{prclauses}. We learn these proofs, with a very low constant
+factor and little sensitivity to the encoding.
 
 
 \subsection{Pigeonhole Setup}~\label{subsec:pigeonhole-setup}
 
-Our technique makes a pair of decisions, propagates and then divides this assignment into a conditional and an autarky part, and finally shrinks the clause to derive a useful \pr clause.
+Our technique makes a pair of decisions, propagates, divides this
+assignment into a conditional and an autarky part, and finally shrinks the
+clause to derive a useful \pr clause.
 
-While our technique does allow for decisions on negative literals, this is not useful for the Pigeonhole Principle. We first decide on some literal $i$. For ease, we assume that $i = x_{1, 1}$. This does not matter because of symmetry.
+While our technique does allow for decisions on negative literals, this is not
+useful for the Pigeonhole Principle. We first decide on some literal $i$. For
+ease, we assume that $i = x_{1, 1}$. This does not matter because of symmetry.
 
-Notice that the set of literals we consider for $j$ are the \emph{touched literals}, i.e. those that are in a clause with $x_{1, 1}$ or any of the variables it propagates. By constraint (2), $x_{1, 1}$ propagates $\overline{x_{k, 1}}$ for $2 \leq k \leq n + 1$. But these literals will touch every literal in the formula via the clauses from constraint (1). 
+Notice that the set of literals we consider for $j$ are the \emph{touched
+literals}, i.e. those that are in a clause with $x_{1, 1}$ or any of the
+variables it propagates. By constraint (2), $x_{1, 1}$ propagates
+$\overline{x_{k, 1}}$ for $2 \leq k \leq n + 1$. But these literals will touch
+every literal in the formula via the clauses from constraint (1). 
 
 
 \subsection{Solving the Pigeonhole Principle}~\label{subsec:solvingpigeonhole}
