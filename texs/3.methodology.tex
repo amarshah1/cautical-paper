@@ -61,7 +61,7 @@ choices (\autoref{sec:implementation}).
     \SetKwProg{Fn}{Function}{:}{}
     \SetKwBlock{Begin}{}{}
     \Fn{\Learn{$\psi$, $\alpha$}}{
-        \For{$i \in vars(\psi)$}{
+        \For{$i \in vars(\psi)$}{ \label{line:sort-alphaa}
             \For{$j \in vars(\psi)$}{
                 \Propagate($i$); \\
                 \Propagate($j$); \\
@@ -77,13 +77,14 @@ For motivation, we will discuss the pigeonhole example \ph{4}, where we make
 decisions $i = x_{1, 1}$ and $j = x_{2, 2}$. This lets us learn the clause
 $\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$ (see
 \autoref{fig:pigeonholeclauses}), which is necessary for the \pr proof of
-pigeonhole \cite{prclauses}. We explain how this clause is used in the proof in
-Appendix~\ref{app:pigeonhole}.
+pigeonhole \cite{prclauses}. 
+% We explain how this clause is used in the proof in
+% Appendix~\ref{app:pigeonhole}.
 
 
 We start by propagating on $x_{1, 1}$ and $x_{2, 2}$, which assigns
 $\overline{x}_{2, 1}, \ldots, \overline{x}_{5, 1}, \overline{x}_{1, 2},
-\overline{3, 2} \ldots, \overline{x}_{5, 2}$ by constraint (2) (see
+\overline{x}_{3, 2} \ldots, \overline{x}_{5, 2}$ by constraint (2) (see
 \autoref{subfig:pigeonholeclause-b}).
 
 \subsection{Learning Clauses}~\label{subsec:learning}

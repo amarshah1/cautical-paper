@@ -14,27 +14,78 @@ In this section, we aim to answer the following research questions:
 % We do so by implementing our technique in a tool \tool (a fork of \cadical
 % commit f13d74439a5b5c963ac5b02d05ce93a8098018b8). 
 
-In \autoref{subsec:eval-pigeonhole}, we compare \tool to \cadical and \sadical
-on the pigeonhole principle. We evaluate based on time taken, the length of
-the proof, and the sensitivity to renaming variables and reordering clauses. 
+% In \autoref{subsec:eval-pigeonhole}, we compare \tool to \cadical and \sadical
+% on the pigeonhole principle. We evaluate based on time taken, the length of
+% the proof, and the sensitivity to renaming variables and reordering clauses. 
 
-In \autoref{subsec:eval-pigeonhole}, we compare augment \tool with fixed
-heuristics to discover $O(n^3)$ proofs of mutilated chessboard. We compare to the best known
-mutilated chessboard \pr proof~\cite{mutilatedchessboard-pr}.
+% In \autoref{subsec:eval-pigeonhole}, we compare augment \tool with fixed
+% heuristics to discover $O(n^3)$ proofs of mutilated chessboard. We compare to the best known
+% mutilated chessboard \pr proof~\cite{mutilatedchessboard-pr}.
 
-In \autoref{subsec:eval-chess}, we compare \tool to other \cadical and \prelearn
-on the benchmarks from the annual Satisfiability competition from the years
-2022, 2023, and 2024. we analyze the use of specific heuristic choices in \tool by turning
-heuristics off one by one and observing the effect on the performance of \tool (\autoref{subsec:eval-heuristics}). Finally, we discuss which families
-of benchmarks our technique performs well and poorly (\autoref{subsec:eval-discussion}).
+% In \autoref{subsec:eval-chess}, we compare \tool to other \cadical and \prelearn
+% on the benchmarks from the annual Satisfiability competition from the years
+% 2022, 2023, and 2024. we analyze the use of specific heuristic choices in \tool by turning
+% heuristics off one by one and observing the effect on the performance of \tool (\autoref{subsec:eval-heuristics}). Finally, we discuss which families
+% of benchmarks our technique performs well and poorly (\autoref{subsec:eval-discussion}).
 
-\subsection{Pigeonhole results}~\label{subsec:eval-pigeonhole}
+% \subsection{Pigeonhole results}~\label{subsec:eval-pigeonhole}
 
-\subsection{Pigeonhole results}~\label{subsec:eval-chess}
+% \subsection{Mutilated chessboard results}~\label{subsec:eval-chess}
 
 
 \subsection{SATCOMP results}~\label{subsec:eval-satcomp}
 
-\subsection{Analysis of heuristics}~\label{subsec:eval-heuristics}
+\begin{figure*}[!t]
+    \centering
+    \begin{subfigure}[t]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/cautical_vs_cadical_log.png}
+        \caption{Comparison with \cadical}
+        \label{fig:cautical-vs-cadical}
+    \end{subfigure}
+    \hspace{0.06\textwidth}
+    \begin{subfigure}[t]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/cautical_vs_prelearn_log.png}
+        \caption{Comparison with \prelearn}
+        \label{fig:cautical-vs-prelearn}
+    \end{subfigure}
+    \caption{Performance comparison of \tool with other solvers}
+    \label{fig:solver-comparison}
+\end{figure*}
 
-\subsection{Discussion of Benchmark Families}~\label{subsec:eval-discussion}
+In \autoref{fig:solver-comparison}, we compare the performance of \tool with \cadical and \prelearn on the benchmarks from the annual Satisfiability competition from the years 2022, 2023, and 2024. \autoref{tab:solver-stats} shows the number of instances solved by each solver as well as the number of queries for which \prelearn and \cadical learn additional clauses, improve upon \cadical, and solve that \cadical does not solve.
+
+The PAR-2 score is used to evaluate the performance of the solvers at the competition, it is the sum of the runtime on instances solved plus two times the timeout for each instance unsolved. On this dataset, \cadical has a PAR-score of 3970200.7 seconds, \prelearn has a PAR-score of 3791297.9 seconds, and \tool has a PAR-score of 4072090.4 seconds.
+
+\begin{table}[ht]
+    \centering
+    \sisetup{table-format=3}        % remove if you are not using siunitx
+    \begin{tabular}{lrrrr}
+      \toprule
+      & \multicolumn{2}{c}{0--10k} & \multicolumn{2}{c}{10k$+$} \\
+      \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+      & SAT & UNSAT & SAT & UNSAT \\
+      \midrule
+      \cadical Solved      &  54 &  73 & 354 & 349 \\
+      \midrule
+      Total w/ \prelearn &  52 &  92 & 356 & 355 \\
+      \prelearn learnt      &  43 &  75 & 216 & 203 \\
+      Improved w/ \prelearn&  12 &  31 &  32 &  22 \\
+      Only w/ \prelearn    &   1 &  19 &   6 &   9 \\
+      \midrule
+      Solved w/ \tool  &  52 &  87 & 349 & 327 \\
+      \tool learnt     &  16 &  59 &  32 &  36 \\
+      Improved w/ \tool&  23 &  33 &  87 &  78 \\
+      Only w/ \tool    &   0 &  18 &   9 &   9 \\
+      \bottomrule
+    \end{tabular}
+    \caption{Number of solved instances.}
+    \label{tab:solver-stats}
+  \end{table}
+
+  
+
+% \subsection{Analysis of heuristics}~\label{subsec:eval-heuristics}
+
+% \subsection{Discussion of Benchmark Families}~\label{subsec:eval-discussion}

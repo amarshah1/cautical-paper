@@ -16,6 +16,8 @@
   \usepackage{bussproofs}  % For natural deduction proofs with \inferrule
   \usepackage{mathpartir}
   \usepackage{orcidlink}
+  \usepackage{booktabs}
+  \usepackage{siunitx}
   % \usepackage{appendix}
 
   
@@ -209,17 +211,17 @@
   \begin{abstract}
     % \input{texs/abstract}
     State-of-the-art Boolean satisfiability (SAT) solvers increasingly use techniques that go beyond resolution.
-    One of the strongest such techniques is Propagation Redundancy (\pr) learning.
+    One of the strongest such techniques is Propagation Redundancy (PR) learning.
     %
-    Solvers utilizing PR learning may admit short proofs for benchmark families with exponentially large resolution proofs, such as pigeonhole and mutilated chessboard. However, existing \pr clause learning techniques require an NP-hard check; hence, they are computationally expensive and difficult to integrate into existing tools.
+    Solvers utilizing PR learning may admit short proofs for benchmark families with exponentially large resolution proofs, such as pigeonhole and mutilated chessboard. However, existing PR clause learning techniques require an NP-hard check; hence, they are computationally expensive and difficult to integrate into existing tools.
  
     % todo: I need to cite some paper that introduces pigeonhole and mutilated chessboard
-    % Propagation redundant (\pr) clauses are a class of satisfiability-preserving clauses that can be learned by modern SAT solvers.  
+    % Propagation redundant (PR) clauses are a class of satisfiability-preserving clauses that can be learned by modern SAT solvers.  
 
-    We propose a new method for learning \pr clauses based on conditional autarkies and implement it in the SAT solver \cadical. Our method is modular, allowing for cross-solver compatibility, and learns \pr clauses in linear time. Additionally, we introduce a number of heuristics, including a clause-shrinking technique, to ensure that our method learns useful clauses.
+    We propose a new technique for learning PR clauses based on conditional autarkies and implement it in the SAT solver \cadical. Our method is modular, allowing for cross-solver compatibility, and learns PR clauses in linear time. Additionally, we introduce a number of heuristics, including a clause-shrinking technique, to ensure that our method learns useful clauses.
     %
     % todo: add that the we added our thing into cadical
-    We show that our method is competitive with state-of-the-art \pr clause learning techniques, and improves performance on a large portion of SAT competition benchmarks.
+    We show that this is competitive with state-of-the-art PR clause learning techniques, and improves performance on a large portion of SAT competition benchmarks.
     % todo : I would like a better way to talk about the heuristics
     % \keywords{Program Verification \and SMT \and Proof Stability.}
   \end{abstract}
@@ -252,9 +254,9 @@
   \bibliographystyle{IEEEtran}
   \bibliography{base}
 
-  \appendix
+  % \appendix
 
-  \input{texs/A.pigeonhole}
+  % \input{texs/A.pigeonhole}
 
   
   % \input{texs/appendix}
