@@ -16,7 +16,7 @@ regardless of whether it has found any \pr clauses.
 % todo: maybe move these two paragraphs to implementation section
 
 % \noindent \textbf{Sorting $\alpha_a$ by Implication:}%~\label{subsubsec:impordering}
-% The greedy set cover algorithm described above is almost sufficient for being insensitive to heuristics, but there is one other optimization that we made. \autoref{alg:finda0} describes sorting $\alpha_a$ as an initial step. This is important for cases where there are more than one cover of the same size. The most common occurence of this is for $a_1, a_2 \in \alpha_a$, we may have that $\overline{a_2} \impunit^\formula \overline{a_1} \impunit^\formula c_1, ..., c_n$. 
+% The greedy set cover algorithm described above is almost sufficient for being insensitive to heuristics, but there is one other optimization that we made. \autoref{alg:finda0} describes sorting $\alpha_a$ as an initial step. This is important for cases where there are more than one cover of the same size. The most common occurence of this is for $a_1, a_2 \in \alpha_a$, we may have that $\overline{a_2} \impunit^\formula \overline{a_1} \impunit^\formula c_1, \dots, c_n$. 
 
 % Thus, greedy set cover could pick $\{a_1\}$ or $\{a_2\}$ as singleton sets. However, since $a_1 \impunit^\formula a_2$, we really want to learn the unit clause $a_1$ since it is much more powerful.
 

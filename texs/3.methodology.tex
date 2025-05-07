@@ -144,9 +144,9 @@ a_1, \dots, a_m$, we can consider the set $C_0 = \{c_j \in C \mid \exists a_i \i
 
 % This is essentially the set of literals in $\alpha_c$ that can be implied by unit propagation by negating some literal in $\alpha_a$.
 
-% we could add clauses of the form $\overline{c_1} \lor ... \lor \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
+% we could add clauses of the form $\overline{c_1} \lor \dots \lor \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
 
-% , this may still lead to a long clause. We aim to shrink this clause. Notice that if $\alpha_c = c_1, ..., c_n$ and $\alpha_a = a_1, ..., a_m$, we could add clauses of the form $\overline{c_1} \lor ... \lor \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
+% , this may still lead to a long clause. We aim to shrink this clause. Notice that if $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$, we could add clauses of the form $\overline{c_1} \lor \dots \lor \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
 
 
 % Consider $\overline{\alpha_a}$, the negation of the literals in $\alpha_a$. 
@@ -169,7 +169,7 @@ We want learn the clause $\bigvee_{c \in C \backslash C_0} \overline{c} \lor
 
 
 \begin{theorem}~\label{thm:shrunkgbcequisat}
-    The formula $\formula$ is satisfiable if and only if $\formula \land (\bigvee_{c \in C \backslash C_0} \overline{c} \lor \bigvee_{a \in A_0} a)$ is satisfiable.
+    Let $\Gamma$ be a formula and $\alpha = \alpha_c \sqcup \alpha_a$ be a conditional autarky on $\Gamma$, with $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$. Formula $\formula$ is satisfiable if and only if $\formula \land (\bigvee_{c \in C \backslash C_0} \overline{c} \lor \bigvee_{a \in A_0} a)$ is satisfiable.
 \end{theorem}
 
 \begin{proof}

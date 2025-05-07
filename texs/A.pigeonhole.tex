@@ -31,7 +31,7 @@ Notice that the set of literals we consider for $j$ are the \emph{touched litera
 Below we describe three stages at which we learn useful clauses:
 
 
-\subsubsection{Useful Binary Clauses}~\label{subec:usefulbinaryclauses} When learning a second variable $j= x_{2, 2}$, propagation gives us the literals $\overline{x}_{2, 1}, ... \overline{x}_{n+1, 1}$ and $\overline{x}_{1, 2}, \overline{x}_{3, 2}, ... \overline{x}_{n+1, 2}$. This can be divided into a autarky part $\alpha_a = x_{1, 1}, x_{2, 2}, \overline{x}_{1, 2}, \overline{x}_{2, 1}$ and a conditional part $\alpha_c = \overline{x}_{3, 1}, \ldots, \overline{x}_{n+1, 1}, \overline{x}_{3, 2}, \ldots, \overline{x}_{n+1, 2}$.
+\subsubsection{Useful Binary Clauses}~\label{subec:usefulbinaryclauses} When learning a second variable $j= x_{2, 2}$, propagation gives us the literals $\overline{x}_{2, 1}, \dots \overline{x}_{n+1, 1}$ and $\overline{x}_{1, 2}, \overline{x}_{3, 2}, \dots \overline{x}_{n+1, 2}$. This can be divided into a autarky part $\alpha_a = x_{1, 1}, x_{2, 2}, \overline{x}_{1, 2}, \overline{x}_{2, 1}$ and a conditional part $\alpha_c = \overline{x}_{3, 1}, \ldots, \overline{x}_{n+1, 1}, \overline{x}_{3, 2}, \ldots, \overline{x}_{n+1, 2}$.
 
 This can be shrunk to the clause $\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$.
 % todo : maybe say more about this shrinking

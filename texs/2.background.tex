@@ -1,6 +1,6 @@
 \section{Background}~\label{sec:background}
 
-We begin with some SAT preliminaries. Variables $x_1, x_2, ...$ take values
+We begin with some SAT preliminaries. Variables $x_1, x_2, \dots$ take values
 \emph{true} ($\top$) or \emph{false} ($\bot$). A literal $l$ is a variable
 $x$ or its negation $\overline{x}$. A clause $C$ is a disjunction of literals,
 e.g., $C = x_1 \lor \overline{x}_4 \lor x_6$. A clause may also be represented by the set of its literals:
@@ -85,7 +85,7 @@ Unit propagation can be thought of as a proof step. Indeed, it can be thought of
     }
 \end{equation*}
 
-Given a formula $\formula$ and clause $C = l_1 \lor ... \lor l_k$, we can say $\formula \impunit C$, i.e., ``$\formula$ implies $C$ via unit propagation,'' if $\formula \land \overline{l}_1 \land \dots \land \overline{l}_k$ derives a conflict. Here, $C$ is a simple example of a redundant clause w.r.t. $\formula$. 
+Given a formula $\formula$ and clause $C = l_1 \lor \dots \lor l_k$, we can say $\formula \impunit C$, i.e., ``$\formula$ implies $C$ via unit propagation,'' if $\formula \land \overline{l}_1 \land \dots \land \overline{l}_k$ derives a conflict. Here, $C$ is a simple example of a redundant clause w.r.t. $\formula$. 
 
 % This can be justified in almost any proof system for propositional logic. However, this is not very useful as it rules out
 
@@ -131,7 +131,7 @@ However, checking if a clause is \pr is NP-complete~\cite{prclause}, so witnesse
     A nonempty assignment $\alpha$ is an autarky for a formula $\formula$ if every clause $C \in \formula$ touched by $\alpha$ is satisfied.
 \end{definition}
 
-% An autarky $\alpha_a = a_1, ..., a_m$ can be very useful as $a_1 \land ... \land a_m$ is an equisatisfiable clause. However, these can be difficult to find.
+% An autarky $\alpha_a = a_1, \dots, a_m$ can be very useful as $a_1 \land \dots \land a_m$ is an equisatisfiable clause. However, these can be difficult to find.
 
 In plain words, an autarky is an assignment that satisfies every clause it touches. For example, if $\alpha$ was a satisfying assignment, it would be an autarky since it satisfies every clause.
 
@@ -141,31 +141,32 @@ In plain words, an autarky is an assignment that satisfies every clause it touch
 
 Specifically, we can think about searching for conditional autarkies by first looking for a partial assignment $\alpha_c$, and then finding an autarky $\alpha_a$ on the reduced formula $\formula|_{\alpha_c}$.
 
-Conditional autarkies can be very useful for learning equisatisfiable clauses, for instance, if $\alpha_c = c_1, ..., c_n$ and $\alpha_a = a_1, ..., a_m$, we add clauses of the form:
+Conditional autarkies can be very useful for learning equisatisfiable clauses, for instance, if $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$, we add clauses of the form:
 
 \begin{equation*}
-    [c_1 \land ... \land c_n] \rightarrow [a_1 \land ... \land a_m]
+    [c_1 \land \dots \land c_n] \rightarrow [a_1 \land \dots \land a_m]
 \end{equation*}
 
 This results in $m$ different clauses as in the following theorem from Kiesl et al.~\cite{conditionalautarkies}:
 
 \begin{theorem}~\label{thm:gbcequisat}
-    Formula $\formula$ and $\formula \land \bigwedge_{1 \leq i \leq m} (\overline{c}_1 \lor ... \overline{c}_n \lor a_i)$ are equisatisfiable.
+    Let $\Gamma$ be a formula and $\alpha = \alpha_c \sqcup \alpha_a$ be a conditional autarky on $\Gamma$, with $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$. Formula $\formula$ and $\formula \land \bigwedge_{1 \leq i \leq m} (\overline{c}_1 \lor \dots \lor \overline{c}_n \lor a_i)$ are equisatisfiable.
 \end{theorem}
 
-This means that $\formula$ is satisfiable if and only if $\formula \land \bigwedge_{1 \leq i \leq m} (\overline{c}_1 \lor ... \overline{c}_n \lor a_i)$ is satisfiable. Thus, the solver can add any of the $m$ clauses $\overline{c}_1 \lor ... \overline{c}_n \lor a_i$ and preserve satisfiability. Each of these clauses is a \pr clause with witness $\alpha_a$. Each of these clauses is a \emph{globally blocked clause}, however, this is not too important for our purposes, so we will not discuss it further.
+That is, a formula $\formula$ is satisfiable if and only if $\formula \land \bigwedge_{1 \leq i \leq m} (\overline{c}_1 \lor \dots \lor \overline{c}_n \lor a_i)$ is satisfiable. A solver may thus add any of the $m$ clauses $\overline{c}_1 \lor \dots \lor \overline{c}_n \lor a_i$ and preserve satisfiability. Each of these clauses is a \pr clause with witness $\alpha_a$.
+% Each of these clauses is a \emph{globally blocked clause}, however, this is not too important for our purposes, so we will not discuss it further.
 % Additionally, we can see that this is a \pr clause:
 
 % todo: this theorem works for us because of the algorithm we use to prove this, but it is not true in the general case.
 
 % \begin{theorem}~\label{thm:totalassignmnet}
-%     For $1 \leq i \leq m$, the clause $C = \overline{c}_1 \lor ... \overline{c}_n \lor a_i$ is a \pr clause w.r.t $\formula$ with witness $\alpha_a$
+%     For $1 \leq i \leq m$, the clause $C = \overline{c}_1 \lor \dots \overline{c}_n \lor a_i$ is a \pr clause w.r.t $\formula$ with witness $\alpha_a$
 % \end{theorem}
 
 % \begin{proof}
 %    Since $a_i \in \alpha_a$, $\alpha_a$ satisfies $C$.
    
-%    Define the assignment that blocks $C$ as $\beta = c_1, ..., c_n, \overline{a}_i$. Now we want to show that: $\formula|_\beta \impunit \formula|_{\alpha_a}$. Take a clause $C \in \formula|_{\alpha_a}$. We know that
+%    Define the assignment that blocks $C$ as $\beta = c_1, \dots, c_n, \overline{a}_i$. Now we want to show that: $\formula|_\beta \impunit \formula|_{\alpha_a}$. Take a clause $C \in \formula|_{\alpha_a}$. We know that
 % \end{proof}
 
 
