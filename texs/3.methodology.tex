@@ -8,27 +8,27 @@
     \caption{Learning the clause $\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$ for \ph{4}}~\label{fig:pigeonholeclauses}
   \end{figure*}
 
-We motivate our methodology with a discusssion of the pigeonhole principle.
+We use the pigeonhole principle as a motivating example.
 The problem $\ph{n}$ asks whether we can put $n+1$ pigeons in $n$ holes such
 that (1)~every pigeon is in a hole, and (2)~no hole contains more than one
 pigeon. This can be encoded as a SAT problem where variable $x_{i, j}$
 represents putting the $i$-th pigeon into the $j$-th hole. Thus, constraint (1)
 is $\bigvee_{1 \leq j \leq n} x_{i, j}$ for each $1 \leq i \leq n+1$ and
 constraint (2) is $\overline{x}_{i, j} \lor \overline{x}_{k, j}$ for each $ 1
-\leq i \neq k \leq n+1$ and $1 \leq j \leq n$.
+\leq i < k \leq n+1$ and $1 \leq j \leq n$.
 
-We represent this diagrammatically in \autoref{fig:pigeonholeclauses}, where the
+\autoref{fig:pigeonholeclauses} provides a visualization where the
 rows represent the pigeons and the columns represent the holes. The cell in row
 $i$ and column $j$ represents the literal $x_{i, j}$
 % i.e. whether the $i$-th pigeon is in the $j$-th hole.
-If the $(i, j)$-th cell has a $+$ symbol this represents $x_{i, j}$ is set to
+If the $(i, j)$-th cell has a $+$ symbol, this represents $x_{i, j}$ is set to
 true and if it has a $-$ symbol this represents $x_{i, j}$ is set to false.
 Thus, constraint (1) asks that each row has at least one $+$ cell and
 constraint (2) asks that no two $+$ cells share a column.
 
 % We only consider the case where $m = n + 1$ which we denote \ph{n}. 
 We achieve an $O(n^3)$ \pr proof, matching the best known
-result~\cite{prclauses}. We learn these proofs, with a very low constant
+result~\cite{prclauses}. We learn these proofs with a very low constant
 factor and little sensitivity to the encoding.
 %  todo: add a forward reference to where we evaluate this
 %  todo: is this the best possible result theoretically?
@@ -43,11 +43,10 @@ propagating on two variables $i$ and $j$, (II) learning the least conditional
 autarky of the partial assignment, (III) shrinking the clause, and (IV) adding
 the clause to the formula. 
 
-The \texttt{Propagate} function represents unit propagation. II is done via the
-\texttt{LeastConditional} function, following prior work
-(\autoref{subsec:learning}). III is done by the \texttt{Shrink} function
-(\autoref{subsec:shrinking}). All four stages require a number of heuristics
-choices (\autoref{sec:implementation}).
+The \texttt{Propagate} function represents unit propagation.
+\texttt{LeastConditional} function achieves II, following prior work
+(\autoref{subsec:learning}). The \texttt{Shrink} function takes care of III
+(\autoref{subsec:shrinking}). All four stages require several heuristic choices (\autoref{sec:implementation}).
 
 \begin{algorithm}~\label{alg:methodology}
     \caption{Learning \pr clauses}\label{alg:methodology}
@@ -90,15 +89,15 @@ $\overline{x}_{2, 1}, \ldots, \overline{x}_{5, 1}, \overline{x}_{1, 2},
 \subsection{Learning Clauses}~\label{subsec:learning}
 
 
-As described in \autoref{subsec:autarkies}, we can split a partial assignment
-$\alpha = \alpha_c \sqcup \alpha_a$ to learn a \pr clause $\alpha_C \lor a$ for
-any $a \in \alpha_a$. Since all of $\alpha_c$ appears in such a clause we must
-minimize it using \autoref{alg:leastcond} from Kiesel et al
-\cite{conditionalautarkies} to find the smallest possible $\alpha_c$:
+As described in \autoref{subsec:autarkies}, we can split any partial assignment
+$\alpha = \alpha_c \sqcup \alpha_a$ to learn a \pr clause $\alpha_c \lor a$ for
+any $a \in \alpha_a$. Since all of $\alpha_c$ appears in such a clause, we want
+minimize it using \autoref{alg:leastcond} from Kiesl et al.
+\cite{conditionalautarkies} to find the unique smallest possible $\alpha_c$:
 
 
 \begin{algorithm}
-    \caption{Minimizing $\alpha_c$ in $\alpha = \alpha_c \sqcup \alpha_a$}\label{alg:leastcond}
+    \caption{Unique minimal $\alpha_c$ in $\alpha = \alpha_c \sqcup \alpha_a$}\label{alg:leastcond}
     \SetAlgoNoLine
     \SetKwFunction{LCP}{LeastConditional}
     \SetKwFor{For}{for}{:}{}
@@ -132,14 +131,14 @@ From our pigeonhole example, we can see the rows in
 touched but not satisfied and thus are in $\alpha_c$. However, the rows with a
 $+$ will have their constraint (1) satisfied and thus are in $\alpha_a$. Thus,
 $\alpha_a = \{x_{1, 1}, \overline{x}_{1, 2}, \overline{x}_{2, 1}, x_{2, 2}\}$
-and $\alpha_a = \{\overline{x}_{3, 1}, \ldots, \overline{x}_{5, 1}, \overline{x}_{3,
+and $\alpha_c = \{\overline{x}_{3, 1}, \ldots, \overline{x}_{5, 1}, \overline{x}_{3,
 2} \ldots, \overline{x}_{5, 2}\}$.
 
 \subsection{Shrinking Clauses}~\label{subsec:shrinking}
 
-Unfortunately a clause $\alpha_c \lor a$ may still be too long. We aim to
-shrink this clause. Notice that if $\alpha_c = c_1, ..., c_n$ and $\alpha_a =
-a_1, ..., a_m$, we can consider the set $C_0 = \{c_j \in C| \exists a_i \in
+Unfortunately, a clause $\alpha_c \lor a$ may still be too long. We aim to
+shrink this clause. Notice that if $\alpha_c = c_1, \dots, c_n$ and $\alpha_a =
+a_1, \dots, a_m$, we can consider the set $C_0 = \{c_j \in C \mid \exists a_i \in
 \alpha_a \text{ s.t. } \impunitclause{\phi}{a_i}{c_j} \}$.
 %  todo : provide some intutition for how we pick this set
 
@@ -190,7 +189,7 @@ We want learn the clause $\bigvee_{c \in C \backslash C_0} \overline{c} \lor
     the case then: (1)~for all $a \in A_0$ $\overline{a} \in \beta$ and (2)~there
     is some $c \in C_0$ such that $\overline{c} \in \beta$. 
 
-    But by definition there is some $a \in A_0$ such that
+    But by definition, there is some $a \in A_0$ such that
     $\impunitclause{\phi}{a}{c}$. Thus $\phi \land \overline{a} \land
     \overline{c}$ is unsatisfiable via unit propagation. However, this cannot be
     the case since $\beta$ is a satisfying assignment for $\phi$ and
@@ -208,13 +207,13 @@ As mentioned in \autoref{subsec:shrinking}, our choice for $A_0$ is very importa
 
 
 \noindent \textbf{Greedy Set Cover:} %~\label{subsubsec:greedysetcover}
-In order to minimize the size of the clause, we may want the smallest possible $A_0$ that maximizes $C_0$. Say for each $a \in \alpha_a$, we define $\alpha_a^{SETS}(a) = \{ c \in \alpha_c \; | \; \impunitclause{\phi}{a}{c}\}$. 
+In order to minimize the size of the clause, we may want the smallest possible $A_0$ that maximizes $C_0$. Say for each $a \in \alpha_a$, we define $\alpha_a^\mathrm{SETS}(a) = \{ c \in \alpha_c \; | \; \impunitclause{\phi}{a}{c}\}$. 
 
-When $C_0 = \alpha_C$, finding the smallest $A_0$ is exactly the set cover problem with $\alpha_a^{SETS}$. This is NP-hard. We can approximate using the greedy algorithm, which returns a set cover at most roughly $(\ln |\alpha_c| + 1)$-times the size of the smallest set cover~\cite{greedysetcover}. 
+When $C_0 = \alpha_C$, finding the smallest $A_0$ is exactly the set cover problem with $\alpha_a^\mathrm{SETS}$. This is NP-hard. We can approximate using the greedy algorithm, which returns a set cover at most roughly $(\ln |\alpha_c| + 1)$-times the size of the smallest set cover~\cite{greedysetcover}. 
 %  in actuality it is $\ln |\alpha_c| - \ln \ln |\alpha_c| + O(1)$
 
 
-Specifically, the greedy algorithm will find the largest set in $\{\alpha_a^{SETS} \cap (\alpha_c \backslash C_0) | a \in \alpha_a \}$ at each step and add it to $C_0$. It stops when each of the $\alpha_a^{SETS} \cap (\alpha_c \backslash C_0)$ are empty.
+Specifically, the greedy algorithm will find the largest set in $\{\alpha_a^\mathrm{SETS} \cap (\alpha_c \backslash C_0) | a \in \alpha_a \}$ at each step and add it to $C_0$. It stops when each of the $\alpha_a^\mathrm{SETS} \cap (\alpha_c \backslash C_0)$ are empty.
 % either $C_0 = \alpha_C$ or there are no terms 
 
 
@@ -227,7 +226,7 @@ Specifically, the greedy algorithm will find the largest set in $\{\alpha_a^{SET
     \SetKwProg{Fn}{Function}{:}{}
     \Fn{\Shrink{$\psi$, $\alpha_a$, $\alpha_c$}}{
         % $\alpha_a$ := \texttt{sort($\alpha_a$)}\;
-        $\alpha_a^{SETS}$ := init \texttt{Array[len($\alpha_a$)]}\;
+        $\alpha_a^\mathrm{SETS}$ := init \texttt{Array[len($\alpha_a$)]}\;
         \For{$i \in \texttt{range}(\alpha_a)$}{
             \texttt{Propagate($-\alpha_a[i]$)}\;
             \texttt{implied} := $\{\}$\;
@@ -237,9 +236,9 @@ Specifically, the greedy algorithm will find the largest set in $\{\alpha_a^{SET
                 $\texttt{implied} := \texttt{implied} \cup \{c\}$\;
             }
             }
-            $\alpha_a^{SETS}[i]$ := \texttt{implied}\;
+            $\alpha_a^\mathrm{SETS}[i]$ := \texttt{implied}\;
         }
-        \Return{\texttt{GreedySetCover}($\alpha_a^{SETS}$)}\;
+        \Return{\texttt{GreedySetCover}($\alpha_a^\mathrm{SETS}$)}\;
     }
 \end{algorithm}
 % todo : this algorithm is not actually what we do, since we don't propagate on c -> see if this is a problem ever
@@ -247,9 +246,9 @@ Specifically, the greedy algorithm will find the largest set in $\{\alpha_a^{SET
 In \autoref{alg:finda0}, we describe our process for calculating $A_0$. 
 % We initially pre-sort $\alpha_a$ by implication, which we will discuss in more
 % detail. 
-We initialize $\alpha_a^{SETS}$ as an array, iterate the counter
-$i$ through $\alpha_a$, populating $\alpha_a^{SETS}[i]$ with the set of literals
-$c \in \alpha_c$ such that $\impunitclause{\psi}{\alpha_a^{SETS}[i]}{c}$. Finally, we apply
+We initialize $\alpha_a^\mathrm{SETS}$ as an array, iterate the counter
+$i$ through $\alpha_a$, populating $\alpha_a^\mathrm{SETS}[i]$ with the set of literals
+$c \in \alpha_c$ such that $\impunitclause{\psi}{\alpha_a^\mathrm{SETS}[i]}{c}$. Finally, we apply
 \texttt{GreedySetCover}, to get a small set $A_0$ that covers as much of $C$ as we can
 
 In the context of the pigeonhole example, out of the $\alpha_a$,
