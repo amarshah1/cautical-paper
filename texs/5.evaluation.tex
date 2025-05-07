@@ -14,21 +14,53 @@ In this section, we aim to answer the following research questions:
 % We do so by implementing our technique in a tool \tool (a fork of \cadical
 % commit f13d74439a5b5c963ac5b02d05ce93a8098018b8). 
 
-% In \autoref{subsec:eval-pigeonhole}, we compare \tool to \cadical and \sadical
-% on the pigeonhole principle. We evaluate based on time taken, the length of
-% the proof, and the sensitivity to renaming variables and reordering clauses. 
+In \autoref{subsec:eval-pigeonhole}, we compare \tool to \cadical and \sadical
+on the pigeonhole principle. We evaluate based on time taken, the length of
+the proof, and the sensitivity to renaming variables and reordering clauses. 
 
-% In \autoref{subsec:eval-pigeonhole}, we compare augment \tool with fixed
+% In \autoref{subsec:eval-chess}, we compare augment \tool with fixed
 % heuristics to discover $O(n^3)$ proofs of mutilated chessboard. We compare to the best known
 % mutilated chessboard \pr proof~\cite{mutilatedchessboard-pr}.
 
-% In \autoref{subsec:eval-chess}, we compare \tool to other \cadical and \prelearn
-% on the benchmarks from the annual Satisfiability competition from the years
-% 2022, 2023, and 2024. we analyze the use of specific heuristic choices in \tool by turning
-% heuristics off one by one and observing the effect on the performance of \tool (\autoref{subsec:eval-heuristics}). Finally, we discuss which families
-% of benchmarks our technique performs well and poorly (\autoref{subsec:eval-discussion}).
+In \autoref{subsec:eval-chess}, we compare \tool to other \cadical and \prelearn
+on the benchmarks from the annual Satisfiability competition from the years
+2022, 2023, and 2024. we analyze the use of specific heuristic choices in \tool by turning
+heuristics off one by one and observing the effect on the performance of \tool (\autoref{subsec:eval-heuristics}). Finally, we discuss which families
+of benchmarks our technique performs well and poorly (\autoref{subsec:eval-discussion}).
 
-% \subsection{Pigeonhole results}~\label{subsec:eval-pigeonhole}
+All experiments were performed in the Anvil Supercomputing Center on nodes
+with 128 cores and 2 GB RAM~\cite{anvil}. We ran 64 experiments in parallel per node with 5,000 second timeouts.
+
+\subsection{Pigeonhole results}~\label{subsec:eval-pigeonhole}
+
+We compare the performance of \tool, \cadical, \sadical, and \prelearn on pigeonhole principle benchmarks up to size $40$. Tools such as \sadical were successful at learning short proofs for the pigeonhole principle, but were very sensitive to how the problem was encoded.
+
+As shown in \autoref{fig:pigeonhole-results}, \prelearn and \tool scale cubicly in both runtime and proof size. Interestingly, \tool is able to learn shorter proofs by a factor of $2$-$5$x compared to \prelearn. As we discuss in \autoref{app:pigeonhole}, \tool learns proofs of size $\approx \frac13 n^3$, which is expected to shorter than prior proofs from pigeonhole.
+
+Additionally, we evaluate \tool on
+
+
+We conclude that \tool is able to match \sadical's runtime for the pigeonhole principle, but is able to learn shorter proofs by a constant factor. Additionally, \tool is insensitive to permuting variables, permuting clauses, and flipping literals as it relies on conditional autarkies, a global property of the formula.
+
+
+\begin{figure*}[!t]
+    \centering
+    \begin{subfigure}[t]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/pigeonhole_runtime_comparison.png}
+        \caption{Comparison with \cadical}
+        \label{fig:pigeonhole-runtime-comparison}
+    \end{subfigure}
+    \hspace{0.06\textwidth}
+    \begin{subfigure}[t]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/pigeonhole_proof_size_comparison.png}
+        \caption{Comparison with \prelearn}
+        \label{fig:pigeonhole-proof-size-comparison}
+    \end{subfigure}
+    \caption{Comparison of \tool, \cadical, \sadical, and \prelearn on pigeonhole principle benchmarks up to size $40$. The y-axis is on a cube root scale. The performance of a solver on the original benchmark is shown with a solid line. The mean of the performance of 5 scranfilized queries is shown with a dashed line. If a solver times out in 5000s, it is not shown.}
+    \label{fig:pigeonhole-results}
+\end{figure*}
 
 % \subsection{Mutilated chessboard results}~\label{subsec:eval-chess}
 
