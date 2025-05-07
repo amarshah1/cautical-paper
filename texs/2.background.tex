@@ -96,7 +96,7 @@ Given a formula $\formula$ and clause $C = l_1 \lor ... \lor l_k$, we can say $\
 
 
 For two formulas, we say $\formula \impunit \psi$ if for every clause $C \in \psi$, $\formula \impunit C$. 
-% For literals $l_1$ and $l_2$, we sometimes notate $l_1 \impunit^\formula l_2$ to mean $\formula \vdash_1 \overline{l_1} \land l_2$. Informally, we can think of this as saying ``$l_1$ implies $l_2$ via unit propagation on $\formula$,'' which means that .
+% For literals $l_1$ and $l_2$, we sometimes notate $l_1 \impunit^\formula l_2$ to mean $\formula \vdash_1 \overline{l}_1 \land l_2$. Informally, we can think of this as saying ``$l_1$ implies $l_2$ via unit propagation on $\formula$,'' which means that .
 % see definition here: https://www.cs.cmu.edu/~mheule/publications/prencode.pdf
 % However, this is not very useful as it is quiet easy for the solver to figure this out. Instead, we must appeal to a more complicated notion of redundancy.
 
@@ -150,22 +150,22 @@ Conditional autarkies can be very useful for learning equisatisfiable clauses, f
 This results in $m$ different clauses as in the following theorem from Kiesl et al.~\cite{conditionalautarkies}:
 
 \begin{theorem}~\label{thm:gbcequisat}
-    Formula $\formula$ and $\formula \land \bigwedge_{1 \leq i \leq m} (\overline{c_1} \lor ... \overline{c_n} \lor a_i)$ are equisatisfiable.
+    Formula $\formula$ and $\formula \land \bigwedge_{1 \leq i \leq m} (\overline{c}_1 \lor ... \overline{c}_n \lor a_i)$ are equisatisfiable.
 \end{theorem}
 
-This means that $\formula$ is satisfiable if and only if $\formula \land \bigwedge_{1 \leq i \leq m} (\overline{c_1} \lor ... \overline{c_n} \lor a_i)$ is satisfiable. Thus, the solver can add any of the $m$ clauses $\overline{c_1} \lor ... \overline{c_n} \lor a_i$ and preserve satisfiability. Each of these clauses is a \pr clause with witness $\alpha_a$. Each of these clauses is a \emph{globally blocked clause}, however, this is not too important for our purposes, so we will not discuss it further.
+This means that $\formula$ is satisfiable if and only if $\formula \land \bigwedge_{1 \leq i \leq m} (\overline{c}_1 \lor ... \overline{c}_n \lor a_i)$ is satisfiable. Thus, the solver can add any of the $m$ clauses $\overline{c}_1 \lor ... \overline{c}_n \lor a_i$ and preserve satisfiability. Each of these clauses is a \pr clause with witness $\alpha_a$. Each of these clauses is a \emph{globally blocked clause}, however, this is not too important for our purposes, so we will not discuss it further.
 % Additionally, we can see that this is a \pr clause:
 
 % todo: this theorem works for us because of the algorithm we use to prove this, but it is not true in the general case.
 
 % \begin{theorem}~\label{thm:totalassignmnet}
-%     For $1 \leq i \leq m$, the clause $C = \overline{c_1} \lor ... \overline{c_n} \lor a_i$ is a \pr clause w.r.t $\formula$ with witness $\alpha_a$
+%     For $1 \leq i \leq m$, the clause $C = \overline{c}_1 \lor ... \overline{c}_n \lor a_i$ is a \pr clause w.r.t $\formula$ with witness $\alpha_a$
 % \end{theorem}
 
 % \begin{proof}
 %    Since $a_i \in \alpha_a$, $\alpha_a$ satisfies $C$.
    
-%    Define the assignment that blocks $C$ as $\beta = c_1, ..., c_n, \overline{a_i}$. Now we want to show that: $\formula|_\beta \impunit \formula|_{\alpha_a}$. Take a clause $C \in \formula|_{\alpha_a}$. We know that
+%    Define the assignment that blocks $C$ as $\beta = c_1, ..., c_n, \overline{a}_i$. Now we want to show that: $\formula|_\beta \impunit \formula|_{\alpha_a}$. Take a clause $C \in \formula|_{\alpha_a}$. We know that
 % \end{proof}
 
 
