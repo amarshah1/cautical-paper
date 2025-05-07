@@ -6,24 +6,24 @@ $x$ or its negation $\overline{x}$. A clause $C$ is a disjunction of literals,
 e.g., $C = x_1 \lor \overline{x}_4 \lor x_6$. A clause may also be represented by the set of its literals:
 the prior clause $C = \{x_1, \overline{x}_4, x_6\}$. This motivates denoting that a literal
 $l$ occurs in clause $C$ via $l \in C$. A conjunctive normal form (CNF)
-formula $\phi$ is a conjunction of (disjunctive) clauses. In this paper,
-all formulas $\phi$ are CNF.
+formula $\formula$ is a conjunction of (disjunctive) clauses. In this paper,
+all formulas $\formula$ are CNF.
 
-We use $var(\phi)$ to represent the set of variables occurring in formula $\phi$.
-A partial assignment $\alpha : V \rightarrow \{\top, \bot\}$ on $\phi$
-maps variables $V \subseteq var(\phi)$ to true or false. If $V
-= var(\phi)$, then $\alpha$ is a (total) assignment. We abuse notation by
+We use $var(\formula)$ to represent the set of variables occurring in formula $\formula$.
+A partial assignment $\alpha : V \rightarrow \{\top, \bot\}$ on $\formula$
+maps variables $V \subseteq var(\formula)$ to true or false. If $V
+= var(\formula)$, then $\alpha$ is a (total) assignment. We abuse notation by
 denoting $\alpha(l) = \alpha(x)$ if $l = x$ and $\alpha(l) = \neg \alpha(x)$ if
 $l = \overline{x}$.
 
-A formula restricted to a partial assignment $\phi|_\alpha$ is the formula resulting from
+A formula restricted to a partial assignment $\formula|_\alpha$ is the formula resulting from
 mapping variables in the domain of $\alpha$ to their assignments. We can
 simplify such a formula by removing \emph{literals} assigned false and
 \emph{clauses} including a literal assigned true (and thus satisfied).
-For example, with formula $\phi =
+For example, with formula $\formula =
 (x_1 \lor \overline{x}_4 \lor x_6) \land (x_2 \lor x_3) \land \overline{x}_5$
 and assignment $\alpha$ mapping $x_1$ to $\bot$ and $x_2$ to $\top$,
-we have $\phi|_\alpha = (\overline{x}_4 \lor x_6) \land \overline{x}_5$.
+we have $\formula|_\alpha = (\overline{x}_4 \lor x_6) \land \overline{x}_5$.
 
 A clause $C = l_1 \lor \dots \lor l_m$ is \emph{blocked} by an assignment
 that maps each $l_i \in C$ to false ($\bot$). An assignment $\alpha$
@@ -31,24 +31,24 @@ that maps each $l_i \in C$ to false ($\bot$). An assignment $\alpha$
 such that $x \in C$ or $\overline{x} \in C$. We say $\alpha$ \emph{satisfies}
 $C$ if $\alpha(l) = \top$ and $l \in C$.
 
-Assignment $\alpha$ \emph{satisfies} formula $\phi$ if it satisfies every
-clause $C \in \phi$. If there exists such a satisfying assignment, then $\phi$ is
+Assignment $\alpha$ \emph{satisfies} formula $\formula$ if it satisfies every
+clause $C \in \formula$. If there exists such a satisfying assignment, then $\formula$ is
 \emph{satisfiable}. The boolean satisfiability problem asks whether a given
-formula $\phi$ is satisfiable.
+formula $\formula$ is satisfiable.
 
 \subsection{Redundant Clauses}~\label{subsec:redundant}
 
 A clause $C$ is \emph{redundant} (or \emph{satisfiability-preserving}) with
-respect to a formula $\phi$ if the formulas $\phi$ and $\phi \land C$ are
-\emph{equisatisfiable}, i.e., $\phi$ is satisfiable if and only if $\phi \land C$
+respect to a formula $\formula$ if the formulas $\formula$ and $\formula \land C$ are
+\emph{equisatisfiable}, i.e., $\formula$ is satisfiable if and only if $\formula \land C$
 is satisfiable.
 
 In a \emph{clausal proof system}, each step adds or removes a redundant
 clause $C$. The step may contain extra information, such as a boolean witness
 justifying $C$'s redundancy. A list of redundant clauses ending with the
-empty clause $\bot$ is a proof of unsatisfiability for formula $\phi$.
+empty clause $\bot$ is a proof of unsatisfiability for formula $\formula$.
 
-% If $\phi$ is unsatisfiable, then any clause $C$ will be redundant. However, when solving, we do not know whether $\phi$ is satisfiable a priori. Clausal proof systems can justify that a clause is redundant.
+% If $\formula$ is unsatisfiable, then any clause $C$ will be redundant. However, when solving, we do not know whether $\formula$ is satisfiable a priori. Clausal proof systems can justify that a clause is redundant.
 
 Adding redundant clauses may be helpful to a solver if it greatly
 constrains the set of possible solutions; however, the addition of these clauses
@@ -66,7 +66,7 @@ could negatively interact with solver heuristics, increasing solve time.
     }    
 \end{equation*}
 
-\emph{Unit propagation} is a core reasoning technique in a SAT solver. Starting with empty assignment $\alpha$, if a formula $\phi$ contains a \emph{unit clause} $l$, i.e., a clause with only a single literal, then we set $\alpha(l) = \top$. Then, this unit is propagated, i.e., we consider the formula $\phi|_\alpha$ and continue this process until there are no unit clauses remaining. When unit propagation terminates with $\phi|_\alpha = \bot$, we say that it derives a conflict.
+\emph{Unit propagation} is a core reasoning technique in a SAT solver. Starting with empty assignment $\alpha$, if a formula $\formula$ contains a \emph{unit clause} $l$, i.e., a clause with only a single literal, then we set $\alpha(l) = \top$. Then, this unit is propagated, i.e., we consider the formula $\formula|_\alpha$ and continue this process until there are no unit clauses remaining. When unit propagation terminates with $\formula|_\alpha = \bot$, we say that it derives a conflict.
 % todo: notation issue: I never defined \bot as the empty clause and I also am using \bot both as false and the empty clause.
 
 Unit propagation can be thought of as a proof step. Indeed, it can be thought of as a mechanized application of resolution.
@@ -85,7 +85,7 @@ Unit propagation can be thought of as a proof step. Indeed, it can be thought of
     }
 \end{equation*}
 
-Given a formula $\phi$ and clause $C = l_1 \lor ... \lor l_k$, we can say $\phi \impunit C$, i.e. ``$\phi$ implies $C$ via unit propagation,'' if $\phi \land \overline{l}_1 \land \dots \land \overline{l}_k$ derives a conflict. Here, $C$ is a simple example of a redundant clause w.r.t. $\phi$. 
+Given a formula $\formula$ and clause $C = l_1 \lor ... \lor l_k$, we can say $\formula \impunit C$, i.e., ``$\formula$ implies $C$ via unit propagation,'' if $\formula \land \overline{l}_1 \land \dots \land \overline{l}_k$ derives a conflict. Here, $C$ is a simple example of a redundant clause w.r.t. $\formula$. 
 
 % This can be justified in almost any proof system for propositional logic. However, this is not very useful as it rules out
 
@@ -95,8 +95,8 @@ Given a formula $\phi$ and clause $C = l_1 \lor ... \lor l_k$, we can say $\phi 
 
 
 
-For two formulas, we say $\phi \impunit \psi$ if for every clause $C \in \psi$, $\phi \impunit C$. 
-% For literals $l_1$ and $l_2$, we sometimes notate $l_1 \impunit^\phi l_2$ to mean $\phi \vdash_1 \overline{l_1} \land l_2$. Informally, we can think of this as saying ``$l_1$ implies $l_2$ via unit propagation on $\phi$,'' which means that .
+For two formulas, we say $\formula \impunit \psi$ if for every clause $C \in \psi$, $\formula \impunit C$. 
+% For literals $l_1$ and $l_2$, we sometimes notate $l_1 \impunit^\formula l_2$ to mean $\formula \vdash_1 \overline{l_1} \land l_2$. Informally, we can think of this as saying ``$l_1$ implies $l_2$ via unit propagation on $\formula$,'' which means that .
 % see definition here: https://www.cs.cmu.edu/~mheule/publications/prencode.pdf
 % However, this is not very useful as it is quiet easy for the solver to figure this out. Instead, we must appeal to a more complicated notion of redundancy.
 
@@ -107,19 +107,19 @@ For two formulas, we say $\phi \impunit \psi$ if for every clause $C \in \psi$, 
 While resolution is complete for propositional logic, more powerful proof steps can yield shorter proofs and faster runtimes. One such step is based on \pr clauses.
 
 \begin{definition}[Propagation Redundant (\pr) clauses]
-    For formula $\phi$, we say that clause $C$ (blocked by $\beta$) is propagation redundant (\pr) w.r.t. $\phi$ if there exists an assignment $\omega$ known as the witness such that $F|_\beta \impunit F|_\omega$ and $\omega$ satisfies $C$
+    For formula $\formula$, we say that clause $C$ (blocked by $\beta$) is propagation redundant (\pr) w.r.t. $\formula$ if there exists an assignment $\omega$ known as the witness such that $\formula|_\beta \impunit \formula|_\omega$ and $\omega$ satisfies $C$
 \end{definition}
 
-Such a clause $C$ must be redundant. Say there is a satisfying assignment $\alpha$ for $\phi$. Then if $\alpha$ is not a satisfying assignment for $\phi \land C$, then it must be that $\beta \subseteq \alpha$, i.e. $\alpha$ extends $\beta$. However, since $F|_\beta \impunit F|_\omega$, it must be that any assignment that satisfies $F|_\beta$, will satisfy $F|_\omega$. 
+Such a clause $C$ must be redundant. Say there is a satisfying assignment $\alpha$ for $\formula$. Then if $\alpha$ is not a satisfying assignment for $\formula \land C$, then it must be that $\beta \subseteq \alpha$, i.e., $\alpha$ extends $\beta$. However, since $\formula|_\beta \impunit \formula|_\omega$, it must be that any assignment that satisfies $\formula|_\beta$, will satisfy $\formula|_\omega$. 
 
-Then we can define $\alpha' (x) = \omega(x)$ if $x \in \omega$ and $\alpha'(x) = \alpha(x)$ otherwise. Thus, $\alpha'$ satisfies $\phi$ and $\alpha'$ satisfies $C$.
+Then we can define $\alpha' (x) = \omega(x)$ if $x \in \omega$ and $\alpha'(x) = \alpha(x)$ otherwise. Thus, $\alpha'$ satisfies $\formula$ and $\alpha'$ satisfies $C$.
 
-% Intuitively, we can think of adding $C$ as the constraint that prunes all assignments that extend $\beta$. Since $F|_\beta \impunit F|_\omega$, it must be that any assignment that satisfies $F_\beta$, will satisfy $F_\omega$.
+% Intuitively, we can think of adding $C$ as the constraint that prunes all assignments that extend $\beta$. Since $\formula|_\beta \impunit \formula|_\omega$, it must be that any assignment that satisfies $\formula_\beta$, will satisfy $\formula_\omega$.
 
 % Additionally, since $\omega$ satisfies $C$, removing the assignments that extend $\beta$, will not affect satisfiability.
 % % todo : this needs ot be explained better.
 
-% If $C$ is a \pr clause w.r.t $\phi$, then $\phi$ and $\phi \land C$ are equisatisfiable. Indeed, the clause defined in \autoref{thm:gbcequisat} is \pr with witness $\alpha_a$. 
+% If $C$ is a \pr clause w.r.t $\formula$, then $\formula$ and $\formula \land C$ are equisatisfiable. Indeed, the clause defined in \autoref{thm:gbcequisat} is \pr with witness $\alpha_a$. 
 
 However, checking if a clause is \pr is NP-complete~\cite{prclause}, so witnesses must be provided for proof checking. \pr clauses subsume many classes of redundant clauses, including resolution asymmetric tautologies (RATs)~\cite{rat}, blocked clauses~\cite{blockedclause}, set-blocked clauses~\cite{setblocked}, and globally-blocked clauses~\cite{conditionalautarkies}.
 
@@ -128,7 +128,7 @@ However, checking if a clause is \pr is NP-complete~\cite{prclause}, so witnesse
 % A key realization in prior work~\cite{}
 
 \begin{definition}[Autarky]
-    A nonempty assignment $\alpha$ is an autarky for a formula $\phi$ if every clause $C \in \phi$ touched by $\alpha$ is satisfied.
+    A nonempty assignment $\alpha$ is an autarky for a formula $\formula$ if every clause $C \in \formula$ touched by $\alpha$ is satisfied.
 \end{definition}
 
 % An autarky $\alpha_a = a_1, ..., a_m$ can be very useful as $a_1 \land ... \land a_m$ is an equisatisfiable clause. However, these can be difficult to find.
@@ -136,10 +136,10 @@ However, checking if a clause is \pr is NP-complete~\cite{prclause}, so witnesse
 In plain words, an autarky is an assignment that satisfies every clause it touches. For example, if $\alpha$ was a satisfying assignment, it would be an autarky since it satisfies every clause.
 
 \begin{definition}[Conditional Autarky]
-    A nonempty assignment $\alpha = \alpha_c \sqcup \alpha_a$ (disjoint union) is a conditional autarky for a formula $\phi$ if $\alpha_a$ is an autarky for $\phi|_{\alpha_c}$.
+    A nonempty assignment $\alpha = \alpha_c \sqcup \alpha_a$ (disjoint union) is a conditional autarky for a formula $\formula$ if $\alpha_a$ is an autarky for $\formula|_{\alpha_c}$.
 \end{definition}
 
-Specifically, we can think about searching for conditional autarkies by first looking for a partial assignment $\alpha_c$, and then finding an autarky $\alpha_a$ on the reduced formula $\phi|_{\alpha_c}$.
+Specifically, we can think about searching for conditional autarkies by first looking for a partial assignment $\alpha_c$, and then finding an autarky $\alpha_a$ on the reduced formula $\formula|_{\alpha_c}$.
 
 Conditional autarkies can be very useful for learning equisatisfiable clauses, for instance, if $\alpha_c = c_1, ..., c_n$ and $\alpha_a = a_1, ..., a_m$, we add clauses of the form:
 
@@ -150,22 +150,22 @@ Conditional autarkies can be very useful for learning equisatisfiable clauses, f
 This results in $m$ different clauses as in the following theorem from Kiesl et al.~\cite{conditionalautarkies}:
 
 \begin{theorem}~\label{thm:gbcequisat}
-    Formula $\phi$ and $\phi \land \bigwedge_{1 \leq i \leq m} (\overline{c_1} \lor ... \overline{c_n} \lor a_i)$ are equisatisfiable.
+    Formula $\formula$ and $\formula \land \bigwedge_{1 \leq i \leq m} (\overline{c_1} \lor ... \overline{c_n} \lor a_i)$ are equisatisfiable.
 \end{theorem}
 
-This means that $\phi$ is satisfiable if and only if $\phi \land \bigwedge_{1 \leq i \leq m} (\overline{c_1} \lor ... \overline{c_n} \lor a_i)$ is satisfiable. Thus, the solver can add any of the $m$ clauses $\overline{c_1} \lor ... \overline{c_n} \lor a_i$ and preserve satisfiability. Each of these clauses is a \pr clause with witness $\alpha_a$. Each of these clauses is a \emph{globally blocked clause}, however, this is not too important for our purposes, so we will not discuss it further.
+This means that $\formula$ is satisfiable if and only if $\formula \land \bigwedge_{1 \leq i \leq m} (\overline{c_1} \lor ... \overline{c_n} \lor a_i)$ is satisfiable. Thus, the solver can add any of the $m$ clauses $\overline{c_1} \lor ... \overline{c_n} \lor a_i$ and preserve satisfiability. Each of these clauses is a \pr clause with witness $\alpha_a$. Each of these clauses is a \emph{globally blocked clause}, however, this is not too important for our purposes, so we will not discuss it further.
 % Additionally, we can see that this is a \pr clause:
 
 % todo: this theorem works for us because of the algorithm we use to prove this, but it is not true in the general case.
 
 % \begin{theorem}~\label{thm:totalassignmnet}
-%     For $1 \leq i \leq m$, the clause $C = \overline{c_1} \lor ... \overline{c_n} \lor a_i$ is a \pr clause w.r.t $\phi$ with witness $\alpha_a$
+%     For $1 \leq i \leq m$, the clause $C = \overline{c_1} \lor ... \overline{c_n} \lor a_i$ is a \pr clause w.r.t $\formula$ with witness $\alpha_a$
 % \end{theorem}
 
 % \begin{proof}
 %    Since $a_i \in \alpha_a$, $\alpha_a$ satisfies $C$.
    
-%    Define the assignment that blocks $C$ as $\beta = c_1, ..., c_n, \overline{a_i}$. Now we want to show that: $F|_\beta \impunit F|_{\alpha_a}$. Take a clause $C \in F|_{\alpha_a}$. We know that
+%    Define the assignment that blocks $C$ as $\beta = c_1, ..., c_n, \overline{a_i}$. Now we want to show that: $\formula|_\beta \impunit \formula|_{\alpha_a}$. Take a clause $C \in \formula|_{\alpha_a}$. We know that
 % \end{proof}
 
 
