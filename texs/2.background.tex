@@ -40,23 +40,23 @@ formula $\phi$ is satisfiable.
 
 A clause $C$ is \emph{redundant} (or \emph{satisfiability-preserving}) with
 respect to a formula $\phi$ if the formulas $\phi$ and $\phi \land C$ are
-\emph{equisatisfiable}, i.e. $\phi$ is satisfiable if and only if $\phi \land C$
+\emph{equisatisfiable}, i.e., $\phi$ is satisfiable if and only if $\phi \land C$
 is satisfiable.
 
-In a \emph{clausal proof system}, each step will add or remove a redundant
-clause $C$. The step may contain extra information, such as a boolean witness,
-justifying why $C$ is redundant. A list of redundant clauses ending with the
+In a \emph{clausal proof system}, each step adds or removes a redundant
+clause $C$. The step may contain extra information, such as a boolean witness
+justifying $C$'s redundancy. A list of redundant clauses ending with the
 empty clause $\bot$ is a proof of unsatisfiability for formula $\phi$.
 
 % If $\phi$ is unsatisfiable, then any clause $C$ will be redundant. However, when solving, we do not know whether $\phi$ is satisfiable a priori. Clausal proof systems can justify that a clause is redundant.
 
-Adding redundant clauses may be helpful in certain cases, since adding a clause
-will constrain the set of possible solutions. However, it could be harmful as
-new clauses may negatively interact with solver heuristics.
+Adding redundant clauses may be helpful to a solver if it greatly
+constrains the set of possible solutions; however, the addition of these clauses
+could negatively interact with solver heuristics, increasing solve time.
 
 % \subsection{Reasoning Steps}~\label{subsec:reasoning-steps}
 
-\emph{Resolution} is the main proof step in a clausal proof system. It states that two clauses $C \lor x$ and $\overline{x} \lor D$ and returns a new clause $C \lor D$.
+\emph{Resolution} is the main proof step of clausal proof systems. Given two clauses in a formula, $C \lor x$ and $\overline{x} \lor D$, resolution gives $C \lor D$ as an equisatisfiable clause.
 
 \begin{equation*}
     \inferrule*[Right=Resolution]{
@@ -66,7 +66,7 @@ new clauses may negatively interact with solver heuristics.
     }    
 \end{equation*}
 
-\emph{Unit propagation} is a core reasoning techniques in a SAT solver. Starting with empty partial assignment $\alpha$, if a formula $\phi$, contains a \emph{unit clause} $l$, i.e. a clause with only a single literal, then we set $\alpha(l) = \top$. Then, this unit is propagated, i.e. we consider the formula $\phi|_\alpha$ and continue this process until there are no unit clauses remaining. When unit propagation terminates with $\phi|_\alpha = \bot$, we say that it derives a conflict.
+\emph{Unit propagation} is a core reasoning technique in a SAT solver. Starting with empty assignment $\alpha$, if a formula $\phi$ contains a \emph{unit clause} $l$, i.e., a clause with only a single literal, then we set $\alpha(l) = \top$. Then, this unit is propagated, i.e., we consider the formula $\phi|_\alpha$ and continue this process until there are no unit clauses remaining. When unit propagation terminates with $\phi|_\alpha = \bot$, we say that it derives a conflict.
 % todo: notation issue: I never defined \bot as the empty clause and I also am using \bot both as false and the empty clause.
 
 Unit propagation can be thought of as a proof step. Indeed, it can be thought of as a mechanized application of resolution.
@@ -85,7 +85,7 @@ Unit propagation can be thought of as a proof step. Indeed, it can be thought of
     }
 \end{equation*}
 
-Given a formula $\phi$ and clause $C = l_1 \lor ... \lor l_k$, we can say $\phi \impunit C$, i.e. ``$\phi$ implies $C$ via unit propagation,'' if $\phi \land \overline{l_1} \land ... \land \overline{l_k}$ derives a conflict. Here, $C$ is a simple example of a redundant clause w.r.t. $\phi$. 
+Given a formula $\phi$ and clause $C = l_1 \lor ... \lor l_k$, we can say $\phi \impunit C$, i.e., ``$\phi$ implies $C$ via unit propagation,'' if $\phi \land \overline{l_1} \land ... \land \overline{l_k}$ derives a conflict. Here, $C$ is a simple example of a redundant clause w.r.t. $\phi$. 
 
 % This can be justified in almost any proof system for propositional logic. However, this is not very useful as it rules out
 
@@ -110,7 +110,7 @@ While resolution is complete for propositional logic, more powerful proof steps 
     For formula $\phi$, we say that clause $C$ (blocked by $\beta$) is propagation redundant (\pr) w.r.t. $\phi$ if there exists an assignment $\omega$ known as the witness such that $F|_\beta \impunit F|_\omega$ and $\omega$ satisfies $C$
 \end{definition}
 
-Such a clause $C$ must be redundant. Say there is a satisfying assignment $\alpha$ for $\phi$. Then if $\alpha$ is not a satisfying assignment for $\phi \land C$, then there it must be that $\beta \subseteq \alpha$, i.e. $\alpha$ extends $\beta$. However, since $F|_\beta \impunit F|_\omega$, it must be that any assignment that satisfies $F|_\beta$, will satisfy $F|_\omega$. 
+Such a clause $C$ must be redundant. Say there is a satisfying assignment $\alpha$ for $\phi$. Then if $\alpha$ is not a satisfying assignment for $\phi \land C$, then there it must be that $\beta \subseteq \alpha$, i.e., $\alpha$ extends $\beta$. However, since $F|_\beta \impunit F|_\omega$, it must be that any assignment that satisfies $F|_\beta$, will satisfy $F|_\omega$. 
 
 Then we can define $\alpha' (x) = \omega(x)$ if $x \in \omega$ and $\alpha'(x) = \alpha(x)$ otherwise. Thus, $\alpha'$ satisfies $\phi$ and $\alpha'$ satisfies $C$.
 
