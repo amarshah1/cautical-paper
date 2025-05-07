@@ -131,14 +131,14 @@ From our pigeonhole example, we can see the rows in
 touched but not satisfied and thus are in $\alpha_c$. However, the rows with a
 $+$ will have their constraint (1) satisfied and thus are in $\alpha_a$. Thus,
 $\alpha_a = \{x_{1, 1}, \overline{x}_{1, 2}, \overline{x}_{2, 1}, x_{2, 2}\}$
-and $\alpha_a = \{\overline{x}_{3, 1}, \ldots, \overline{x}_{5, 1}, \overline{x}_{3,
+and $\alpha_c = \{\overline{x}_{3, 1}, \ldots, \overline{x}_{5, 1}, \overline{x}_{3,
 2} \ldots, \overline{x}_{5, 2}\}$.
 
 \subsection{Shrinking Clauses}~\label{subsec:shrinking}
 
 Unfortunately, a clause $\alpha_c \lor a$ may still be too long. We aim to
-shrink this clause. Notice that if $\alpha_c = c_1, ..., c_n$ and $\alpha_a =
-a_1, ..., a_m$, we can consider the set $C_0 = \{c_j \in C| \exists a_i \in
+shrink this clause. Notice that if $\alpha_c = c_1, \dots, c_n$ and $\alpha_a =
+a_1, \dots, a_m$, we can consider the set $C_0 = \{c_j \in C \mid \exists a_i \in
 \alpha_a \text{ s.t. } \impunitclause{\phi}{a_i}{c_j} \}$.
 %  todo : provide some intutition for how we pick this set
 
