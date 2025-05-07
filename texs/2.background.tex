@@ -1,37 +1,38 @@
 \section{Background}~\label{sec:background}
 
-We begin with some SAT preliminaries. Variables $x_1, x_2, ...$ can take values
-\emph{true} ($\top$) or \emph{false} ($\bot$). A literal $l$ can be a variable
+We begin with some SAT preliminaries. Variables $x_1, x_2, ...$ take values
+\emph{true} ($\top$) or \emph{false} ($\bot$). A literal $l$ is a variable
 $x$ or its negation $\overline{x}$. A clause $C$ is a disjunction of literals,
-e.g. $x_1 \lor \overline{x_4} \lor x_6$. Occasionally, we will use set notation
-and may represent $C = \{x_1, \overline{x_4}, x_6\}$ and denote that a literal
-$l$ is present in clause $C$ with $l \in C$. A conjunctive normal form (CNF)
-formula $\phi$ is a conjunction of clauses. We will assume that any formula
-$\phi$ is in CNF for the rest of this paper.
+e.g., $C = x_1 \lor \overline{x_4} \lor x_6$. A clause may also be represented by the set of its literals:
+the prior clause $C = \{x_1, \overline{x_4}, x_6\}$. This motivates denoting that a literal
+$l$ occurs in clause $C$ via $l \in C$. A conjunctive normal form (CNF)
+formula $\phi$ is a conjunction of (disjunctive) clauses. In this paper,
+all formulas $\phi$ are CNF.
 
-We notate $var(\phi)$ as the set of variables that occur in formula $\phi$. For
-some $V \subseteq var(\phi)$, a partial assignment $\alpha : V \rightarrow
-\{\top, \bot\}$  maps some variables of a formula $\phi$ to true or false. If $V
+We use $var(\phi)$ to represent the set of variables occurring in formula $\phi$.
+A partial assignment $\alpha : V \rightarrow \{\top, \bot\}$ on $\phi$
+maps variables $V \subseteq var(\phi)$ to true or false. If $V
 = var(\phi)$, then $\alpha$ is a (total) assignment. We abuse notation by
 denoting $\alpha(l) = \alpha(x)$ if $l = x$ and $\alpha(l) = \neg \alpha(x)$ if
 $l = \overline{x}$.
 
-A formula restricted to a partial assignment $\phi|_\alpha$ is the formula where
-every variable $x$ in the domain of $\alpha$ is assigned to $\alpha(x)$. We can
-simplify such a formula by removing all literals that are assigned to false and
-all clauses with a literal assigned to true. For example, with formula $\phi =
+A formula restricted to a partial assignment $\phi|_\alpha$ is the formula resulting from
+mapping variables in the domain of $\alpha$ to their assignments. We can
+simplify such a formula by removing \emph{literals} assigned false and
+\emph{clauses} including a literal assigned true (and thus satisfied).
+For example, with formula $\phi =
 (x_1 \lor \overline{x_4} \lor x_6) \land (x_2 \lor x_3) \land \overline{x_5}$
-and assignment $\alpha$ with $\alpha(x_1) = \bot$ and $\alpha(x_2) = \top$.
-Then, $\phi|_\alpha = (\overline{x_4} \lor x_6) \land \overline{x_5}$.
+and assignment $\alpha$ mapping $x_1$ to $\bot$ and $x_2$ to $\top$,
+we have $\phi|_\alpha = (\overline{x_4} \lor x_6) \land \overline{x_5}$.
 
-A clause $C = l_1 \lor ... \lor l_m$ is blocked by the partial assignment
-$\alpha$ that assigns each $l_i$ to false ($\bot$). An assignment $\alpha$
+A clause $C = l_1 \lor ... \lor l_m$ is \emph{blocked} by an assignment
+that maps each $l_i \in C$ to false ($\bot$). An assignment $\alpha$
 \emph{touches} a clause $C$ if there is a variable $x$ in the domain of $\alpha$
 such that $x \in C$ or $\overline{x} \in C$. We say $\alpha$ \emph{satisfies}
 $C$ if $\alpha(l) = \top$ and $l \in C$.
 
-An assignment $\alpha$ \emph{satisfies} formula $\phi$ if it satisfies every
-clause $C \in \phi$. If there is such a satisfying assignment, then $\phi$ is
+Assignment $\alpha$ \emph{satisfies} formula $\phi$ if it satisfies every
+clause $C \in \phi$. If there exists such a satisfying assignment, then $\phi$ is
 \emph{satisfiable}. The boolean satisfiability problem asks whether a given
 formula $\phi$ is satisfiable.
 
