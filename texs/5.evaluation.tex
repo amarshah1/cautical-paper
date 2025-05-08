@@ -196,10 +196,140 @@ The PAR-2 score is used to evaluate the performance of the solvers at the compet
     \label{tab:solver-stats}
   \end{table}
 
+
+
+
+
   % todo : update these numbers
 
-  
+\subsection{Discussion of Benchmark Families}~\label{subsec:eval-discussion}
+
+We identify six benchmark families, which \pr clauses  based on prior work ~\cite{prelearn} and our experiments on SATCOMP benchmarks:
+
+\begin{enumerate}
+    \item \texttt{mutilated-chessboard}
+    \item 
+    \item 
+    \item 
+    \item 
+    \item 
+    \item 
+    \item 
+\end{enumerate}
+
+\begin{figure*}[!t]
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figs/cadical_vs_cautical_interesting.jpg}
+            \caption{Comparison with \cadical}
+            \label{fig:cautical-vs-cadical}
+    \end{subfigure}
+        % \hspace{0.06\textwidth}
+    % \hspace{0.06\textwidth}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/prelearn_vs_cadical_interesting.jpg}
+        \caption{Comparison with \prelearn}
+        \label{fig:cautical-vs-prelearn}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/prelearn_vs_cautical_interesting_legend.jpg}
+        \caption{Comparison with \prelearn}
+        \label{fig:cautical-vs-prelearn}
+    \end{subfigure}
+
+    \caption{Performance comparison of \tool with other solvers}
+    \label{fig:solver-comparison}
+\end{figure*}
+
+
+
+
 
 \subsection{Analysis of heuristics}~\label{subsec:eval-heuristics}
 
-% \subsection{Discussion of Benchmark Families}~\label{subsec:eval-discussion}
+We provide a brief analysis of the heuristics used in \tool.
+
+
+\begin{figure*}[!t]
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figs/global_time_lim_heuristic_comparison.jpg}
+            \caption{Time limit}
+            \label{fig:global-time-comparison}
+    \end{subfigure}
+        % \hspace{0.06\textwidth}
+    % \hspace{0.06\textwidth}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/globalbcp_heuristic_comparison.jpg}
+        \caption{BCP}
+        \label{fig:globalbcp}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/globaldontfilter_heuristic_comparison.jpg}
+        \caption{No filter}
+        \label{fig:globaldontfilter}
+    \end{subfigure}
+
+    \caption{Performance comparison of \tool with other solvers}
+    \label{fig:solver-comparison}
+\end{figure*}
+
+\begin{figure*}[!t]
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figs/globaldouble_heuristic_comparison.jpg}
+            \caption{Double}
+            \label{fig:cautical-vs-cadical}
+    \end{subfigure}
+        % \hspace{0.06\textwidth}
+    % \hspace{0.06\textwidth}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/globalisort_heuristic_comparison.jpg}
+        \caption{Sort $i$ beforehand by frequency used}
+        \label{fig:cautical-vs-prelearn}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/globalmaxlen_heuristic_comparison.jpg}
+        \caption{Max length}
+        \label{fig:cautical-vs-prelearn}
+    \end{subfigure}
+
+    \caption{Performance comparison of \tool with other solvers}
+    \label{fig:solver-comparison}
+\end{figure*}
+
+\begin{figure*}[!t]
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figs/globalnoshrink_heuristic_comparison.jpg}
+            \caption{No shrink}
+            \label{fig:cautical-vs-cadical}
+    \end{subfigure}
+        % \hspace{0.06\textwidth}
+    % \hspace{0.06\textwidth}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/globalorderi_heuristic_comparison.jpg}
+        \caption{Order $i$ beforehand in increasing order}
+        \label{fig:cautical-vs-prelearn}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/globaltouch_heuristic_comparison.jpg}
+        \caption{Touched heuristic}
+        \label{fig:cautical-vs-prelearn}
+    \end{subfigure}
+
+    \caption{Performance comparison of \tool with other solvers}
+    \label{fig:solver-comparison}
+\end{figure*}

@@ -145,11 +145,8 @@ However, formulas often do not contain autarkies, and they are difficult to find
 
 Consider, as example, the formula with aptly named variables $\formula = (c \lor a) \land (\overline{a} \lor x) \land (\overline{c} \lor \overline{a} \lor \overline{y})$. We have a conditional autarky $\alpha = \alpha_c \sqcup \alpha_a = c\;a$, with $\alpha_c = c$ and $\alpha_a = a$. Since $\formula|_{\alpha_c} = (a \lor x) \land (a \lor \overline{y})$ and $a$ occurs here only positively, $a$ is an autarky. Thus, $\alpha$ is a conditional autarky on $\formula$.
 
-<<<<<<< HEAD
-=======
 % Specifically, we can think about searching for conditional autarkies by first looking for a partial assignment $\alpha_c$, and then finding an autarky $\alpha_a$ on the reduced formula $\formula|_{\alpha_c}$.
 
->>>>>>> 7d5d61dff6abebc6856a91780a77517130ced429
 Conditional autarkies can be very useful for learning equisatisfiable clauses, for instance, if $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$, we add clauses of the form:
 
 \begin{equation*}
