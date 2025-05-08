@@ -95,18 +95,64 @@ In conclusion, \tool is able to match \sadical's runtime for the pigeonhole prin
 
 \subsection{SATCOMP results}~\label{subsec:eval-satcomp}
 
+% \begin{figure*}[!t]
+%     \centering
+%     \begin{subfigure}[t]{0.4\textwidth}
+%         \centering
+%         \includegraphics[width=\textwidth]{figs/cautical_vs_cadical_log.png}
+%         \caption{Comparison with \cadical}
+%         \label{fig:cautical-vs-cadical}
+%     \end{subfigure}
+%     \hspace{0.06\textwidth}
+%     \begin{subfigure}[t]{0.4\textwidth}
+%         \centering
+%         \includegraphics[width=\textwidth]{figs/cautical_vs_prelearn_log.png}
+%         \caption{Comparison with \prelearn}
+%         \label{fig:cautical-vs-prelearn}
+%     \end{subfigure}
+%     \caption{Performance comparison of \tool with other solvers}
+%     \label{fig:solver-comparison}
+% \end{figure*}
+
+
+% \begin{figure*}[!t]
+%     \centering
+%     \begin{subfigure}[t]{0.4\textwidth}
+%         \centering
+%         \includegraphics[width=\textwidth]{figs/cautical_vs_cadical_log.png}
+%         \caption{Comparison with \cadical}
+%         \label{fig:cautical-vs-cadical}
+%     \end{subfigure}
+%     \hspace{0.06\textwidth}
+%     \begin{subfigure}[t]{0.4\textwidth}
+%         \centering
+%         \includegraphics[width=\textwidth]{figs/cautical_vs_prelearn_log.png}
+%         \caption{Comparison with \prelearn}
+%         \label{fig:cautical-vs-prelearn}
+%     \end{subfigure}
+%     \caption{Performance comparison of \tool with other solvers}
+%     \label{fig:solver-comparison}
+% \end{figure*}
+
+
 \begin{figure*}[!t]
     \centering
-    \begin{subfigure}[t]{0.4\textwidth}
+    \begin{subfigure}[t]{0.3\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figs/cautical_vs_cadical_log.png}
+        \includegraphics[width=\textwidth]{figs/cadical_vs_cautical.jpg}
         \caption{Comparison with \cadical}
         \label{fig:cautical-vs-cadical}
     \end{subfigure}
-    \hspace{0.06\textwidth}
-    \begin{subfigure}[t]{0.4\textwidth}
+    % \hspace{0.06\textwidth}
+    \begin{subfigure}[t]{0.3\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figs/cautical_vs_prelearn_log.png}
+        \includegraphics[width=\textwidth]{figs/prelearn_vs_cautical.jpg}
+        \caption{Comparison with \prelearn}
+        \label{fig:cautical-vs-prelearn}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/cadical_vs_prelearn.jpg}
         \caption{Comparison with \prelearn}
         \label{fig:cautical-vs-prelearn}
     \end{subfigure}
@@ -114,38 +160,46 @@ In conclusion, \tool is able to match \sadical's runtime for the pigeonhole prin
     \label{fig:solver-comparison}
 \end{figure*}
 
-In \autoref{fig:solver-comparison}, we compare the performance of \tool with \cadical and \prelearn on the benchmarks from the annual Satisfiability competition from the years 2022, 2023, and 2024. \autoref{tab:solver-stats} shows the number of instances solved by each solver as well as the number of queries for which \prelearn and \cadical learn additional clauses, improve upon \cadical, and solve that \cadical does not solve.
+In \autoref{fig:solver-comparison}, we compare the performance of \tool with \cadical and \prelearn on the benchmarks from the '22,'23, and '24 SAT competition's main tracks. \autoref{tab:solver-stats} shows the number of instances solved by each solver as well as the number of queries for which \prelearn and \cadical learn additional clauses, improve upon \cadical, and solve that \cadical does not solve.
 
-The PAR-2 score is used to evaluate the performance of the solvers at the competition, it is the sum of the runtime on instances solved plus two times the timeout for each instance unsolved. On this dataset, \cadical has a PAR-score of 3970200.7 seconds, \prelearn has a PAR-score of 3791297.9 seconds, and \tool has a PAR-score of 4072090.4 seconds.
+The PAR-2 score is used to evaluate the performance of the solvers at the competition, it is the sum of the runtime on instances solved plus two times the timeout for each instance unsolved. On this dataset, \cadical has a PAR-score of 3521.79 seconds, \prelearn has a PAR-score of 3331.41 seconds, and \tool has a PAR-score of 3442.14 seconds.
+
+% prelearn PAR score:  3331.406813590451
+% cautical PAR score:  3442.137998163452
+% cadical PAR score:  3521.7908356290172
 
 \begin{table}[ht]
     \centering
     \sisetup{table-format=3}        % remove if you are not using siunitx
     \begin{tabular}{lrrrr}
       \toprule
-      & \multicolumn{2}{c}{0--10k} & \multicolumn{2}{c}{10k$+$} \\
+      & \multicolumn{2}{c}{0--10k} & \multicolumn{2}{c}{10k--20M} \\
       \cmidrule(lr){2-3} \cmidrule(lr){4-5}
       & SAT & UNSAT & SAT & UNSAT \\
       \midrule
       \cadical Solved      &  54 &  73 & 354 & 349 \\
       \midrule
-      Total w/ \prelearn &  52 &  92 & 356 & 355 \\
-      \prelearn learnt      &  43 &  75 & 216 & 203 \\
-      Improved w/ \prelearn&  12 &  31 &  32 &  22 \\
-      Only w/ \prelearn    &   1 &  19 &   6 &   9 \\
+      \prelearn \\
+      \; Total &  52 &  92 & 356 & 355 \\
+      \; Learnt clauses   &  43 &  75 & 216 & 203 \\
+      \; Improved &  12 &  31 &  32 &  22 \\
+      \; Exclusively &   1 &  19 &   6 &   9 \\
       \midrule
-      Solved w/ \tool  &  52 &  87 & 349 & 327 \\
-      \tool learnt     &  16 &  59 &  32 &  36 \\
-      Improved w/ \tool&  23 &  33 &  87 &  78 \\
-      Only w/ \tool    &   0 &  18 &   9 &   9 \\
+      \tool \\
+      \; Total &  52 &  87 & 349 & 327 \\
+      \; Learnt clauses     &  16 &  59 &  32 &  36 \\
+      \; Improved &  23 &  33 &  87 &  78 \\
+      \; Exclusively &   0 &  18 &   9 &   9 \\
       \bottomrule
     \end{tabular}
     \caption{Number of solved instances.}
     \label{tab:solver-stats}
   \end{table}
 
+  % todo : update these numbers
+
   
 
-% \subsection{Analysis of heuristics}~\label{subsec:eval-heuristics}
+\subsection{Analysis of heuristics}~\label{subsec:eval-heuristics}
 
 % \subsection{Discussion of Benchmark Families}~\label{subsec:eval-discussion}
