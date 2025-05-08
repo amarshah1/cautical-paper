@@ -10,7 +10,7 @@ We discuss the pigeonhole principle as a motivating example. The problem asks
 whether we can put $m$ pigeons in $n$ holes such that (1)~every pigeon is in a 
 hole, and (2)~no hole contains more than one pigeon. This can be easily 
 encoded as a SAT problem where variable $x_{i, j}$ represents putting the 
-$i$-th pigeon into the $j$-th hole. We can translate constraint (1) as $\bigvee_{1 \leq j \leq n} x_{i, j}$ for each $1 \leq i \leq m$. We can also translate constraint (2) as $\overline{x_{i, j}} \lor \overline{x_{k, j}}$ for each $ 1 \leq i \neq k \leq m$ and $1 \leq j \leq n$.
+$i$-th pigeon into the $j$-th hole. We can translate constraint (1) as $\bigvee_{1 \leq j \leq n} x_{i, j}$ for each $1 \leq i \leq m$. We can also translate constraint (2) as $\overline{x}_{i, j} \lor \overline{x}_{k, j}$ for each $ 1 \leq i \neq k \leq m$ and $1 \leq j \leq n$.
 
 We represent this diagrammatically as in \autoref{fig:pigeonhole}, where the rows are the pigeons and the columns are the holes. The cell in row $i$ and column $j$ represents the literal $x_{i, j}$, i.e. whether the $i$-th pigeon is in the $j$-th hole. If the $(i, j)$-th cell is green this represents $x_{i, j}$ is set to true and if it is red this represents $x_{i, j}$ is set to false. Thus, constraint (1) asks that each row has at least one green cell and constraint (2) asks that no two green cells share a column.
 
@@ -23,7 +23,7 @@ Our technique makes a pair of decisions, propagates and then divides this assign
 
 While our technique does allow for decisions on negative literals, this is not useful for the Pigeonhole Principle. We first decide on some literal $i$. For ease, we assume that $i = x_{1, 1}$. This does not matter because of symmetry.
 
-Notice that the set of literals we consider for $j$ are the \emph{touched literals}, i.e. those that are in a clause with $x_{1, 1}$ or any of the variables it propagates. By constraint (2), $x_{1, 1}$ propagates $\overline{x_{k, 1}}$ for $2 \leq k \leq n + 1$. But these literals will touch every literal in the formula via the clauses from constraint (1). 
+Notice that the set of literals we consider for $j$ are the \emph{touched literals}, i.e. those that are in a clause with $x_{1, 1}$ or any of the variables it propagates. By constraint (2), $x_{1, 1}$ propagates $\overline{x}_{k, 1}$ for $2 \leq k \leq n + 1$. But these literals will touch every literal in the formula via the clauses from constraint (1). 
 
 
 \subsection{Solving the Pigeonhole Principle}~\label{subsec:solvingpigeonhole}
@@ -31,21 +31,21 @@ Notice that the set of literals we consider for $j$ are the \emph{touched litera
 Below we describe three stages at which we learn useful clauses:
 
 
-\subsubsection{Useful Binary Clauses}~\label{subec:usefulbinaryclauses} When learning a second variable $j= x_{2, 2}$, propagation gives us the literals $\overline{x_{2, 1}}, ... \overline{x_{n+1, 1}}$ and $\overline{x_{1, 2}}, \overline{x_{3, 2}}, ... \overline{x_{n+1, 2}}$. This can be divided into a autarky part $\alpha_a = x_{1, 1}, x_{2, 2}, \overline{x_{1, 2}}, \overline{x_{2, 1}}$ and a conditional part $\alpha_c = \overline{x_{3, 1}}, \ldots, \overline{x_{n+1, 1}}, \overline{x_{3, 2}}, \ldots, \overline{x_{n+1, 2}}$.
+\subsubsection{Useful Binary Clauses}~\label{subec:usefulbinaryclauses} When learning a second variable $j= x_{2, 2}$, propagation gives us the literals $\overline{x}_{2, 1}, \dots \overline{x}_{n+1, 1}$ and $\overline{x}_{1, 2}, \overline{x}_{3, 2}, \dots \overline{x}_{n+1, 2}$. This can be divided into a autarky part $\alpha_a = x_{1, 1}, x_{2, 2}, \overline{x}_{1, 2}, \overline{x}_{2, 1}$ and a conditional part $\alpha_c = \overline{x}_{3, 1}, \ldots, \overline{x}_{n+1, 1}, \overline{x}_{3, 2}, \ldots, \overline{x}_{n+1, 2}$.
 
-This can be shrunk to the clause $\overline{x_{1, 2}} \lor \overline{x_{2, 1}}$.
+This can be shrunk to the clause $\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$.
 % todo : maybe say more about this shrinking
 
-Then when considering the next assumption $j = x_{2, 3}$, we end up learning the clause $\overline{x_{1, 3}} \lor \overline{x_{2, 1}}$. This continues until we learn $\overline{x_{1, n}} \lor \overline{x_{2, 1}}$. Notice that have the clause $\overline{x_{1, n}} \lor \overline{x_{2, 1}}$ from constraint (2) and the clause $\bigwedge_{1 \leq j \leq n} x_{1, j}$ from constraint (1). These combined will yield the unit clause $\overline{x_{2, 1}}$ as shown in \autoref{subfig:pigeonhole-a}.
+Then when considering the next assumption $j = x_{2, 3}$, we end up learning the clause $\overline{x}_{1, 3} \lor \overline{x}_{2, 1}$. This continues until we learn $\overline{x}_{1, n} \lor \overline{x}_{2, 1}$. Notice that have the clause $\overline{x}_{1, n} \lor \overline{x}_{2, 1}$ from constraint (2) and the clause $\bigwedge_{1 \leq j \leq n} x_{1, j}$ from constraint (1). These combined will yield the unit clause $\overline{x}_{2, 1}$ as shown in \autoref{subfig:pigeonhole-a}.
 
-Similary, we can learn the unit clauses $\overline{x_{3, 1}}, \overline{x_{4, 1}}, \ldots, \overline{x_{n, 1}}$ as shown in \autoref{subfig:pigeonhole-b}.
+Similary, we can learn the unit clauses $\overline{x}_{3, 1}, \overline{x}_{4, 1}, \ldots, \overline{x}_{n, 1}$ as shown in \autoref{subfig:pigeonhole-b}.
 
 
-\subsubsection{Useful Units} In the last row of learning, we get something even more useful. Starting with the assumption $j = x_{n+1, 2}$, we propagate the literals $\overline{x_{n + 1, 1}}$ and $\overline{x_{1, 2}}, \overline{x_{2, 2}}, \ldots, \overline{x_{n, 2}}$.  This can be divided into a autarky part $\alpha_a = x_{1, 1}, x_{n+1, 2}, \overline{x_{1, 2}}, \overline{x_{n+1, 1}}$ and a conditional part $\alpha_c = \overline{x_{1, 2}}, \ldots, \overline{x_{n, 2}}$.
+\subsubsection{Useful Units} In the last row of learning, we get something even more useful. Starting with the assumption $j = x_{n+1, 2}$, we propagate the literals $\overline{x}_{n + 1, 1}$ and $\overline{x}_{1, 2}, \overline{x}_{2, 2}, \ldots, \overline{x}_{n, 2}$.  This can be divided into a autarky part $\alpha_a = x_{1, 1}, x_{n+1, 2}, \overline{x}_{1, 2}, \overline{x}_{n+1, 1}$ and a conditional part $\alpha_c = \overline{x}_{1, 2}, \ldots, \overline{x}_{n, 2}$.
 
-Shrinking gives us just the unit clause $\overline{x_{1, 2}}$. Notice that if we had does this at the beginning, we would have also had $\overline{x_{2, 1}}, \ldots, \overline{x_{n, 1}}$ and thus shrinking would have given a binary clause.
+Shrinking gives us just the unit clause $\overline{x}_{1, 2}$. Notice that if we had does this at the beginning, we would have also had $\overline{x}_{2, 1}, \ldots, \overline{x}_{n, 1}$ and thus shrinking would have given a binary clause.
 
-In a similar manner, we also learn the units $\overline{x_{2, 1}}, \ldots, \overline{x_{n, 1}}$ as shown in \autoref{subfig:pigeonhole-c}.
+In a similar manner, we also learn the units $\overline{x}_{2, 1}, \ldots, \overline{x}_{n, 1}$ as shown in \autoref{subfig:pigeonhole-c}.
 
 \subsubsection{Final Simplifications} Finally, constraint (1) will allow us to learn the unit $x_{1, 1}$ and constraint (2) will imply the unit $x_{n+1, 1}$ as shown in \autoref{subfig:pigeonhole-d}. Thus, we have successfully reduced the \ph{n} to \ph{n-1}. Then we pick some other variable for $i$ (for instance $i = x_{2, 2}$) and repeat the process.
 

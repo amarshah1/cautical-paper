@@ -59,14 +59,14 @@ The \texttt{Propagate} function represents unit propagation.
     \SetKwFor{If}{if}{:}{}
     \SetKwProg{Fn}{Function}{:}{}
     \SetKwBlock{Begin}{}{}
-    \Fn{\Learn{$\psi$, $\alpha$}}{
-        \For{$i \in vars(\psi)$}{ \label{line:sort-alphaa}
-            \For{$j \in vars(\psi)$}{
+    \Fn{\Learn{$\formula$, $\alpha$}}{
+        \For{$i \in vars(\formula)$}{ \label{line:sort-alphaa}
+            \For{$j \in vars(\formula)$}{
                 \Propagate($i$); \\
                 \Propagate($j$); \\
-                $\alpha_c, \alpha_a := \LCP(\psi, \alpha)$; \\
-                $C := \Shrink(\psi,\alpha_c, \alpha_a)$; \\
-                $\psi := \psi \land C$;
+                $\alpha_c, \alpha_a := \LCP(\formula, \alpha)$; \\
+                $C := \Shrink(\formula,\alpha_c, \alpha_a)$; \\
+                $\formula := \formula \land C$;
             }
         }
     }
@@ -105,10 +105,10 @@ minimize it using \autoref{alg:leastcond} from Kiesl et al.
     \SetKwProg{Fn}{Function}{:}{}
     \SetKwBlock{Begin}{}{}
 
-    \Fn{\LCP{$\psi$, $\alpha$}}{
+    \Fn{\LCP{$\formula$, $\alpha$}}{
 
         $\alpha_c := \emptyset$\;
-        \For{$C \in \psi$}{
+        \For{$C \in \formula$}{
             \If{$\alpha$ touches $C$ without satisfying $C$}{
                 $\alpha_c := \alpha_c \cup (\alpha \cap \overline{C})$\;
             }
@@ -136,29 +136,32 @@ and $\alpha_c = \{\overline{x}_{3, 1}, \ldots, \overline{x}_{5, 1}, \overline{x}
 
 \subsection{Shrinking Clauses}~\label{subsec:shrinking}
 
-Unfortunately, a clause $\alpha_c \lor a$ may still be too long. We aim to
-shrink this clause. Notice that if $\alpha_c = c_1, \dots, c_n$ and $\alpha_a =
-a_1, \dots, a_m$, we can consider the set $C_0 = \{c_j \in C \mid \exists a_i \in
-\alpha_a \text{ s.t. } \impunitclause{\phi}{a_i}{c_j} \}$.
+In a formula $\formula$ with conditional autarky $\alpha = \alpha_c \sqcup \alpha_a$ and $\alpha_c = c_1, \dots, c_n$ and $\alpha_a =
+a_1, \dots, a_m$, the addition of clause $C = \alpha_c \lor a_i$ may be too weak to effectively reduce the search space.
+Shrinking this clause, which we do via resolution, strengthens its pruning power.
+We thus aim to see which literals from the autarky part we may use to resolve with values from $\alpha_c$ (and thus $C$).
+
+Consider the set $C_0$ of literals in the conditional part which
+are inconsistent with any literal in the autarky part. Formally, let $C_0 = \{c_j \in C \mid \exists a_i \in
+\alpha_a \text{ s.t. } \impunitclause{\formula}{a_i}{c_j} \}$.
 %  todo : provide some intutition for how we pick this set
-
+%
 % This is essentially the set of literals in $\alpha_c$ that can be implied by unit propagation by negating some literal in $\alpha_a$.
-
-% we could add clauses of the form $\overline{c_1} \lor ... \lor \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
-
-% , this may still lead to a long clause. We aim to shrink this clause. Notice that if $\alpha_c = c_1, ..., c_n$ and $\alpha_a = a_1, ..., a_m$, we could add clauses of the form $\overline{c_1} \lor ... \lor \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
-
-
+%
+% we could add clauses of the form $\overline{c_1} \lor \dots \lor \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
+%
+% , this may still lead to a long clause. We aim to shrink this clause. Notice that if $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$, we could add clauses of the form $\overline{c_1} \lor \dots \lor \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
+%
+%
 % Consider $\overline{\alpha_a}$, the negation of the literals in $\alpha_a$. 
-
+%
 %  in the code we propagate -alpha_a[i]
 %  then if val (neg_alpha_c[j]) < 0, we add neg_alpha_c[j] to propagated and
 %  alpha_a[i] to useful
-
-We also define $A_0 \subseteq \alpha_a$ as a set such that for each $c \in C_0$,
-there is some $a \in A_0$ such that $\impunitclause{\phi}{a}{c}$. By definition,
-there exists such an $A_0$, but there are many possible options. We discuss how
-we choose $A_0$ in \autoref{subsec:sym}.
+Consider additionally $A_0 \subseteq \alpha_a$ such that for each $c \in C_0$,
+there is some $a \in A_0$ such that $\impunitclause{\formula}{a}{c}$.
+There exists at least one such $A_0$ ($\alpha_a$ is a trivial example); however, a smaller set is typically more helpful for creating useful clauses. 
+We discuss our method to efficiently choose $A_0$ in \autoref{subsec:sym}.
 %  as it will be important for having a technique resistant to different encodings. 
 
 
@@ -169,7 +172,7 @@ We want learn the clause $\bigvee_{c \in C \backslash C_0} \overline{c} \lor
 
 
 \begin{theorem}~\label{thm:shrunkgbcequisat}
-    The formula $\phi$ is satisfiable if and only if $\phi \land (\bigvee_{c \in C \backslash C_0} \overline{c} \lor \bigvee_{a \in A_0} a)$ is satisfiable.
+    Let $\Gamma$ be a formula and $\alpha = \alpha_c \sqcup \alpha_a$ be a conditional autarky on $\Gamma$, with $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$. Formula $\formula$ is satisfiable if and only if $\formula \land (\bigvee_{c \in C \backslash C_0} \overline{c} \lor \bigvee_{a \in A_0} a)$ is satisfiable.
 \end{theorem}
 
 \begin{proof}
@@ -177,29 +180,30 @@ We want learn the clause $\bigvee_{c \in C \backslash C_0} \overline{c} \lor
 
 
     \underline{$\Rightarrow$:}  As a corollary to \autoref{thm:gbcequisat},
-    $\phi$ is satisfiable if and only if $\phi \land (\bigvee_{c \in C}
+    $\formula$ is satisfiable if and only if $\formula \land (\bigvee_{c \in C}
     \overline{c} \lor \bigvee_{a \in A_0} a)$ is satisfiable.
 
-    Thus we can assume $\phi \land (\bigvee_{c \in C} \overline{c} \lor
+    Thus we can assume $\formula \land (\bigvee_{c \in C} \overline{c} \lor
     \bigvee_{a \in A_0} a)$ is satisfiable by some assignment
     $\beta$.
 
-    We claim $\beta$ is a satisfying assignment for $\phi \land (\bigvee_{c \in
+    We claim $\beta$ is a satisfying assignment for $\formula \land (\bigvee_{c \in
     C \backslash C_0} \overline{c} \lor \bigvee_{a \in A_0} a)$. If this was not
     the case then: (1)~for all $a \in A_0$ $\overline{a} \in \beta$ and (2)~there
     is some $c \in C_0$ such that $\overline{c} \in \beta$. 
 
     But by definition, there is some $a \in A_0$ such that
-    $\impunitclause{\phi}{a}{c}$. Thus $\phi \land \overline{a} \land
+    $\impunitclause{\formula}{a}{c}$. Thus $\formula \land \overline{a} \land
     \overline{c}$ is unsatisfiable via unit propagation. However, this cannot be
-    the case since $\beta$ is a satisfying assignment for $\phi$ and
+    the case since $\beta$ is a satisfying assignment for $\formula$ and
     $\overline{a}, \overline{c} \in \beta$.
 \end{proof}
 
-Another way to see this is: starting with $\bigvee_{c \in C} \overline{c} \lor
-\bigvee_{a \in A_0} a$, we notice that if some clause $c_i \lor a_i$ is implied
-via unit propagation, then we can remove $c_i$ from $C$ by applying resolution
-on the two clauses.
+%Another way to see this is: starting with $\bigvee_{c \in C} \overline{c} \lor
+%\bigvee_{a \in A_0} a$, we notice that if some clause $c_i \lor a_i$ is implied
+%via unit propagation, then we can remove $c_i$ from $C$ by applying resolution
+%on the two clauses.
+% twain : i tried to explain this at the start of the section; hopefully effectively
 
 \subsection{Clause Shrinking Algorithm}~\label{subsec:sym}
 
@@ -207,7 +211,7 @@ As mentioned in \autoref{subsec:shrinking}, our choice for $A_0$ is very importa
 
 
 \noindent \textbf{Greedy Set Cover:} %~\label{subsubsec:greedysetcover}
-In order to minimize the size of the clause, we may want the smallest possible $A_0$ that maximizes $C_0$. Say for each $a \in \alpha_a$, we define $\alpha_a^\mathrm{SETS}(a) = \{ c \in \alpha_c \; | \; \impunitclause{\phi}{a}{c}\}$. 
+In order to minimize the size of the clause, we may want the smallest possible $A_0$ that maximizes $C_0$. Say for each $a \in \alpha_a$, we define $\alpha_a^\mathrm{SETS}(a) = \{ c \in \alpha_c \; | \; \impunitclause{\formula}{a}{c}\}$. 
 
 When $C_0 = \alpha_C$, finding the smallest $A_0$ is exactly the set cover problem with $\alpha_a^\mathrm{SETS}$. This is NP-hard. We can approximate using the greedy algorithm, which returns a set cover at most roughly $(\ln |\alpha_c| + 1)$-times the size of the smallest set cover~\cite{greedysetcover}. 
 %  in actuality it is $\ln |\alpha_c| - \ln \ln |\alpha_c| + O(1)$
@@ -224,7 +228,7 @@ Specifically, the greedy algorithm will find the largest set in $\{\alpha_a^\mat
     \SetKwFor{For}{for}{:}{}
     \SetKwFor{If}{if}{:}{}
     \SetKwProg{Fn}{Function}{:}{}
-    \Fn{\Shrink{$\psi$, $\alpha_a$, $\alpha_c$}}{
+    \Fn{\Shrink{$\formula$, $\alpha_a$, $\alpha_c$}}{
         % $\alpha_a$ := \texttt{sort($\alpha_a$)}\;
         $\alpha_a^\mathrm{SETS}$ := init \texttt{Array[len($\alpha_a$)]}\;
         \For{$i \in \texttt{range}(\alpha_a)$}{
@@ -248,7 +252,8 @@ In \autoref{alg:finda0}, we describe our process for calculating $A_0$.
 % detail. 
 We initialize $\alpha_a^\mathrm{SETS}$ as an array, iterate the counter
 $i$ through $\alpha_a$, populating $\alpha_a^\mathrm{SETS}[i]$ with the set of literals
-$c \in \alpha_c$ such that $\impunitclause{\psi}{\alpha_a^\mathrm{SETS}[i]}{c}$. Finally, we apply
+
+$c \in \alpha_c$ such that $\impunitclause{\formula}{\alpha_a^\mathrm{SETS}[i]}{c}$. Finally, we apply
 \texttt{GreedySetCover} to get a small set $A_0$ that covers as much of $C$ as we can.
 
 In the context of the pigeonhole example, out of the $\alpha_a$,

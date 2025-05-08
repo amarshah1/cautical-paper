@@ -1,46 +1,74 @@
 \section{Evaluation}~\label{sec:evaluation}
 
-In this section, we aim to answer the following research questions:
+In this section, we empirically evaluate our techniques against other \pr clause
+learning techniques. In doing so, we aim to answer the following research questions:
 
 
 \begin{enumerate}
-    \item Can conditional autarkies provide short \pr proofs for pigeonhole or mutilated chessboard?
-    \item Is our technique less sensitive to encoding choices compared to other
+    \item Can our approach provide short \pr proofs for certain benchmark families?
+    \item Is our approach less sensitive to encoding choices compared to other
     \pr learning techniques?
-    \item Can these techniques underperfrom or outperform SAT solvers on other certain benchmark
-    families?
+    % \item Can these techniques underperform or outperform SAT solvers on other certain benchmark
+    % families?
 \end{enumerate}
 
 % We do so by implementing our technique in a tool \tool (a fork of \cadical
 % commit f13d74439a5b5c963ac5b02d05ce93a8098018b8). 
 
+The two main techniques for learning \pr clauses are \sadical (based on SDCL)
+and \prelearn (a preprocessing techniques that calls \sadical). We also compare 
+to \cadical, as a baseline with no \pr clause learning.
+
 In \autoref{subsec:eval-pigeonhole}, we compare \tool to \cadical and \sadical
 on the pigeonhole principle. We evaluate based on time taken, the length of
-the proof, and the sensitivity to renaming variables and reordering clauses. 
+the proof, and the sensitivity to the encoding of the formula. 
 
 % In \autoref{subsec:eval-chess}, we compare augment \tool with fixed
 % heuristics to discover $O(n^3)$ proofs of mutilated chessboard. We compare to the best known
 % mutilated chessboard \pr proof~\cite{mutilatedchessboard-pr}.
 
-In \autoref{subsec:eval-chess}, we compare \tool to other \cadical and \prelearn
-on the benchmarks from the annual Satisfiability competition from the years
-2022, 2023, and 2024. we analyze the use of specific heuristic choices in \tool by turning
-heuristics off one by one and observing the effect on the performance of \tool (\autoref{subsec:eval-heuristics}). Finally, we discuss which families
-of benchmarks our technique performs well and poorly (\autoref{subsec:eval-discussion}).
+In \autoref{subsec:eval-satcomp}, we evaluate the solvers on benchmarks from the
+annual '22, '23, and '24 SAT competition's main
+tracks~\cite{satcomp2022,satcomp2023,satcomp2024}.
 
-All experiments were performed in the Anvil Supercomputing Center on nodes
-with 128 cores and 2 GB RAM~\cite{anvil}. We ran 64 experiments in parallel per node with 5,000 second timeouts.
+In \autoref{subsec:eval-discussion}, we highlight certain benchmark families
+that benefit from and are hurt by \pr clause learning. We evaluate the different approaches on these families.
+
+
+Finally,we analyze the use of specific heuristic choices in \tool
+by turning heuristics off one by one and observing the effect on the performance
+on those benchmarks families (\autoref{subsec:eval-heuristics}). 
+
+All experiments were performed in the Anvil Supercomputing Center on nodes with
+128 cores and 2 GB RAM~\cite{anvil}. We ran 64 experiments in parallel per node
+with 5,000 second timeouts.
 
 \subsection{Pigeonhole results}~\label{subsec:eval-pigeonhole}
 
-We compare the performance of \tool, \cadical, \sadical, and \prelearn on pigeonhole principle benchmarks up to size $40$. Tools such as \sadical were successful at learning short proofs for the pigeonhole principle, but were very sensitive to how the problem was encoded.
+We compare the performance of \tool, \cadical, \sadical, and \prelearn on
+pigeonhole principle benchmarks up to size $40$. Approaches based on SDCL, such
+as \sadical, were successful at learning short proofs for the pigeonhole
+principle, but were very sensitive to how the problem was encoded.
 
-As shown in \autoref{fig:pigeonhole-results}, \prelearn and \tool scale cubicly in both runtime and proof size. Interestingly, \tool is able to learn shorter proofs by a factor of $2$-$5$x compared to \prelearn. As we discuss in \autoref{app:pigeonhole}, \tool learns proofs of size $\approx \frac13 n^3$, which is expected to shorter than prior proofs from pigeonhole.
+As shown in \autoref{fig:pigeonhole-results}, \prelearn, \sadical, and \tool scale cubicly
+in both runtime and proof size. Interestingly, \tool is able to learn shorter
+proofs by a factor of $2$-$5$x compared to \prelearn. As we discuss in
+\autoref{app:pigeonhole}, \tool learns proofs of size $\approx \frac13 n^3$,
+which is expected to be shorter than known \pr proofs for the pigeonhole principle.
 
-Additionally, we evaluate \tool on
+Additionally, we evaluate all solvers on scranfilized variations of the
+pigeonhole principle. Scranfilization is a technique for generating an
+equivalently satisfiable formula from an existing one by permuting variables,
+permuting clauses, and flipping literals~\cite{scranfilize}. We use the tool
+\texttt{scranfilize} with configurations permuting variables,
+and permuting clauses turned on, and flipping literals turned on with
+probability $0.5$~\cite{scranfilize}. We run each solver on 5 scranfilized variations for
+each benchmark and take the median runtime and proof size. This is shown in \autoref{fig:pigeonhole-results} with dashed lines.
 
 
-We conclude that \tool is able to match \sadical's runtime for the pigeonhole principle, but is able to learn shorter proofs by a constant factor. Additionally, \tool is insensitive to permuting variables, permuting clauses, and flipping literals as it relies on conditional autarkies, a global property of the formula.
+Both \sadical and \cadical exhibit an exponential trend when run on the scranfilized benchmarks for runtime and proof size. However, \tool can almost match its non-scranfilized performance, demonstrating that it learns useful \pr clauses regardless of the encoding of the formula.
+
+In conclusion, \tool is able to match \sadical's runtime for the pigeonhole principle while shorter proofs by a constant factor. Additionally, \tool is insensitive to permuting variables, permuting clauses, and flipping literals as it relies on conditional autarkies, a global property of the formula.
 
 
 \begin{figure*}[!t]
@@ -48,17 +76,17 @@ We conclude that \tool is able to match \sadical's runtime for the pigeonhole pr
     \begin{subfigure}[t]{0.4\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/pigeonhole_runtime_comparison.png}
-        \caption{Comparison with \cadical}
+        \caption{Runtime on Pigeonhole Principle Formulas}
         \label{fig:pigeonhole-runtime-comparison}
     \end{subfigure}
     \hspace{0.06\textwidth}
     \begin{subfigure}[t]{0.4\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/pigeonhole_proof_size_comparison.png}
-        \caption{Comparison with \prelearn}
+        \caption{Proof Size for Pigeonhole Principle Formulas}
         \label{fig:pigeonhole-proof-size-comparison}
     \end{subfigure}
-    \caption{Comparison of \tool, \cadical, \sadical, and \prelearn on pigeonhole principle benchmarks up to size $40$. The y-axis is on a cube root scale. The performance of a solver on the original benchmark is shown with a solid line. The mean of the performance of 5 scranfilized queries is shown with a dashed line. If a solver times out in 5000s, it is not shown.}
+    \caption{Comparison of \tool, \cadical, \sadical, and \prelearn on pigeonhole principle benchmarks up to size $40$. The y-axis is on a cube root scale. The performance of a solver on the original benchmark is shown with a solid line. The median of 5 scranfilized queries is shown with a dashed line. If a solver times out on a query in 5000s, it is not shown.}
     \label{fig:pigeonhole-results}
 \end{figure*}
 
