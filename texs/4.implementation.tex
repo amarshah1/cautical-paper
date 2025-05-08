@@ -16,9 +16,9 @@ We include an evaluation of the heuristics in \autoref{subsec:heuristics}.
 % todo: maybe move these two paragraphs to implementation section
 
 % \noindent \textbf{Sorting $\alpha_a$ by Implication:}%~\label{subsubsec:impordering}
-% The greedy set cover algorithm described above is almost sufficient for being insensitive to heuristics, but there is one other optimization that we made. \autoref{alg:finda0} describes sorting $\alpha_a$ as an initial step. This is important for cases where there are more than one cover of the same size. The most common occurence of this is for $a_1, a_2 \in \alpha_a$, we may have that $\overline{a_2} \impunit^\phi \overline{a_1} \impunit^\phi c_1, ..., c_n$. 
+% The greedy set cover algorithm described above is almost sufficient for being insensitive to heuristics, but there is one other optimization that we made. \autoref{alg:finda0} describes sorting $\alpha_a$ as an initial step. This is important for cases where there are more than one cover of the same size. The most common occurence of this is for $a_1, a_2 \in \alpha_a$, we may have that $\overline{a_2} \impunit^\formula \overline{a_1} \impunit^\formula c_1, \dots, c_n$. 
 
-% Thus, greedy set cover could pick $\{a_1\}$ or $\{a_2\}$ as singleton sets. However, since $a_1 \impunit^\phi a_2$, we really want to learn the unit clause $a_1$ since it is much more powerful.
+% Thus, greedy set cover could pick $\{a_1\}$ or $\{a_2\}$ as singleton sets. However, since $a_1 \impunit^\formula a_2$, we really want to learn the unit clause $a_1$ since it is much more powerful.
 
 \subsubsection{Sorting $\alpha_a$ by Implication}~\label{subsubsec:impordering}
 % The greedy set cover algorithm described above is almost sufficient for being
@@ -46,7 +46,7 @@ there already.
 Introducing globally blocked clauses can affect how we divide $\alpha = \alpha_c
 \sqcup \alpha_a$ as in \autoref{alg:leastcond}. Thus, it is better to avoid
 introducing globally blocked clauses if they are not useful. We do this by
-checking if $\phi \impunit C$ for each potential clause $C$. If it is implied by
+checking if $\formula \impunit C$ for each potential clause $C$. If it is implied by
 unit propagation, we do not learn it since we consider it easy to learn.
 
 \subsubsection{Filtering based on Clause Length}~\label{subsubsec:filtering-length}
@@ -57,7 +57,7 @@ or used separately.
 
 \subsubsection{Ordering Literals}~\label{subsubsec:ordering-literals}
 So far, we are considering literals $i$ and $j$ to propagate on randomly.
-However, there could be better ways to order literals. One techinque is to order
+However, there could be better ways to order literals. One technique is to order
 $i$ based on the number of clauses it occurs in. Another is, once an $i$ is
 chosen, we pick $j$ based on if it touches $i$, i.e. if $j$ occurs in the same
 clause as $i$ or a variable propagate by $i$. This was originally proposed in
@@ -65,12 +65,12 @@ Reeves et al ~\cite{prelearn}.
 
 \subsubsection{Alternative Shrinking
 techniques}~\label{subsubsec:shrink-techniques} We discussed in
-\autoref{subsec:shrinking} that we can shrink a checking if
+\autoref{subsec:shrinking} that we can shrink a clause if
 $\impunitclause{\phi}{a}{c}$, where $a \in \alpha_a$ and $c \in \alpha_c$.
 Checking if $\impunitclause{\phi}{a}{c}$ can be expensive. A cheaper option is
-to check if there is a clause $a \lor c$ in the original formula. While, this
-may miss some pairs $a, c$ that were missed, this is sufficient in some cases
-such as the pigeonhole principle benchmarks. Another alternative is to not
-shrink the clause at all.
+to see if there is a clause $a \lor c$ in the original formula. While, this may
+miss some pairs $a, c$, this is sufficient in certain cases such as for the
+pigeonhole principle benchmarks. Another alternative is to not shrink the clause
+at all.
 
 % Here is a complete list of flags discussed in 
