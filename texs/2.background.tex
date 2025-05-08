@@ -133,7 +133,7 @@ However, checking if a clause is \pr is NP-complete~\cite{prclause}, so witnesse
 
 % An autarky $\alpha_a = a_1, ..., a_m$ can be very useful as $a_1 \land ... \land a_m$ is an equisatisfiable clause. However, these can be difficult to find.
 
-In plain words, an autarky is an assignment that satisfies every clause it touches. For example, if $\alpha$ was a satisfying assignment, it would be an autarky since it satisfies every clause.
+In plain words, an autarky is an assignment that satisfies every clause it touches. For example, if $\alpha$ was a satisfying assignment, it would be an autarky since it satisfies every clause. Another example of an autarky is a pure literal.
 
 \begin{definition}[Conditional Autarky]
     A nonempty assignment $\alpha = \alpha_c \sqcup \alpha_a$ (disjoint union) is a conditional autarky for a formula $\phi$ if $\alpha_a$ is an autarky for $\phi|_{\alpha_c}$.
@@ -141,10 +141,10 @@ In plain words, an autarky is an assignment that satisfies every clause it touch
 
 Specifically, we can think about searching for conditional autarkies by first looking for a partial assignment $\alpha_c$, and then finding an autarky $\alpha_a$ on the reduced formula $\phi|_{\alpha_c}$.
 
-Conditional autarkies can be very useful for learning equisatisfiable clauses, for instance, if $\alpha_c = c_1, ..., c_n$ and $\alpha_a = a_1, ..., a_m$, we add clauses of the form:
+Conditional autarkies can be very useful for learning equisatisfiable clauses, for instance, if $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$, we add clauses of the form:
 
 \begin{equation*}
-    [c_1 \land ... \land c_n] \rightarrow [a_1 \land ... \land a_m]
+    [c_1 \land \dots \land c_n] \rightarrow [a_1 \land \dots \land a_m]
 \end{equation*}
 
 This results in $m$ different clauses as in the following theorem from Kiesl et al.~\cite{conditionalautarkies}:

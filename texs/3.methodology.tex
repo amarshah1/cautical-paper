@@ -249,7 +249,7 @@ In \autoref{alg:finda0}, we describe our process for calculating $A_0$.
 We initialize $\alpha_a^\mathrm{SETS}$ as an array, iterate the counter
 $i$ through $\alpha_a$, populating $\alpha_a^\mathrm{SETS}[i]$ with the set of literals
 $c \in \alpha_c$ such that $\impunitclause{\psi}{\alpha_a^\mathrm{SETS}[i]}{c}$. Finally, we apply
-\texttt{GreedySetCover}, to get a small set $A_0$ that covers as much of $C$ as we can
+\texttt{GreedySetCover} to get a small set $A_0$ that covers as much of $C$ as we can.
 
 In the context of the pigeonhole example, out of the $\alpha_a$,
 $\overline{x}_{2, 1}$ can remove $\overline{x}_{3, 1}, \ldots, \overline{x}_{5,
