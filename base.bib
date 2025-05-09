@@ -195,34 +195,32 @@
  @String{VanNostrand = "Van Nostrand" }
  @String{WHFreeman = "W. H. Freeman and Co." }
 
-@misc{MarijnHappyEnding,
-  author    = {Marijn J. H. Heule and
-               Manfred Scheucher},
-  title     = {Happy ending: An empty hexagon in every set of 30 points},
-  year      = {2024},
-  doi       = {10.48550/arXiv.2403.00737},
-  biburl    = {https://arxiv.org/abs/2403.00737},
+@InProceedings{MarijnHappyEnding,
+author="Heule, Marijn J. H.
+and Scheucher, Manfred",
+title="Happy Ending: An Empty Hexagon in Every Set of 30 Points",
+booktitle="Tools and Algorithms for the Construction and Analysis of Systems (TACAS)",
+year="2024",
 }
+
+
 
 @article{MarijnPackingChromatic,
   author    = {Bernardo Subercaseaux and
                Marijn J. H. Heule},
   title     = {The packing chromatic number of the infinite square grid is 15},
-  journal   = {Tools and Algorithms for the Construction and Analysis of Systems},
-  pages     = {389--406},
-  year      = {2023},
-  doi       = {10.48550/arXiv.2301.09757},
-  biburl    = {https://arxiv.org/abs/2301.09757},
+  journal   = {Tools and Algorithms for the Construction and Analysis of Systems (TACAS)},
+ year      = {2023},
+  doi       = {0.1007/978-3-031-30823-9_20},
+
 }
 
 @article{BillionQueries,
   author    = {Neha Rungta},
-  title     = {A Billion SMT Queries a Day},
-  journal   = {Computer Aided Verification},
-  pages     = {3--18},
+  title     = {A Billion {SMT} Queries a Day},
+  journal   = {Computer Aided Verification (CAV)},
   year      = {2022},
   doi       = {10.1007/978-3-031-13185-1_1},
-  biburl    = {https://link.springer.com/chapter/10.1007/978-3-031-13185-1_1},
 }
 
 article{MarijnSDCL,
@@ -236,16 +234,9 @@ article{MarijnSDCL,
 author="Heule, Marijn J. H.
 and Kiesl, Benjamin
 and Biere, Armin",
-editor="Vojnar, Tom{\'a}{\v{s}}
-and Zhang, Lijun",
 title="Encoding Redundancy for Satisfaction-Driven Clause Learning",
-booktitle="Tools and Algorithms for the Construction and Analysis of Systems",
+booktitle="Tools and Algorithms for the Construction and Analysis of Systems (TACAS)",
 year="2019",
-publisher="Springer International Publishing",
-address="Cham",
-pages="41--58",
-abstract="Satisfaction-Driven Clause Learning (SDCL) is a recent SAT solving paradigm that aggressively trims the search space of possible truth assignments. To determine if the SAT solver is currently exploring a dispensable part of the search space, SDCL uses the so-called positive reduct of a formula: The positive reduct is an easily solvable propositional formula that is satisfiable if the current assignment of the solver can be safely pruned from the search space. In this paper, we present two novel variants of the positive reduct that allow for even more aggressive pruning. Using one of these variants allows SDCL to solve harder problems, in particular the well-known Tseitin formulae and mutilated chessboard problems. For the first time, we are able to generate and automatically check clausal proofs for large instances of these problems.",
-isbn="978-3-030-17462-0"
 }
 
 
@@ -254,14 +245,10 @@ isbn="978-3-030-17462-0"
 author="J{\"a}rvisalo, Matti
 and Heule, Marijn J. H.
 and Biere, Armin",
-editor="Gramlich, Bernhard
-and Miller, Dale
-and Sattler, Uli",
 title="Inprocessing Rules",
 booktitle="Automated Reasoning",
 year="2012",
 publisher="Springer Berlin Heidelberg",
-address="Berlin, Heidelberg",
 pages="355--370",
 abstract="Decision procedures for Boolean satisfiability (SAT), especially modern conflict-driven clause learning (CDCL) solvers, act routinely as core solving engines in various real-world applications. Preprocessing, i.e., applying formula rewriting/simplification rules to the input formula before the actual search for satisfiability, has become an essential part of the SAT solving tool chain. Further, some of the strongest SAT solvers today add more reasoning to search by interleaving formula simplification and CDCL search. Such inprocessing SAT solvers witness the fact that implementing additional deduction rules in CDCL solvers leverages the efficiency of state-of-the-art SAT solving further. In this paper we establish formal underpinnings of inprocessing SAT solving via an abstract inprocessing framework that covers a wide range of modern SAT solving techniques.",
 isbn="978-3-642-31365-3"
@@ -272,10 +259,7 @@ isbn="978-3-642-31365-3"
   booktitle={2021 Formal Methods in Computer Aided Design (FMCAD)}, 
   title={Single Clause Assumption without Activation Literals to Speed-up IC3}, 
   year={2021},
-  volume={},
-  number={},
   pages={72-76},
-  keywords={Design automation;Computational modeling;Model checking;Benchmark testing;Hardware;Engines},
   doi={10.34727/2021/isbn.978-3-85448-046-4_15}}
 
 @InProceedings{sdcl,
@@ -283,16 +267,9 @@ author="Heule, Marijn J. H.
 and Kiesl, Benjamin
 and Seidl, Martina
 and Biere, Armin",
-editor="Strichman, Ofer
-and Tzoref-Brill, Rachel",
 title="PRuning Through Satisfaction",
-booktitle="Hardware and Software: Verification and Testing",
+booktitle="Hardware and Software: Verification and Testing (HVC)",
 year="2017",
-publisher="Springer International Publishing",
-address="Cham",
-pages="179--194",
-abstract="The classical approach to solving the satisfiability problem of propositional logic prunes unsatisfiable branches from the search space. We prune more agressively by also removing certain branches for which there exist other branches that are more satisfiable. This is achieved by extending the popular conflict-driven clause learning (CDCL) paradigm with so-called {\$}{\$}{\backslash}mathsf {\{}PR{\}}{\$}{\$}-clause learning. We implemented our new paradigm, named satisfaction-driven clause learning (SDCL), in the SAT solver Lingeling. Experiments on the well-known pigeon hole formulae show that our method can automatically produce proofs of unsatisfiability whose size is cubic in the number of pigeons while plain CDCL solvers can only produce proofs of exponential size.",
-isbn="978-3-319-70389-3"
 }
 
 
@@ -300,39 +277,23 @@ isbn="978-3-319-70389-3"
 author="Rintanen, Jussi",
 editor="Cohen, David",
 title="Heuristics for Planning with SAT",
-booktitle="Principles and Practice of Constraint Programming -- CP 2010",
+booktitle="Principles and Practice of Constraint Programming (CP)",
 year="2010",
-publisher="Springer Berlin Heidelberg",
-address="Berlin, Heidelberg",
-pages="414--428",
-abstract="Generic SAT solvers have been very successful in solving hard combinatorial problems in various application areas, including AI planning. There is potential for improved performance by making the SAT solving process more application-specific. In this paper we propose a variable selection strategy for AI planning. The strategy is based on generic principles about properties of plans, and its performance with standard planning benchmarks often substantially improves on generic variable selection heuristics used in SAT solving, such as the VSIDS strategy. These improvements lift the efficiency of SAT based planning to the same level as best planners that use other search methods.",
-isbn="978-3-642-15396-9"
 }
 
 @inproceedings{planningassat,
 author = {Kautz, Henry and Selman, Bart},
 title = {Planning as satisfiability},
 year = {1992},
-isbn = {0471936081},
-publisher = {John Wiley \& Sons, Inc.},
-address = {USA},
-booktitle = {Proceedings of the 10th European Conference on Artificial Intelligence},
-pages = {359–363},
-numpages = {5},
-location = {Vienna, Austria},
-series = {ECAI '92}
+booktitle = {Proceedings of the 10th European Conference on Artificial Intelligence (ECAI)},
 }
 
 
 @INPROCEEDINGS{CDCLMalik,
   author={Lintao Zhang and Madigan, C.F. and Moskewicz, M.H. and Malik, S.},
-  booktitle={IEEE/ACM International Conference on Computer Aided Design. ICCAD 2001. IEEE/ACM Digest of Technical Papers (Cat. No.01CH37281)}, 
+  booktitle={IEEE/ACM International Conference on Computer Aided Design (ICCAD)}, 
   title={Efficient conflict driven learning in a Boolean satisfiability solver}, 
   year={2001},
-  volume={},
-  number={},
-  pages={279-285},
-  keywords={NP-complete problem;Electronic design automation and methodology;Formal verification;Automatic test pattern generation;Polynomials;Data mining;Databases},
   doi={10.1109/ICCAD.2001.968634}}
 
 
@@ -340,82 +301,51 @@ series = {ECAI '92}
   title = {Preprocessing of {{Propagation Redundant Clauses}}},
   author = {Reeves, Joseph E. and Heule, Marijn J. H. and Bryant, Randal E.},
   year = {2023},
-  month = sep,
-  journal = {Journal of Automated Reasoning},
+  journal = {Journal of Automated Reasoning (JAR)},
   volume = {67},
   number = {3},
   pages = {31},
   issn = {1573-0670},
   doi = {10.1007/s10817-023-09681-3},
-  abstract = {The propagation redundant (PR) proof system generalizes the resolution and resolution asymmetric tautology proof systems used by conflict-driven clause learning (CDCL) solvers. PR allows short proofs of unsatisfiability for some problems that are difficult for CDCL solvers. Previous attempts to automate PR clause learning used hand-crafted heuristics that work well on some highly-structured problems. For example, the solver SaDiCaL incorporates PR clause learning into the CDCL loop, but it cannot compete with modern CDCL solvers due to its fragile heuristics. We present PReLearn, a preprocessing technique that learns short PR clauses. Adding these clauses to a formula reduces the search space that the solver must explore. By performing PR clause learning as a preprocessing stage, PR clauses can be found efficiently without sacrificing the robustness of modern CDCL solvers. On a large portion of SAT competition benchmarks we found that preprocessing with PReLearn improves solver performance. In addition, there were several satisfiable and unsatisfiable formulae that could only be solved after preprocessing with PReLearn. PReLearn supports proof logging, giving a high level of confidence in the results. Lastly, we tested the robustness of PReLearn by applying other forms of preprocessing as well as by randomly permuting variable names in the formula before running PReLearn, and we found PReLearn performed similarly with and without the changes to the formula.}
 }
 
 @inproceedings{conditionalautarkies,
 author = {Kiesl, Benjamin and Heule, Marijn J. H. and Biere, Armin},
 title = {Truth Assignments as Conditional Autarkies},
 year = {2019},
-isbn = {978-3-030-31783-6},
-publisher = {Springer-Verlag},
-address = {Berlin, Heidelberg},
-url = {https://doi.org/10.1007/978-3-030-31784-3_3},
 doi = {10.1007/978-3-030-31784-3_3},
-abstract = {An autarky for a formula in propositional logic is a truth assignment that satisfies every clause it touches, i.e., every clause for which the autarky assigns at least one variable. In this paper, we present how conditional autarkies, a generalization of autarkies, give rise to novel preprocessing techniques for SAT solving. We show that conditional autarkies correspond to a new type of redundant clauses, termed globally-blocked clauses, and that the elimination of these clauses can simulate existing circuit-simplification techniques on the CNF level.},
-booktitle = {Automated Technology for Verification and Analysis: 17th International Symposium, ATVA 2019, Taipei, Taiwan, October 28–31, 2019, Proceedings},
-pages = {48–64},
-numpages = {17},
-location = {Taipei, Taiwan}
+booktitle = {Automated Technology for Verification and Analysis (ATVA)},
 }
 
 @InProceedings{prclauses,
 author="Heule, Marijn J. H.
 and Kiesl, Benjamin
 and Biere, Armin",
-editor="de Moura, Leonardo",
 title="Short Proofs Without New Variables",
-booktitle="Automated Deduction -- CADE 26",
+booktitle="Conference on Automated Deduction (CADE)",
 year="2017",
-publisher="Springer International Publishing",
-address="Cham",
-pages="130--147",
-abstract="Adding and removing redundant clauses is at the core of state-of-the-art SAT solving. Crucial is the ability to add short clauses whose redundancy can be determined in polynomial time. We present a characterization of the strongest notion of clause redundancy (i.e., addition of the clause preserves satisfiability) in terms of an implication relationship. By using a polynomial-time decidable implication relation based on unit propagation, we thus obtain an efficiently checkable redundancy notion. A proof system based on this notion is surprisingly strong, even without the introduction of new variables---the key component of short proofs presented in the proof complexity literature. We demonstrate this strength on the famous pigeon hole formulae by providing short clausal proofs without new variables.",
-isbn="978-3-319-63046-5"
 }
 
 @InProceedings{chromaticnumber,
 author="Subercaseaux, Bernardo
 and Heule, Marijn J. H.",
-editor="Sankaranarayanan, Sriram
-and Sharygina, Natasha",
 title="The Packing Chromatic Number of the Infinite Square Grid is 15",
-booktitle="Tools and Algorithms for the Construction and Analysis of Systems",
+booktitle="Tools and Algorithms for the Construction and Analysis of Systems (TACAS)",
 year="2023",
-publisher="Springer Nature Switzerland",
-address="Cham",
-pages="389--406",
-abstract="A packing k-coloring is a natural variation on the standard notion of graph k-coloring, where vertices are assigned numbers from {\$}{\$}{\backslash}{\{}1, {\backslash}ldots , k{\backslash}{\}}{\$}{\$}{\{}1,{\ldots},k{\}}, and any two vertices assigned a common color {\$}{\$}c {\backslash}in {\backslash}{\{}1, {\backslash}ldots , k{\backslash}{\}}{\$}{\$}c∈{\{}1,{\ldots},k{\}}need to be at a distance greater than c (as opposed to 1, in standard graph colorings). Despite a sequence of incremental work, determining the packing chromatic number of the infinite square grid has remained an open problem since its introduction in 2002. We culminate the search by proving this number to be 15. We achieve this result by improving the best-known method for this problem by roughly two orders of magnitude. The most important technique to boost performance is a novel, surprisingly effective propositional encoding for packing colorings. Additionally, we developed an alternative symmetry breaking method. Since both new techniques are more complex than existing techniques for this problem, a verified approach is required to trust them. We include both techniques in a proof of unsatisfiability, reducing the trusted core to the correctness of the direct encoding.",
-isbn="978-3-031-30823-9"
 }
 
 @inproceedings{cadical,
 author = {Biere, Armin and Faller, Tobias and Fazekas, Katalin and Fleury, Mathias and Froleyks, Nils and Pollitt, Florian},
 title = {CaDiCaL 2.0},
 year = {2024},
-isbn = {978-3-031-65626-2},
-publisher = {Springer-Verlag},
-address = {Berlin, Heidelberg},
-url = {https://doi.org/10.1007/978-3-031-65627-9_7},
 doi = {10.1007/978-3-031-65627-9_7},
-abstract = {The SAT solver CaDiCaL provides a rich feature set with a clean library interface. It has been adopted by many users, is well documented and easy to extend due to its effective testing and debugging infrastructure. In this tool paper we give a high-level introduction into the solver architecture and then go briefly over implemented techniques. We describe basic features and novel advanced usage scenarios. Experiments confirm that CaDiCaL despite this flexibility has state-of-the-art performance both in a stand-alone as well as incremental setting.},
-booktitle = {Computer Aided Verification: 36th International Conference, CAV 2024, Montreal, QC, Canada, July 24–27, 2024, Proceedings, Part I},
-pages = {133–152},
-numpages = {20},
-location = {Montreal, QC, Canada}
+booktitle = {Computer Aided Verification (CAV)},
 }
 
 @article{kissat,
   title={Cadical, kissat, paracooba, plingeling and treengeling entering the sat competition 2020},
   author={Fleury, ABKFM and Heisinger, Maximilian},
-  journal={Sat Competition},
+  journal={SAT Competition},
   volume={2020},
   pages={50},
   year={2020}
@@ -432,17 +362,8 @@ location = {Montreal, QC, Canada}
 author = {Soos, Mate and Nohl, Karsten and Castelluccia, Claude},
 title = {Extending SAT Solvers to Cryptographic Problems},
 year = {2009},
-isbn = {9783642027765},
-publisher = {Springer-Verlag},
-address = {Berlin, Heidelberg},
-url = {https://doi.org/10.1007/978-3-642-02777-2_24},
 doi = {10.1007/978-3-642-02777-2_24},
-abstract = {Cryptography ensures the confidentiality and authenticity of information but often relies on unproven assumptions. SAT solvers are a powerful tool to test the hardness of certain problems and have successfully been used to test hardness assumptions. This paper extends a SAT solver to efficiently work on cryptographic problems. The paper further illustrates how SAT solvers process cryptographic functions using automatically generated visualizations, introduces techniques for simplifying the solving process by modifying cipher representations, and demonstrates the feasibility of the approach by solving three stream ciphers.To optimize a SAT solver for cryptographic problems, we extended the solver's input language to support the XOR operation that is common in cryptography. To better understand the inner workings of the adapted solver and to identify bottlenecks, we visualize its execution. Finally, to improve the solving time significantly, we remove these bottlenecks by altering the function representation and by pre-parsing the resulting system of equations.The main contribution of this paper is a new approach to solving cryptographic problems by adapting both the problem description and the solver synchronously instead of tweaking just one of them. Using these techniques, we were able to solve a well-researched stream cipher 26 times faster than was previously possible.},
-booktitle = {Proceedings of the 12th International Conference on Theory and Applications of Satisfiability Testing},
-pages = {244–257},
-numpages = {14},
-location = {Swansea, UK},
-series = {SAT '09}
+booktitle = {Theory and Applications of Satisfiability Testing (SAT)},
 }
 
 @article{rat,
@@ -452,43 +373,27 @@ volume = {96-97},
 pages = {149-176},
 year = {1999},
 issn = {0166-218X},
-doi = {https://doi.org/10.1016/S0166-218X(99)00037-2},
-url = {https://www.sciencedirect.com/science/article/pii/S0166218X99000372},
-author = {O. Kullmann},
-keywords = {Propositional logic, Extended resolution, Blocked clauses, Generalized extended resolution, Lower bounds},
-abstract = {Motivated by improved SAT algorithms ((O. Kullmann, DIMACS Series, vol. 35, Amer. Math. Soc., Providence, RI, 1997; O. Kullmann, Theoret. Comput. Sci. (1999); O. Kullmann, Inform. Comput., submitted); yielding new worst-case upper bounds) a natural parameterized generalization GER of Extended Resolution (ER) is introduced. ER can simulate polynomially GER, but GER allows special cases for which exponential lower bounds can be proven.}
+doi = {10.1016/S0166-218X(99)00037-2},
+author = {Oliver Kullmann},
 }
 
 @inproceedings{setblocked,
 author = {Kiesl, Benjamin and Seidl, Martina and Tompits, Hans and Biere, Armin},
 title = {Super-Blocked Clauses},
 year = {2016},
-isbn = {9783319402284},
-publisher = {Springer-Verlag},
-address = {Berlin, Heidelberg},
-url = {https://doi.org/10.1007/978-3-319-40229-1_5},
 doi = {10.1007/978-3-319-40229-1_5},
-abstract = {In theory and practice of modern SAT solving, clause-elimination procedures are essential for simplifying formulae in conjunctive normal form CNF. Such procedures identify redundant clauses and faithfully remove them, either before solving in a preprocessing phase or during solving, resulting in a considerable speed up of the SAT solver. A wide number of effective clause-elimination procedures is based on the clause-redundancy property called blocked clauses. For checking if a clause C is blocked in a formula F, only those clauses of F that are resolvable with C have to be considered. Hence, the blocked-clauses redundancy property can be said to be local. In this paper, we argue that the established definitions of blocked clauses are not in their most general form. We introduce more powerful generalizations, called set-blocked clauses and super-blocked clauses, respectively. Both can still be checked locally, and for the latter it can even be shown that it is the most general local redundancy property. Furthermore, we relate these new notions to existing clause-redundancy properties and give a detailed complexity analysis.},
-booktitle = {Proceedings of the 8th International Joint Conference on Automated Reasoning - Volume 9706},
-pages = {45–61},
-numpages = {17}
+booktitle = {Joint Conference on Automated Reasoning (IJCAR)},
 }
 
 @InProceedings{blockedclause,
 author="J{\"a}rvisalo, Matti
 and Heule, Marijn J. H.
 and Biere, Armin",
-editor="Gramlich, Bernhard
-and Miller, Dale
-and Sattler, Uli",
 title="Inprocessing Rules",
 booktitle="Automated Reasoning",
 year="2012",
 publisher="Springer Berlin Heidelberg",
-address="Berlin, Heidelberg",
 pages="355--370",
-abstract="Decision procedures for Boolean satisfiability (SAT), especially modern conflict-driven clause learning (CDCL) solvers, act routinely as core solving engines in various real-world applications. Preprocessing, i.e., applying formula rewriting/simplification rules to the input formula before the actual search for satisfiability, has become an essential part of the SAT solving tool chain. Further, some of the strongest SAT solvers today add more reasoning to search by interleaving formula simplification and CDCL search. Such inprocessing SAT solvers witness the fact that implementing additional deduction rules in CDCL solvers leverages the efficiency of state-of-the-art SAT solving further. In this paper we establish formal underpinnings of inprocessing SAT solving via an abstract inprocessing framework that covers a wide range of modern SAT solving techniques.",
-isbn="978-3-642-31365-3"
 }
 
 @article{hakenpigeonhole,
@@ -500,47 +405,30 @@ year = {1985},
 note = {Third Conference on Foundations of Software Technology and Theoretical Computer Science},
 issn = {0304-3975},
 doi = {https://doi.org/10.1016/0304-3975(85)90144-6},
-url = {https://www.sciencedirect.com/science/article/pii/0304397585901446},
-author = {Armin Haken},
-abstract = {We prove that, for infinitely many disjunctive normal form propositional calculus tautologies ξ, the length of the shortest resolution proof of ξ cannot be bounded by any polynomial of the length of ξ. The tautologies we use were introduced by Cook and Reckhow (1979) and encode the pigeonhole principle. Extended resolution can furnish polynomial length proofs of these formulae.}
 }
 
 @InProceedings{sat-hardwareverification,
 author="Gupta, Aarti
 and Ganai, Malay K.
 and Wang, Chao",
-editor="Bernardo, Marco
-and Cimatti, Alessandro",
 title="SAT-Based Verification Methods and Applications in Hardware Verification",
 booktitle="Formal Methods for Hardware Verification",
 year="2006",
-publisher="Springer Berlin Heidelberg",
-address="Berlin, Heidelberg",
 pages="108--143",
-abstract="Verification methods based on Boolean Satisfiability (SAT) have emerged as a promising alternative to BDD-based symbolic model checking methods. This paper provides a tutorial on various SAT-based verification methods we have developed for verifying large hardware designs. We focus separately on methods for finding bugs and for finding proofs for correctness properties, along with highlighting the many common themes that benefit these methods. We also describe practical experiences with these methods implemented in our verification platform called VeriSol (formerly DiVer), which has been used successfully in industry practice.",
-isbn="978-3-540-34305-9"
 }
 
 @InProceedings{pythagoreantriples,
 author="Heule, Marijn J. H.
 and Kullmann, Oliver
 and Marek, Victor W.",
-editor="Creignou, Nadia
-and Le Berre, Daniel",
 title="Solving and Verifying the Boolean Pythagorean Triples Problem via Cube-and-Conquer",
-booktitle="Theory and Applications of Satisfiability Testing -- SAT 2016",
-year="2016",
-publisher="Springer International Publishing",
-address="Cham",
-pages="228--245",
-abstract="The boolean Pythagorean Triples problem has been a longstanding open problem in Ramsey Theory: Can the set {\$}{\$}{\backslash}mathbb {\{}N{\}}= {\backslash}{\{}1,2,{\backslash}dots {\backslash}{\}}{\$}{\$}of natural numbers be divided into two parts, such that no part contains a triple (a, b, c) with {\$}{\$}a^2 + b^2 = c^2{\$}{\$}? A prize for the solution was offered by Ronald Graham over two decades ago. We solve this problem, proving in fact the impossibility, by using the Cube-and-Conquer paradigm, a hybrid SAT method for hard problems, employing both look-ahead and CDCL solvers. An important role is played by dedicated look-ahead heuristics, which indeed allowed to solve the problem on a cluster with 800 cores in about 2 days. Due to the general interest in this mathematical problem, our result requires a formal proof. Exploiting recent progress in unsatisfiability proofs of SAT solvers, we produced and verified a proof in the DRAT format, which is almost 200 terabytes in size. From this we extracted and made available a compressed certificate of 68 gigabytes, that allows anyone to reconstruct the DRAT proof for checking.",
-isbn="978-3-319-40970-2"
+booktitle="Theory and Applications of Satisfiability Testing (SAT)",
+year="2016"
 }
 
 @article{kellersconjecture,
   title = {The {{Resolution}} of {{Keller}}’s {{Conjecture}}},
   author = {Brakensiek, Joshua and Heule, Marijn and Mackey, John and Narváez, David},
-  date = {2022-08-01},
   journaltitle = {Journal of Automated Reasoning},
   shortjournal = {Journal of Automated Reasoning},
   volume = {66},
@@ -548,53 +436,33 @@ isbn="978-3-319-40970-2"
   pages = {277--300},
   issn = {1573-0670},
   doi = {10.1007/s10817-022-09623-5},
-  url = {https://doi.org/10.1007/s10817-022-09623-5},
-  abstract = {We consider three graphs, \$\$G\_\{7,3\}\$\$, \$\$G\_\{7,4\}\$\$, and \$\$G\_\{7,6\}\$\$, related to Keller’s conjecture in dimension 7. The conjecture is false for this dimension if and only if at least one of the graphs contains a clique of size \$\$2\textasciicircum 7 = 128\$\$. We present an automated method to solve this conjecture by encoding the existence of such a clique as a propositional formula. We apply satisfiability solving combined with symmetry-breaking techniques to determine that no such clique exists. This result implies that every unit cube tiling of \$\$\textbackslash mathbb \{R\}\textasciicircum 7\$\$contains a facesharing pair of cubes. Since a faceshare-free unit cube tiling of \$\$\textbackslash mathbb \{R\}\textasciicircum 8\$\$exists (which we also verify), this completely resolves Keller’s conjecture.}
 }
 
 @InProceedings{emptyhexagon,
 author="Heule, Marijn J. H.
 and Scheucher, Manfred",
-editor="Finkbeiner, Bernd
-and Kov{\'a}cs, Laura",
 title="Happy Ending: An Empty Hexagon in Every Set of 30 Points",
-booktitle="Tools and Algorithms for the Construction and Analysis of Systems",
+booktitle="Tools and Algorithms for the Construction and Analysis of Systems (TACAS)",
 year="2024",
-publisher="Springer Nature Switzerland",
-address="Cham",
-pages="61--80",
-abstract="Satisfiability solving has been used to tackle a range of long-standing open math problems in recent years. We add another success by solving a geometry problem that originated a century ago. In the 1930s, Esther Klein's exploration of unavoidable shapes in planar point sets in general position showed that every set of five points includes four points in convex position. For a long time, it was open if an empty hexagon, i.e., six points in convex position without a point inside, can be avoided. In 2006, Gerken and Nicol{\'a}s independently proved that the answer is no. We establish the exact bound: Every 30-point set in the plane in general position contains an empty hexagon. Our key contributions include an effective, compact encoding and a search-space partitioning strategy enabling linear-time speedups even when using thousands of cores.",
-isbn="978-3-031-57246-3"
 }
 
 
 @InProceedings{ic3,
 author="Bradley, Aaron R.",
-editor="Cimatti, Alessandro
-and Sebastiani, Roberto",
-title="Understanding IC3",
-booktitle="Theory and Applications of Satisfiability Testing -- SAT 2012",
+
+title="Understanding {IC3}",
+booktitle="Theory and Applications of Satisfiability Testing (SAT)",
 year="2012",
-publisher="Springer Berlin Heidelberg",
-address="Berlin, Heidelberg",
-pages="1--14",
-abstract="The recently introduced model checking algorithm, IC3, has proved to be among the best SAT-based safety model checkers. Many implementations now exist. This paper provides the context from which IC3 was developed and explains how the originator of the algorithm understands it. Then it draws parallels between IC3 and the subsequently developed algorithms, FAIR and IICTL, which extend IC3's ideas to the analysis of $\omega$-regular and CTL properties, respectively. Finally, it draws attention to certain challenges that these algorithms pose for the SAT and SMT community.",
-isbn="978-3-642-31612-8"
 }
 
 @article{bmc,
-  title = {Bounded {{Model Checking Using Satisfiability Solving}}},
+  title = {Bounded Model Checking Using Satisfiability Solving},
   author = {Clarke, Edmund and Biere, Armin and Raimi, Richard and Zhu, Yunshan},
-  date = {2001-07-01},
   journaltitle = {Formal Methods in System Design},
-  shortjournal = {Formal Methods in System Design},
   volume = {19},
   number = {1},
   pages = {7--34},
-  issn = {1572-8102},
   doi = {10.1023/A:1011276507260},
-  url = {https://doi.org/10.1023/A:1011276507260},
-  abstract = {The phrase model checking refers to algorithms for exploring the state space of a transition system to determine if it obeys a specification of its intended behavior. These algorithms can perform exhaustive verification in a highly automatic manner, and, thus, have attracted much interest in industry. Model checking programs are now being commercially marketed. However, model checking has been held back by the state explosion problem, which is the problem that the number of states in a system grows exponentially in the number of system components. Much research has been devoted to ameliorating this problem.}
 }
 
 @article{mutilatedchessboard-exponential,
@@ -604,12 +472,8 @@ volume = {310},
 number = {1},
 pages = {513-525},
 year = {2004},
-issn = {0304-3975},
 doi = {https://doi.org/10.1016/S0304-3975(03)00395-5},
-url = {https://www.sciencedirect.com/science/article/pii/S0304397503003955},
 author = {Michael Alekhnovich},
-keywords = {Propositional proof complexity, Resolution, Lower bounds},
-abstract = {Mutilated chessboard principle CBn says that it is impossible to cover by domino tiles the chessboard 2n×2n with two diagonally opposite corners removed. We prove 2Ω(n) lower bound on the size of minimal resolution refutation of CBn.}
 }
 
 
@@ -617,16 +481,9 @@ abstract = {Mutilated chessboard principle CBn says that it is impossible to cov
 author="Heule, Marijn J. H.
 and Kiesl, Benjamin
 and Biere, Armin",
-editor="Badger, Julia M.
-and Rozier, Kristin Yvonne",
 title="Clausal Proofs of Mutilated Chessboards",
 booktitle="NASA Formal Methods",
 year="2019",
-publisher="Springer International Publishing",
-address="Cham",
-pages="204--210",
-abstract="Mutilated chessboard problems have been called a ``tough nut to crack'' for automated reasoning. They are, for instance, hard for resolution, resulting in exponential runtime of current SAT solvers. Although there exists a well-known short argument for solving mutilated chessboard problems, this argument is based on an abstraction that is challenging to discover by automated-reasoning techniques. In this paper, we present another short argument that is much easier to compute and that can be expressed within the recent (clausal) {\$}{\$}{\backslash}mathsf {\{}PR{\}}{\$}{\$}proof system for propositional logic. We construct short clausal proofs of mutilated chessboard problems using this new argument and validate them using a formally-verified proof checker.",
-isbn="978-3-030-20652-9"
 }
 
 @Inbook{er,
@@ -639,30 +496,27 @@ year="1983",
 publisher="Springer Berlin Heidelberg",
 address="Berlin, Heidelberg",
 pages="466--483",
-abstract="The question of the minimum complexity of derivation of a given formula in classical propositional calculus is considered in this article and it is proved that estimates of complexity may vary considerably among the various forms of propositional calculus. The forms of propositional calculus used in the present article are somewhat unusual, {\textdagger} but the results obtained for them can, in principle, be extended to the usual forms of propositional calculus.",
-isbn="978-3-642-81955-1",
 doi="10.1007/978-3-642-81955-1_28",
-url="https://doi.org/10.1007/978-3-642-81955-1_28"
 }
 
 @article{glucoser,
- title={A Restriction of Extended Resolution for Clause Learning SAT Solvers}, volume={24}, url={https://ojs.aaai.org/index.php/AAAI/article/view/7553}, DOI={10.1609/aaai.v24i1.7553}, abstractNote={ &lt;p&gt; Modern complete SAT solvers almost uniformly implement variations of the clause learning framework introduced by Grasp and Chaff. The success of these solvers has been theoretically explained by showing that the clause learning framework is an implementation of a proof system which is as poweful as resolution. However, exponential lower bounds are known for resolution, which suggests that significant advances in SAT solving must come from implementations of more powerful proof systems. We present a clause learning SAT solver that uses extended resolution. It is based on a restriction of the application of the extension rule. This solver outperforms existing solvers on application instances from recent SAT competitions as well as on instances that are provably hard for resolution. &lt;/p&gt; }, number={1}, journal={Proceedings of the AAAI Conference on Artificial Intelligence}, author={Audemard, Gilles and Katsirelos, George and Simon, Laurent}, year={2010}, month={Jul.}, pages={15-20} }
+ title={A Restriction of Extended Resolution for Clause Learning SAT Solvers},
+ DOI={10.1609/aaai.v24i1.7553}, 
+ journal={Proceedings of the AAAI Conference on Artificial Intelligence}, 
+ author={Audemard, Gilles and Katsirelos, George and Simon, Laurent}, 
+ year={2010}, 
+ month={Jul.}
+}
 
 @article{hardexamplesresolution,
 author = {Urquhart, Alasdair},
 title = {Hard examples for resolution},
 year = {1987},
-issue_date = {Jan. 1987},
 publisher = {Association for Computing Machinery},
-address = {New York, NY, USA},
 volume = {34},
 number = {1},
-issn = {0004-5411},
-url = {https://doi.org/10.1145/7531.8928},
 doi = {10.1145/7531.8928},
-abstract = {Exponential lower bounds are proved for the length-of-resolution refutations of sets of disjunctions constructed from expander graphs, using the method of Tseitin. Since these sets of clauses encode biconditionals, they have short (polynomial-length) refutations in a standard axiomatic formulation of propositional calculus.},
 journal = {J. ACM},
-month = jan,
 pages = {209–219},
 numpages = {11}
 }
@@ -671,34 +525,19 @@ numpages = {11}
 author = {Slav\'{\i}k, Petr},
 title = {A tight analysis of the greedy algorithm for set cover},
 year = {1996},
-isbn = {0897917855},
-publisher = {Association for Computing Machinery},
-address = {New York, NY, USA},
-url = {https://doi.org/10.1145/237814.237991},
 doi = {10.1145/237814.237991},
-booktitle = {Proceedings of the Twenty-Eighth Annual ACM Symposium on Theory of Computing},
-pages = {435–441},
-numpages = {7},
-keywords = {set cover, partial set cover, greedy algorithm, fractional set cover, approximation algorithms},
-location = {Philadelphia, Pennsylvania, USA},
-series = {STOC '96}
+booktitle = {Symposium on Theory of Computing (STOC)},
 }
 
 @inproceedings{anvil,
 author = {Song, X. Carol and Smith, Preston and Kalyanam, Rajesh and Zhu, Xiao and Adams, Eric and Colby, Kevin and Finnegan, Patrick and Gough, Erik and Hillery, Elizabett and Irvine, Rick and Maji, Amiya and St. John, Jason},
 title = {Anvil - System Architecture and Experiences from Deployment and Early User Operations},
 year = {2022},
-isbn = {9781450391610},
 publisher = {Association for Computing Machinery},
-address = {New York, NY, USA},
-url = {https://doi.org/10.1145/3491418.3530766},
 doi = {10.1145/3491418.3530766},
-abstract = {Anvil is a new XSEDE advanced capacity computational resource funded by NSF. Designed with a systematic strategy to meet the ever increasing and diversifying research needs for advanced computational capacity, Anvil integrates a large capacity high-performance computing (HPC) system with a comprehensive ecosystem of software, access interfaces, programming environments, and composable services in a seamless environment to support a broad range of current and future science and engineering applications of the nation’s research community. Anchored by a 1000-node CPU cluster featuring the latest AMD EPYC 3rd generation (Milan) processors, along with a set of 1TB large memory and NVIDIA A100 GPU nodes, Anvil integrates a multi-tier storage system, a Kubernetes composable subsystem, and a pathway to Azure commercial cloud to support a variety of workflows and storage needs. Anvil was successfully deployed and integrated with XSEDE during the world-wide COVID-19 pandemic. Entering production operation in February 2022, Anvil will serve the nation’s science and engineering research community for five years. This paper describes the Anvil system and services, including its various components and subsystems, user facing features, and shares the Anvil team’s experience through its early user access program from November 2021 through January 2022.},
-booktitle = {Practice and Experience in Advanced Research Computing 2022: Revolutionary: Computing, Connections, You},
+booktitle = {Practice and Experience in Advanced Research Computing (PEARC)},
 articleno = {23},
 numpages = {9},
-location = {Boston, MA, USA},
-series = {PEARC '22}
 }
 
 competitions and solved them with the best solvers in the main track of the last SAT competition. As expected our experimental results suggest that scrambling has a substantial effect on the performance of individual solvers but surprisingly has little effect on rankings among solvers. As a consequence we argue that only using our method of scrambling is not enough to increase robustness of competitions and evaluations in general.
@@ -713,53 +552,30 @@ BibTeX entry
 @inproceedings{scranfilize,
   author    = {Armin Biere and Marijn Heule},
   title     = {The Effect of Scrambling CNFs},
-  booktitle = {Proceedings of Pragmatics of SAT 2015 and 2018},
-  editor    = {Daniel Le Berre and Matti Järvisalo},
-  series    = {EPiC Series in Computing},
-  volume    = {59},
-  publisher = {EasyChair},
-  bibsource = {EasyChair, https://easychair.org},
-  issn      = {2398-7340},
-  url       = {/publications/paper/HtqQ},
+  booktitle = {Proceedings of Pragmatics of SAT (PoS)},
+  year      = {2019},
   doi       = {10.29007/9dj5},
-  pages     = {111-126},
-  year      = {2019}}
+}
 
 
 @book{satcomp2023,
 title = "Proceedings of SAT Competition 2023: Solver, Benchmark and Proof Checker Descriptions",
-keywords = "113 Computer and information sciences",
 editor = "Tomas Balyo and Marijn Heule and Markus Iser and Matti J{\"a}rvisalo and Martin Suda",
 year = "2023",
-language = "English",
-series = "Department of Computer Science Series of Publications B",
-publisher = "Department of Computer Science, University of Helsinki",
-address = "Finland",
 }
 
 
 @book{satcomp2022,
 title = "Proceedings of SAT Competition 2022: Solver and Benchmark Descriptions",
-keywords = "113 Computer and information sciences",
 editor = "Tomas Balyo and Heule, {Marijn J.H.} and Markus Iser and Matti J{\"a}rvisalo and Martin Suda",
 year = "2022",
-language = "English",
-series = "Department of Computer Science Series of Publications B",
-publisher = "Department of Computer Science, University of Helsinki",
-address = "Finland",
 }
 
 
 @book{satcomp2024,
 title = "Proceedings of SAT Competition 2024: Solver, Benchmark and Proof Checker Descriptions",
-keywords = "113 Computer and information sciences",
 editor = "Heule, {Marijn J.H.} and Markus Iser and Matti J{\"a}rvisalo and Martin Suda",
 year = "2024",
-language = "English",
-series = "Department of Computer Science Report Series B",
-publisher = "Department of Computer Science, University of Helsinki",
-address = "Finland",
-
 }
 
 
