@@ -12,24 +12,24 @@ We use the pigeonhole principle as a motivating example.
 The problem $\ph{n}$ asks whether we can put $n+1$ pigeons in $n$ holes such
 that (1)~every pigeon is in a hole, and (2)~no hole contains more than one
 pigeon. This can be encoded as a SAT problem where variable $x_{i, j}$
-represents putting the $i$-th pigeon into the $j$-th hole. Thus, constraint (1)
-is $\bigvee_{1 \leq j \leq n} x_{i, j}$ for each $1 \leq i \leq n+1$ and
-constraint (2) is $\overline{x}_{i, j} \lor \overline{x}_{k, j}$ for each $ 1
+represents putting the $i$-th pigeon into the $j$-th hole. Constraint (1)
+is encoded as $\bigvee_{1 \leq j \leq n} x_{i, j}$ for each $1 \leq i \leq n+1$ and
+(2) as $\overline{x}_{i, j} \lor \overline{x}_{k, j}$ for each $ 1
 \leq i < k \leq n+1$ and $1 \leq j \leq n$.
 
 \autoref{fig:pigeonholeclauses} provides a visualization where the
 rows represent the pigeons and the columns represent the holes. The cell in row
-$i$ and column $j$ represents the literal $x_{i, j}$
+$i$ and column $j$ represents the literal $x_{i, j}$.
 % i.e. whether the $i$-th pigeon is in the $j$-th hole.
-If the $(i, j)$-th cell has a $+$ symbol, this represents $x_{i, j}$ is set to
-true and if it has a $-$ symbol this represents $x_{i, j}$ is set to false.
+A $+$ in the $(i, j)$-th cell indicates that $x_{i, j}$ is set to
+true, and a $-$ symbol indicates falsehood.
 Thus, constraint (1) asks that each row has at least one $+$ cell and
 constraint (2) asks that no two $+$ cells share a column.
 
 % We only consider the case where $m = n + 1$ which we denote \ph{n}. 
 We achieve an $O(n^3)$ \pr proof, matching the best known
 result~\cite{prclauses}. We learn these proofs with a very low constant
-factor and little sensitivity to the encoding.
+factor and robustness against encoding preturbations.
 %  todo: add a forward reference to where we evaluate this
 %  todo: is this the best possible result theoretically?
 
@@ -38,14 +38,14 @@ factor and little sensitivity to the encoding.
 \subsection{Algorithm}~\label{subsec:methodology}
 
 
-At a high level, \autoref{alg:methodology} learns a \pr clause by: (I)
-propagating on two variables $i$ and $j$, (II) learning the least conditional
-autarky of the partial assignment, (III) shrinking the clause, and (IV) adding
+At a high level, \autoref{alg:methodology} learns a \pr clause by: (1)
+propagating on two variables $i$ and $j$, (2) learning the least conditional
+autarky of the partial assignment, (3) shrinking the clause, and (4) adding
 the clause to the formula. 
 
 The \texttt{Propagate} function represents unit propagation.
-\texttt{LeastConditional} function achieves II, following prior work
-(\autoref{subsec:learning}). The \texttt{Shrink} function takes care of III
+\texttt{LeastConditional} function achieves 2, following prior work
+(\autoref{subsec:learning}). The \texttt{Shrink} function takes care of 3
 (\autoref{subsec:shrinking}). All four stages require several heuristic choices (\autoref{sec:implementation}).
 
 \begin{algorithm}~\label{alg:methodology}
@@ -117,7 +117,7 @@ minimize it using \autoref{alg:leastcond} from Kiesl et al.
     }
 \end{algorithm}
 
-This is a conditional autarky, since every clause that $\alpha_a$ touches, is
+This is a conditional autarky, since every clause that $\alpha_a$ touches is
 satisfied by some literal in $\alpha$.
 
 Additionally, $\alpha_c$ is minimal: for each clause that is touched but not
@@ -127,8 +127,8 @@ will touch a clause that is not satisfied by $\alpha$, violating the conditional
 autarky property.
 
 From our pigeonhole example, we can see the rows in
-\autoref{subfig:pigeonholeclause-c} with no $+$, will have their constraint (1)
-touched but not satisfied and thus are in $\alpha_c$. However, the rows with a
+\autoref{subfig:pigeonholeclause-c} with no $+$ will have their constraint (1)
+touched but not satisfied, and thus are in $\alpha_c$. However, the rows with a
 $+$ will have their constraint (1) satisfied and thus are in $\alpha_a$. Thus,
 $\alpha_a = \{x_{1, 1}, \overline{x}_{1, 2}, \overline{x}_{2, 1}, x_{2, 2}\}$
 and $\alpha_c = \{\overline{x}_{3, 1}, \ldots, \overline{x}_{5, 1}, \overline{x}_{3,
@@ -207,17 +207,17 @@ We want learn the clause $\bigvee_{c \in C \backslash C_0} \overline{c} \lor
 
 \subsection{Clause Shrinking Algorithm}~\label{subsec:sym}
 
-As mentioned in \autoref{subsec:shrinking}, our choice for $A_0$ is very important.. 
+As mentioned in \autoref{subsec:shrinking}, our choice for $A_0$ is important. We discuss our heuristic for minimizing the size of $A_0$ without drastically increasing complexity.
 
 
 \noindent \textbf{Greedy Set Cover:} %~\label{subsubsec:greedysetcover}
 In order to minimize the size of the clause, we may want the smallest possible $A_0$ that maximizes $C_0$. Say for each $a \in \alpha_a$, we define $\alpha_a^\mathrm{SETS}(a) = \{ c \in \alpha_c \; | \; \impunitclause{\formula}{a}{c}\}$. 
 
-When $C_0 = \alpha_C$, finding the smallest $A_0$ is exactly the set cover problem with $\alpha_a^\mathrm{SETS}$. This is NP-hard. We can approximate using the greedy algorithm, which returns a set cover at most roughly $(\ln |\alpha_c| + 1)$-times the size of the smallest set cover~\cite{greedysetcover}. 
+When $C_0 = \alpha_c$, finding the smallest $A_0$ is exactly the set cover problem with $\alpha_a^\mathrm{SETS}$. This is NP-hard, so we instead approximate using the greedy algorithm, returning a set cover at most roughly $(\ln |\alpha_c| + 1)\times$ the size of the smallest set cover~\cite{greedysetcover}. 
 %  in actuality it is $\ln |\alpha_c| - \ln \ln |\alpha_c| + O(1)$
 
 
-Specifically, the greedy algorithm will find the largest set in $\{\alpha_a^\mathrm{SETS} \cap (\alpha_c \backslash C_0) | a \in \alpha_a \}$ at each step and add it to $C_0$. It stops when each of the $\alpha_a^\mathrm{SETS} \cap (\alpha_c \backslash C_0)$ are empty.
+Specifically, the greedy algorithm finds the largest set in $\{\alpha_a^\mathrm{SETS} \cap (\alpha_c \backslash C_0) | a \in \alpha_a \}$ at each step and adds it to $C_0$. It stops when each of the $\alpha_a^\mathrm{SETS} \cap (\alpha_c \backslash C_0)$ are empty.
 % either $C_0 = \alpha_C$ or there are no terms 
 
 
@@ -252,7 +252,6 @@ In \autoref{alg:finda0}, we describe our process for calculating $A_0$.
 % detail. 
 We initialize $\alpha_a^\mathrm{SETS}$ as an array, iterate the counter
 $i$ through $\alpha_a$, populating $\alpha_a^\mathrm{SETS}[i]$ with the set of literals
-
 $c \in \alpha_c$ such that $\impunitclause{\formula}{\alpha_a^\mathrm{SETS}[i]}{c}$. Finally, we apply
 \texttt{GreedySetCover} to get a small set $A_0$ that covers as much of $C$ as we can.
 

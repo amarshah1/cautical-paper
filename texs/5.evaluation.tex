@@ -13,13 +13,12 @@ learning techniques. In doing so, we aim to answer the following research questi
 \end{enumerate}
 
 
-We compare to the two main tools for learning \pr clauses are \sadical (based on SDCL)
+We compare the two main tools learning \pr: clauses \sadical (based on SDCL)
 and \prelearn (a preprocessing technique that calls \sadical). To be consistent with our approach,
-we run \prelearn with 50 iterations and for 30 seconds. We also compare to \cadical, as a baseline with no \pr clause learning.
+we run \prelearn with 50 iterations and for 30 seconds. We also compare to \cadical as a baseline with no \pr clause learning.
 
 In \autoref{subsec:eval-pigeonhole}, we compare all approaches
-on the pigeonhole principle. We evaluate based on time taken, the length of
-the proof, and the sensitivity to the encoding of the formula. 
+on the pigeonhole principle. We evaluate based on time taken, proof length, and sensitivity to the encoding of the formula. 
 
 In \autoref{subsec:eval-satcomp}, we evaluate the solvers on benchmarks from the
 annual '22, '23, and '24 SAT competition's main
@@ -108,7 +107,8 @@ On the other hand, \tool almost matches its non-scranfilized performance, demons
 
 In \autoref{fig:solver-comparison}, we compare the performance of \tool with \cadical and \prelearn on the benchmarks from the '22,'23, and '24 SAT competition's main tracks~\cite{satcomp2022,satcomp2023,satcomp2024}. We exclude all benchmarks with more than 20M variables. \autoref{tab:solver-stats} shows the number of instances solved by each solver as well as the number of queries for which \prelearn and \cadical learn additional clauses, improve upon \cadical, and solve that \cadical does not solve.
 
-The PAR-2 score is used to evaluate the performance of the solvers at the competition. It is the sum of the runtime on instances solved plus two times the timeout for each instance unsolved. On this dataset, \cadical has a PAR-score of 3521.79 seconds, \prelearn has a PAR-score of 3331.41 seconds, and \tool has a PAR-score of 3442.14 seconds.
+PAR-2 score is a standard metric used to evaluate the performance of solvers.
+It is evaluated as the sum of the runtimes of solved instances and twice the timeout of unsolved instances. On this dataset, \cadical has a PAR-score of 3521.79 seconds, \prelearn has a PAR-score of 3331.41 seconds, and \tool has a PAR-score of 3442.14 seconds.
 
 % prelearn PAR score:  3331.406813590451
 % cautical PAR score:  3442.137998163452

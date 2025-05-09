@@ -2,9 +2,9 @@
 
 We implement our technique in \tool (a fork of \cadical
 %  commit f13d74439a5b5c963ac5b02d05ce93a8098018b8
-). By default, \tool will search for \pr clauses as a preprocessing step for 30
+). By default, \tool searches for \pr clauses as a preprocessing step for 30
 seconds. After this time limit, the solver exits and commences normal solving,
-regardless of whether it has found any \pr clauses. This adds $\sim\!800$ lines
+regardless of whether or not it has found any \pr clauses. This adds $\sim\!800$ lines
 of C++ code to \cadical and is implementable within any CDCL SAT solver.
  
 
@@ -26,10 +26,11 @@ We include an evaluation of the heuristics in \autoref{subsec:heuristics}.
 We could sort $\alpha_a$ by implication before \autoref{alg:finda0}
 \autoref{line:sort-alphaa}. This is important when there is more than one set
 cover of the same size. For instance, if  $a_1, a_2 \in \alpha_a$ and
-$\impunitclause{\psi}{a_1}{a_2}$. Then, we would prefer to learn a clause with 
+% todo: fix overline over a_1
+$\impunitclause{\formula}{a_1}{a_2}$. Then, we would prefer to learn a clause with 
 $a_1$ since it implies $a_2$. We select for this by first sorting $\alpha_a$ by
-implication, i.e. we would move $a_1$ before $a_2$ in $\alpha_a$ if it was not
-there already.
+implication, i.e., we would move $a_1$ before $a_2$ in $\alpha_a$ if it were not
+already there.
 % todo: maybe delete this, if we do not evaluate on it
 
 % and $\alpha_c = c$, we may have
@@ -47,30 +48,28 @@ Introducing globally blocked clauses can affect how we divide $\alpha = \alpha_c
 \sqcup \alpha_a$ as in \autoref{alg:leastcond}. Thus, it is better to avoid
 introducing globally blocked clauses if they are not useful. We do this by
 checking if $\formula \impunit C$ for each potential clause $C$. If it is implied by
-unit propagation, we do not learn it since we consider it easy to learn.
+unit propagation, we consider it easy to learn and do not add it.
 
-\subsubsection{Filtering based on Clause Length}~\label{subsubsec:filtering-length}
+\subsubsection{Filtering Long Clauses}~\label{subsubsec:filtering-length}
 Another heuristic for filtering is based on clause size. If a clause is longer
-than some size $k$ we may choose not to learn it as shorter clauses are
+than some set length, we may choose not to learn it, as shorter clauses are
 typically more useful. This can be combined with filtering out trivial clauses
 or used separately.
 
 \subsubsection{Ordering Literals}~\label{subsubsec:ordering-literals}
-So far, we are considering literals $i$ and $j$ to propagate on randomly.
+So far, we propagate on literals $i$ and $j$ selected randomly.
 However, there could be better ways to order literals. One technique is to order
-$i$ based on the number of clauses it occurs in. Another is, once an $i$ is
-chosen, we pick $j$ based on if it touches $i$, i.e. if $j$ occurs in the same
-clause as $i$ or a variable propagate by $i$. This was originally proposed in
-Reeves et al ~\cite{prelearn}.
+$i$ based on the number of clauses it occurs in. Another is to pick $j$ from the neighbors of $i$. This was originally proposed in
+Reeves et al.~\cite{prelearn}.
 
 \subsubsection{Alternative Shrinking
-techniques}~\label{subsubsec:shrink-techniques} We discussed in
-\autoref{subsec:shrinking} that we can shrink a clause if
-$\impunitclause{\phi}{a}{c}$, where $a \in \alpha_a$ and $c \in \alpha_c$.
-Checking if $\impunitclause{\phi}{a}{c}$ can be expensive. A cheaper option is
-to see if there is a clause $a \lor c$ in the original formula. While, this may
-miss some pairs $a, c$, this is sufficient in certain cases such as for the
-pigeonhole principle benchmarks. Another alternative is to not shrink the clause
+techniques}~\label{subsubsec:shrink-techniques} As discussed in
+\autoref{subsec:shrinking}, we may shrink a clause if
+$\impunitclause{\formula}{a}{c}$, where $a \in \alpha_a$ and $c \in \alpha_c$.
+Checking if $\impunitclause{\formula}{a}{c}$ can be expensive. A cheaper option is
+to see if there is a clause $a \lor c$ in the original formula. While this may
+miss some pairs, it is sufficient in certain cases, such as for the
+pigeonhole benchmarks. Another alternative is to not shrink the clause
 at all.
 
 % Here is a complete list of flags discussed in 

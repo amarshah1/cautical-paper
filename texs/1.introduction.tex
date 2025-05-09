@@ -6,7 +6,7 @@ Satisfiability (SAT) solving is a core tool in computer science with application
 
 
 % It is most commonly solved using the conflict-driven clause learning (CDCL) framework. This framework explores the state space of possible solutions, while learning clauses when it reaches a conflict, to aid future explorations.
-One such class of techniques is propagation redundant (\pr) clause learning. In this technique, the solver generates and adds clauses which are satisfiability-preserving; that is, clauses whose conjunction with formula maintains whether or not the formula is satisfiable. The solver aims to attain clauses that drastically shrink the potential solution space, such as clauses that break symmetries.
+One such class of techniques is propagation redundant (\pr) clause learning. In this technique, a solver generates and adds clauses which are satisfiability-preserving; that is, clauses whose conjunction with the formula is satisfiable if and only if the original formula is satisfiable. The solver aims to attain clauses that drastically shrink the potential solution space, such as clauses that break symmetries.
 
 A classic problem involving symmetries is the pigeonhole problem, which asks if it is possible to fit $n+1$ pigeons into $n$ holes with at most one pigeon per hole. In this problem, one may learn a clause equivalent to the lemma: \emph{pigeon 1 is not in hole 1}. Adding this clause restricts the search space for the first pigeon (and thus the problem), but it preserves satisfiability, as hole 1 is symmetric with all holes.
 
@@ -23,9 +23,9 @@ Thus, in the worst case, the solver takes exponential time to learn a single \pr
 % todo : check crypto mini sat to see if it uses PR clauses
 
 % todo : should we explain what conditional autarkies are? or go more into depth about globally blocked clauses?
-In this work, we propose a new, more efficient approach to learn \pr clauses based on conditional autarkies. Given a partial assignment to a SAT formula, our method divides the assignment into a ``conditional'' part and an ``autarky'' part. Using this distinction, we can learn a globally blocked clause (a type of \pr clause) in linear time.
+In this work, we propose a new, more efficient approach to learn \pr clauses based on conditional autarkies. Given a partial assignment to a SAT formula, our method divides the assignment into a \emph{conditional} part and an \emph{autarky} part. Using this distinction, we can learn a globally blocked clause (a type of \pr clause) in linear time.
 
-While this an effective means of bridging the theoretical gap in identifying \pr clauses, it is not immediately useful in real SAT solving applications. There are two major practical limitations: (1) not all globally blocked clauses meaningfully shrink the search space, and (2) it is difficult to select useful clauses. We solve (1) by introducing a shrinking procedure to extract compact, useful \pr clauses. We solve (2) by introducing a number of heuristics.
+While this is an effective means of bridging the theoretical gap in identifying \pr clauses, it is not immediately useful in real SAT solving applications. There are two major practical limitations: (1) not all globally blocked clauses meaningfully shrink the search space, and (2) it is difficult to select useful clauses. We solve (1) by introducing a shrinking procedure to extract compact, useful \pr clauses. We solve (2) by introducing a number of heuristics.
 % todo: would like to say more about what these heuristics are
 
 % Integrating \pr clause learning into a SAT solver is still an active area of study
