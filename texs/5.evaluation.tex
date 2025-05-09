@@ -17,23 +17,21 @@ We compare the two main tools learning \pr: clauses \sadical (based on SDCL)
 and \prelearn (a preprocessing technique that calls \sadical). To be consistent with our approach,
 we run \prelearn with 50 iterations and for 30 seconds. We also compare to \cadical as a baseline with no \pr clause learning.
 
-In \autoref{subsec:eval-pigeonhole}, we compare all approaches
-on the pigeonhole principle. We evaluate based on time taken, proof length, and sensitivity to the encoding of the formula. 
-
-In \autoref{subsec:eval-satcomp}, we evaluate the solvers on benchmarks from the
-annual '22, '23, and '24 SAT competition's main
-tracks~\cite{satcomp2022,satcomp2023,satcomp2024}.
-
-In \autoref{subsec:eval-discussion}, we highlight certain benchmark families
-that benefit from \pr clause learning. We evaluate the different approaches on these families.
-
-
-Finally, we analyze the use of specific heuristic choices in \tool
-by turning heuristics off individually and observing their effect (\autoref{subsec:eval-heuristics}). 
-
 All experiments were performed in the Anvil Supercomputing Center on nodes with
 128 cores and 2 GB RAM per core~\cite{anvil}. We ran 64 experiments in parallel per node
 with a 5,000 second timeout, the default timeout for the SAT competition.
+
+In \autoref{subsec:eval-pigeonhole}, we compare all approaches
+on the pigeonhole principle, evaluating runtime, proof length, and sensitivity to the encoding of the formula. 
+In \autoref{subsec:eval-satcomp}, we evaluate the solvers on benchmarks from the
+annual '22, '23, and '24 SAT competition's main 
+tracks~\cite{satcomp2022,satcomp2023,satcomp2024}. 
+In \autoref{subsec:eval-discussion}, we highlight certain benchmark families
+that benefit from \pr clause learning. %We evaluate the different approaches on these families. 
+Finally, we analyze the use of specific heuristic choices in \tool
+by turning heuristics off individually and observing their effect (\autoref{subsec:eval-heuristics}). 
+
+
 
 \subsection{Pigeonhole results}~\label{subsec:eval-pigeonhole}
 
