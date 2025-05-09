@@ -114,9 +114,21 @@ clauses.
 
 \begin{definition}[Propagation Redundant (\pr) clauses]
     For formula $\formula$, we say that clause $C$ is propagation redundant
-    (\pr) if there exists a \emph{witness} assignment $\omega$ implying the
-    redundancy of $C$, as checkable in polynomial time by a solver. 
+    (\pr) if there exists a \emph{witness} assignment $\omega$ such that
+$$
+    \formula \land \lnot C \impunit (\formula \land C)|_\omega.
+$$
 \end{definition}
+
+
+   Or more informally, a clause $C$ is $\pr$ if every assignment that 
+   satisfies $\formula$ but falsifies $C$ can be turned into an assignment
+   that satisfies $\formula \land C$, while this property can be validated 
+   in polynomial time (i.e., via implied by unit propagation).  
+
+%    For formula $\formula$, we say that clause $C$ is propagation redundant
+%    (\pr) if there exists a \emph{witness} assignment $\omega$ implying the
+%    redundancy of $C$, as checkable in polynomial time by a solver. 
 
 % Such a clause $C$ must be redundant. Say there is a satisfying assignment
 % $\alpha$ for $\formula$. Then if $\alpha$ is not a satisfying assignment for

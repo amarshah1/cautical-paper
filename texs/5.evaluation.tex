@@ -17,23 +17,21 @@ We compare the two main tools learning \pr: clauses \sadical (based on SDCL)
 and \prelearn (a preprocessing technique that calls \sadical). To be consistent with our approach,
 we run \prelearn with 50 iterations and for 30 seconds. We also compare to \cadical as a baseline with no \pr clause learning.
 
-In \autoref{subsec:eval-pigeonhole}, we compare all approaches
-on the pigeonhole principle. We evaluate based on time taken, proof length, and sensitivity to the encoding of the formula. 
-
-In \autoref{subsec:eval-satcomp}, we evaluate the solvers on benchmarks from the
-annual '22, '23, and '24 SAT competition's main
-tracks~\cite{satcomp2022,satcomp2023,satcomp2024}.
-
-In \autoref{subsec:eval-discussion}, we highlight certain benchmark families
-that benefit from \pr clause learning. We evaluate the different approaches on these families.
-
-
-Finally, we analyze the use of specific heuristic choices in \tool
-by turning heuristics off individually and observing their effect (\autoref{subsec:eval-heuristics}). 
-
 All experiments were performed in the Anvil Supercomputing Center on nodes with
 128 cores and 2 GB RAM per core~\cite{anvil}. We ran 64 experiments in parallel per node
 with a 5,000 second timeout, the default timeout for the SAT competition.
+
+In \autoref{subsec:eval-pigeonhole}, we compare all approaches
+on the pigeonhole principle, evaluating runtime, proof length, and sensitivity to the encoding of the formula. 
+In \autoref{subsec:eval-satcomp}, we evaluate the solvers on benchmarks from the
+annual '22, '23, and '24 SAT competition's main 
+tracks~\cite{satcomp2022,satcomp2023,satcomp2024}. 
+In \autoref{subsec:eval-discussion}, we highlight certain benchmark families
+that benefit from \pr clause learning. %We evaluate the different approaches on these families. 
+Finally, we analyze the use of specific heuristic choices in \tool
+by turning heuristics off individually and observing their effect (\autoref{subsec:eval-heuristics}). 
+
+
 
 \subsection{Pigeonhole results}~\label{subsec:eval-pigeonhole}
 
@@ -110,7 +108,7 @@ We compare the performance of \tool with \cadical and \prelearn on the benchmark
 \autoref{tab:solver-stats} shows the number of instances solved by each solver and the number of queries for which \prelearn and \cadical learn additional \pr clauses, how many improve upon \cadical by at least 5\%, and how many solve a formula that \cadical does not solve. We divide the benchmarks based on number of clauses (0-10k or 10k-20M) and status (SAT or UNSAT).
 
 PAR-2 score is a standard metric used to evaluate the performance of solvers.
-It is evaluated as the sum of the runtimes of solved instances and twice the timeout of unsolved instances. On this dataset, \cadical has a PAR-score of 3521.79 seconds, \prelearn has a PAR-score of 3331.41 seconds, and \tool has a PAR-score of 3442.14 seconds. This can be explained by \prelearn solving the most formulae at 771, followed by \tool at 754, and \cadical at 749.
+It is evaluated as the sum of the runtimes of solved instances and twice the timeout of unsolved instances. On this dataset, \cadical has a PAR2-score of 3521.79 seconds, \prelearn has a PAR2-score of 3331.41 seconds, and \tool has a PAR2-score of 3442.14 seconds. This can be explained by \prelearn solving the most formulae at 771, followed by \tool at 754, and \cadical at 749.
 
 %  I don't know if this actually makes sense
 Notably, \tool solves 36 formulae that \cadical does not solve, while \prelearn solves 30 that \cadical does not solve. \tool improves on 219 formulae from \cadical, while \prelearn improves on 146 formulae. We attribute this to more selective \pr clause learning techniques in \tool. Learning unhelpful \pr clauses can have a detrimental effect on performance. \tool only learns 50 \pr clauses or more for 57 formulae, while \prelearn learns 50 \pr clauses or more for 256 formulae. On those clauses, \tool improves the \cadical's runtime by ??\%, while \prelearn improves it by ??\%.
