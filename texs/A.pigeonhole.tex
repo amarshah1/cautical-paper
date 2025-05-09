@@ -43,7 +43,7 @@ Similary, we can learn the unit clauses $\overline{x}_{3, 1}, \overline{x}_{4, 1
 
 \subsubsection{Useful Units} In the last row of learning, we get something even more useful. Starting with the assumption $j = x_{n+1, 2}$, we propagate the literals $\overline{x}_{n + 1, 1}$ and $\overline{x}_{1, 2}, \overline{x}_{2, 2}, \ldots, \overline{x}_{n, 2}$.  This can be divided into a autarky part $\alpha_a = x_{1, 1}, x_{n+1, 2}, \overline{x}_{1, 2}, \overline{x}_{n+1, 1}$ and a conditional part $\alpha_c = \overline{x}_{1, 2}, \ldots, \overline{x}_{n, 2}$.
 
-Shrinking gives us just the unit clause $\overline{x}_{1, 2}$. Notice that if we had does this at the beginning, we would have also had $\overline{x}_{2, 1}, \ldots, \overline{x}_{n, 1}$ and thus shrinking would have given a binary clause.
+Shrinking gives us just the unit clause $\overline{x}_{1, 2}$. Notice that if we had done this at the beginning, we would have also had $\overline{x}_{2, 1}, \ldots, \overline{x}_{n, 1}$ and thus shrinking would have given a binary clause.
 
 In a similar manner, we also learn the units $\overline{x}_{2, 1}, \ldots, \overline{x}_{n, 1}$ as shown in \autoref{subfig:pigeonhole-c}.
 
@@ -54,6 +54,6 @@ In a similar manner, we also learn the units $\overline{x}_{2, 1}, \ldots, \over
 The complexity of this technique is $O(n^3)$ for the proof size. The time it takes to execute a proof step is linear in the size of a formula. Since the formula for pigeonhole has size $O(n^2)$, the total runtime is $O(n^5)$.
 
 % \subsubsection{Proof Size}~\label{subsubsec:proof-size} 
-We make a brief remark on the constant factors in the proof size as they compare favorably to similar techniques. First, in the useful binary clause phase, for each unit we learn, we must learn $n-1$ binary clauses. We end learning $n-1$ units, for a total of $(n-1)^2$ clauses (note the final binary clause and the unit clause can be learned together in a single step). Second, in the useful unit phase, we learn $n-1$ units, for a total of $n-1$ clauses. Third, in the final simplification phase, we learn 3 clauses. This gives a total of $n(n-1) + 3$ clauses to reduce \ph{n} to \ph{n-1}.
+We briefly remark on the constant factors in the proof size as they compare favorably to similar techniques. First, in the useful binary clause phase, we must learn $n-1$ binary clauses for each unit we learn. We end learning $n-1$ units, for a total of $(n-1)^2$ clauses (note the final binary clause and the unit clause can be learned together in a single step). Second, in the useful unit phase, we learn $n-1$ units, for a total of $n-1$ clauses. Third, in the final simplification phase, we learn 3 clauses. This gives a total of $n(n-1) + 3$ clauses to reduce \ph{n} to \ph{n-1}.
 
 Thus, there needs to be 

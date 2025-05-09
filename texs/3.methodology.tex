@@ -24,12 +24,12 @@ $i$ and column $j$ represents the literal $x_{i, j}$.
 A $+$ in the $(i, j)$-th cell indicates that $x_{i, j}$ is set to
 true, and a $-$ symbol indicates falsehood.
 Thus, constraint (1) asks that each row has at least one $+$ cell and
-constraint (2) asks that no two $+$ cells share a column.
+constraint (2) asks that at most one $+$ cell share a column.
 
 % We only consider the case where $m = n + 1$ which we denote \ph{n}. 
 We achieve an $O(n^3)$ \pr proof, matching the best known
 result~\cite{prclauses}. We learn these proofs with a very low constant
-factor and robustness against encoding preturbations.
+factor and robustness against encoding perturbations.
 %  todo: add a forward reference to where we evaluate this
 %  todo: is this the best possible result theoretically?
 
@@ -110,7 +110,7 @@ minimize it using \autoref{alg:leastcond} from Kiesl et al.
         $\alpha_c := \emptyset$\;
         \For{$C \in \formula$}{
             \If{$\alpha$ touches $C$ without satisfying $C$}{
-                $\alpha_c := \alpha_c \cup (\alpha \cap \overline{C})$\;
+                $\alpha_c := \alpha_c \cup (\alpha \cap \lnot{C})$\;
             }
         }
         \Return{$\alpha_c$, $\alpha \backslash \alpha_c$}\;
@@ -253,7 +253,7 @@ In \autoref{alg:finda0}, we describe our process for calculating $A_0$.
 We initialize $\alpha_a^\mathrm{SETS}$ as an array, iterate the counter
 $i$ through $\alpha_a$, populating $\alpha_a^\mathrm{SETS}[i]$ with the set of literals
 $c \in \alpha_c$ such that $\impunitclause{\formula}{\alpha_a^\mathrm{SETS}[i]}{c}$. Finally, we apply
-\texttt{GreedySetCover} to get a small set $A_0$ that covers as much of $C$ as we can.
+\texttt{GreedySetCover} to get a small set $A_0$ that covers as much of $C$ as possible.
 
 In the context of the pigeonhole example, out of the $\alpha_a$,
 $\overline{x}_{2, 1}$ can remove $\overline{x}_{3, 1}, \ldots, \overline{x}_{5,

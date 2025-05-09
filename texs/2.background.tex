@@ -32,8 +32,8 @@ such that $x \in C$ or $\overline{x} \in C$. We say $\alpha$ \emph{satisfies}
 $C$ if there is some $l \in C$ with $\alpha(l) = \top$.
 
 Assignment $\alpha$ \emph{satisfies} formula $\formula$ if it satisfies every
-clause $C \in \formula$. If there exists such a satisfying assignment, then $\formula$ is
-\emph{satisfiable}. The boolean satisfiability problem asks whether or not a given
+clause $C \in \formula$. If such a satisfying assignment exists, then $\formula$ is
+\emph{satisfiable}. The Boolean satisfiability problem asks whether or not a given
 formula $\formula$ is satisfiable.
 
 \subsection{Redundant Clauses}~\label{subsec:redundant}
@@ -76,7 +76,7 @@ Given two clauses, $C \lor x$ and $\overline{x} \lor D$,  \emph{resolution} prod
 %    }    
 %\end{equation*}
 %
-\emph{Unit propagation} is a core reasoning technique in a SAT solver. Starting with empty assignment $\alpha$, if a formula $\formula$ contains a \emph{unit clause} $l$, i.e., a clause with only a single literal, then we set $\alpha(l) = \top$. Then, this unit is propagated: we consider the formula $\formula|_\alpha$ and continue this process until there are no unit clauses remaining. When unit propagation terminates with $\formula|_\alpha = \bot$, we say that it derives a conflict.
+\emph{Unit propagation} is a core reasoning technique in a SAT solver. Starting with empty assignment $\alpha$, if a formula $\formula$ contains a \emph{unit clause} $l$, i.e., a clause with only a single literal, we set $\alpha(l) = \top$. Then, this unit is propagated: we consider the formula $\formula|_\alpha$ and continue this process until no unit clauses remain. When unit propagation terminates with $\formula|_\alpha = \bot$, we say that it derives a conflict.
 % todo: notation issue: I never defined \bot as the empty clause and I also am using \bot both as false and the empty clause.
 %
 %Unit propagation can be thought of as a proof step. Indeed, it can be thought of
@@ -96,7 +96,7 @@ Given two clauses, $C \lor x$ and $\overline{x} \lor D$,  \emph{resolution} prod
 %    }
 %\end{equation*}
 
-Given a formula $\formula$ and clause $C = l_1 \lor \dots \lor l_k$, we can say $\formula \impunit C$, read as ``$\formula$ implies $C$ via unit propagation,'' if $\formula \land \overline{l}_1 \land \dots \land \overline{l}_k$ derives a conflict. Here, $C$ is a simple example of a redundant clause w.r.t. $\formula$. 
+Given a formula $\formula$ and clause $C = l_1 \lor \dots \lor l_k$, we can say $\formula \impunit C$, read as ``$\formula$ implies $C$ via unit propagation,'' if $\formula \land \lnot C \equiv \formula \land \overline{l}_1 \land \dots \land \overline{l}_k$ derives a conflict. Here, $C$ is a simple example of a redundant clause w.r.t. $\formula$. 
 
 % This can be justified in almost any proof system for propositional logic. However, this is not very useful as it rules out
 For two formulae, we say $\formula \impunit \formula'$ if $\formula \impunit C$ for every clause $C \in \formula'$. 
@@ -178,7 +178,7 @@ clauses~\cite{conditionalautarkies}.
 In plain words, an autarky is an assignment that satisfies every clause it touches. Satisfying assignments and pure literals are examples of autarkies.
 
 However, formulae often do not contain autarkies, and they are difficult to find
-even when they do exist. Much easier to find is the following weakening to the
+even when they do exist. Much easier to find is the following weakening of the
 concept of an autarky. 
 
 \begin{definition}[Conditional Autarky]
@@ -187,7 +187,7 @@ concept of an autarky.
     autarky for $\formula|_{\alpha_c}$.
 \end{definition}
 
-Consider, as example, the formula with aptly named variables $\formula = (c \lor
+Consider, as an example, the formula with aptly named variables $\formula = (c \lor
 a) \land (\overline{a} \lor x) \land (\overline{c} \lor \overline{a} \lor
 \overline{y})$. We have a conditional autarky $\alpha = \alpha_c \sqcup \alpha_a
 = c\;a$, with $\alpha_c = c$ and $\alpha_a = a$. Since $\formula|_{\alpha_c} =
@@ -220,7 +220,7 @@ That is, a formula $\formula$ is satisfiable if and only if $\formula \land
 \bigwedge_{1 \leq i \leq m} (\overline{c}_1 \lor \dots \lor \overline{c}_n \lor
 a_i)$ is satisfiable. A solver may thus add any of the $m$ clauses
 $\overline{c}_1 \lor \dots \lor \overline{c}_n \lor a_i$ and preserve
-satisfiability. Each of these clauses is a \pr clause with witness $\alpha_a$.
+satisfiability. Each of these is a \pr clause with witness $\alpha_a$.
 % Each of these clauses is a \emph{globally blocked clause}, however, this is
 % not too important for our purposes, so we will not discuss it further.
 % Additionally, we can see that this is a \pr clause:
@@ -247,8 +247,8 @@ satisfiability. Each of these clauses is a \pr clause with witness $\alpha_a$.
 The pigeonhole problem asks if $n+1$ pigeons can fit into $n$ holes without overlap. The
 mutilated chessboard problem asks if a $2n \times 2n$ board with two diagonally
 opposite corners removed can be tiled with $1 \times 2$ rectangular dominoes.
-It is easy to convince a human that both of these problems are unsatisfiable. However, it has
-been shown there are no polynomial-sized resolution proofs for either
+It is easy to convince a human that both problems are unsatisfiable. However, it has
+been shown that there are no polynomial-sized resolution proofs for either
 problem~\cite{hakenpigeonhole,mutilatedchessboard-exponential}.
 % todo: need to clarify if I should say that there are not polynomial-sized
 % resolution proofs for these problems or if there are no sub-exponential-sized

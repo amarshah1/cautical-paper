@@ -26,7 +26,7 @@
       }
     \end{tikzpicture}
     \captionsetup{width=0.8\textwidth}  % override for this one only
-    \caption{We initially propagate on $x_{1, 1}$ and $x_{2, 2}$}~\label{subfig:pigeonholeclause-a}  
+    \caption{We initially propagate on $x_{1, 1}$ and $x_{2, 2}$.}~\label{subfig:pigeonholeclause-a}  
 \end{subfigure}
 \begin{subfigure}[t]{0.23\textwidth}
     \centering
@@ -56,7 +56,7 @@
         }
     \end{tikzpicture}
     \captionsetup{width=0.8\textwidth}  % override for this one only
-    \caption{Then unit propagation gives us $\overline{x}_{2,1}, \ldots, \overline{x}_{5,1},$ $\overline{x}_{1, 2}, \overline{x}_{3, 2}, \ldots, \overline{x}_{5, 2}$}~\label{subfig:pigeonholeclause-b} 
+    \caption{Then unit propagation gives us $\overline{x}_{2,1}, \ldots, \overline{x}_{5,1},$ $\overline{x}_{1, 2}, \overline{x}_{3, 2}, \ldots, \overline{x}_{5, 2}$.}~\label{subfig:pigeonholeclause-b} 
 \end{subfigure}
 \begin{subfigure}[t]{0.23\textwidth}
     \centering
@@ -86,7 +86,7 @@
     }
     \end{tikzpicture}
     \captionsetup{width=0.8\textwidth}  % override for this one only
-    \caption{$\overline{x}_{3, 1}, \ldots, \overline{x}_{5, 1},$ $\overline{x}_{3, 2}, \ldots, \overline{x}_{5, 2}$ are in $\alpha_c$ by their respective constraint (1). The rest are in $\alpha_a$.}~\label{subfig:pigeonholeclause-c}
+    \caption{Literals $\overline{x}_{3, 1}, \ldots, \overline{x}_{5, 1},$ $\overline{x}_{3, 2}, \ldots, \overline{x}_{5, 2}$ are in $\alpha_c$ by their respective constraint (1). The rest are in $\alpha_a$.}~\label{subfig:pigeonholeclause-c}
 \end{subfigure}
 \begin{subfigure}[t]{0.23\textwidth}
     \centering
@@ -116,6 +116,7 @@
     }
     \end{tikzpicture}
     \captionsetup{width=0.8\textwidth}  % override for this one only
-    \caption{Finally, we shrink and learn the clause $\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$}~\label{subfig:pigeonholeclause-d}
+    \caption{Finally, we shrink and learn the clause $\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$.
+    E.g., we can omit $\overline{x}_{3, 2}$ from the condition because of clause $\overline{x}_{1, 2} \lor \overline{x}_{3, 2}$.}~\label{subfig:pigeonholeclause-d}
 \end{subfigure}
 
