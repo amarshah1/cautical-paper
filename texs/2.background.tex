@@ -7,7 +7,7 @@ e.g., $C = x_1 \lor \overline{x}_4 \lor x_6$. A clause may also be represented b
 e.g., the prior clause $C = \{x_1, \overline{x}_4, x_6\}$. This motivates denoting that a literal
 $l$ occurs in clause $C$ via $l \in C$. A conjunctive normal form (CNF)
 formula $\formula$ is a conjunction of (disjunctive) clauses. In this paper,
-all formulas $\formula$ are CNF.
+all formulae $\formula$ are CNF.
 
 We use $var(\formula)$ to represent the set of variables occurring in formula $\formula$.
 A partial assignment $\alpha : V \rightarrow \{\top, \bot\}$ on $\formula$
@@ -94,7 +94,7 @@ as a mechanized application of resolution.
 Given a formula $\formula$ and clause $C = l_1 \lor \dots \lor l_k$, we can say $\formula \impunit C$, read as ``$\formula$ implies $C$ via unit propagation,'' if $\formula \land \overline{l}_1 \land \dots \land \overline{l}_k$ derives a conflict. Here, $C$ is a simple example of a redundant clause w.r.t. $\formula$. 
 
 % This can be justified in almost any proof system for propositional logic. However, this is not very useful as it rules out
-For two formulas, we say $\formula \impunit \formula'$ if $\formula \impunit C$ for every clause $C \in \formula'$. 
+For two formulae, we say $\formula \impunit \formula'$ if $\formula \impunit C$ for every clause $C \in \formula'$. 
 % For literals $l_1$ and $l_2$, we sometimes notate $l_1 \impunit^\formula l_2$ to mean $\formula \vdash_1 \overline{l}_1 \land l_2$. Informally, we can think of this as saying ``$l_1$ implies $l_2$ via unit propagation on $\formula$,'' which means that .
 % see definition here: https://www.cs.cmu.edu/~mheule/publications/prencode.pdf
 % However, this is not very useful as it is quiet easy for the solver to figure this out. Instead, we must appeal to a more complicated notion of redundancy.
@@ -257,7 +257,7 @@ After propagating an assignment, they check if the clause $C$ blocked by this as
 If the positive reduct is satisfiable, then $C$ is a \pr clause and is added. 
 This was implemented in an extension of the solver \lingeling and was shown to scale well on pigeonhole benchmarks.
 
-Later, two new variants of the positive reduct were proposed for more aggressive pruning of the search space \cite{sadical}. This allowed SDCL to solve other difficult problems such as Tseitin formulas~\cite{hardexamplesresolution}. This is implemented in a new SDCL solver \sadical.
+Later, two new variants of the positive reduct were proposed for more aggressive pruning of the search space \cite{sadical}. This allowed SDCL to solve other difficult problems such as Tseitin formulae~\cite{hardexamplesresolution}. This is implemented in a new SDCL solver \sadical.
 
 
 \prelearn is a preprocessing technique for \pr clauses~\cite{prelearn}. It initially considers many possible clauses and queries \sadical to see which are \pr.
