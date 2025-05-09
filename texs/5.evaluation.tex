@@ -275,94 +275,56 @@ These formulas are mostly UNSAT as these are most benefitted by \pr clause learn
 
 \subsection{Analysis of heuristics}~\label{subsec:eval-heuristics}
 
-We provide a brief analysis of the heuristics used in \tool.
+\autoref{fig:global-heuristics} shows the performance of \tool with different heuristics turned on and off. First we consider turning three optimizations off. \autoref{fig:globaldontfilter} compares against when we turn off filtering short and non-trivial \pr clauses. \autoref{fig:global-max-length} compares against when we filter only clauses of length $10$ or greater. \autoref{fig:global-no-shrink} compares to when we decide not to shrink clauses. When we disable all three optimizations, the performance is significantly, especially on \texttt{perfect-matching}, \texttt{mutilated-chessboard}, and \texttt{register-allocation} benchmarks.
+
+Additionally, we consider potential improvements to the heuristics used in \tool. Three possible options are to change the time limit of preprocessing, try to efficiently sort the first propagated variable $i$ and try to sort the second propagated variable $j$. \autoref{fig:global-time-limit} does the first, by setting the pre-processing time limit to 100 seconds. \autoref{fig:global-time-limit}. \autoref{fig:global-sort-i} does the second by propagating $i$ in order of which literals occurs most frequently in the original formula. Finally, \autoref{sub@fig:global-touched} does the the third, for each $i$ propagated, for each other $j$, it counts the number of clauses that contain $j$ and $i$ (or a literal propagate by $i$). It then picks $j$ based on which has the highest of this score.
+
+
+%  shows that the time limit heuristic is not useful for \tool. \autoref{fig:global-sort-i} shows that sorting $i$ beforehand by frequency used is not useful. \autoref{fig:global-touched} shows that the touched heuristic is not useful.
+
 
 
 \begin{figure*}[!t]
     \centering
-
-        % \hspace{0.06\textwidth}
-    % \hspace{0.06\textwidth}
-    % \begin{subfigure}[t]{0.3\textwidth}
-    %     \centering
-    %     \includegraphics[width=\textwidth]{figs/globalbcp_heuristic_comparison.jpg}
-    %     \caption{BCP}
-    %     \label{fig:globalbcp}
-    % \end{subfigure}
     \begin{subfigure}[t]{0.3\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/globaldontfilter_heuristic_comparison.jpg}
         \caption{No filter}
         \label{fig:globaldontfilter}
     \end{subfigure}
-
-    % \begin{subfigure}[t]{0.3\textwidth}
-    %         \centering
-    %         \includegraphics[width=\textwidth]{figs/globaldouble_heuristic_comparison.jpg}
-    %         \caption{Double}
-    %         \label{fig:cautical-vs-cadical}
-    % \end{subfigure}
-
     \begin{subfigure}[t]{0.3\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/globalmaxlen_heuristic_comparison.jpg}
         \caption{Max length}
-        \label{fig:cautical-vs-prelearn}
+        \label{fig:global-max-length}
     \end{subfigure}
     \begin{subfigure}[t]{0.3\textwidth}
             \centering
             \includegraphics[width=\textwidth]{figs/globalnoshrink_heuristic_comparison.jpg}
             \caption{No shrink}
-            \label{fig:cautical-vs-cadical}
+            \label{fig:global-no-shrink}
     \end{subfigure}
-        % \hspace{0.06\textwidth}
-    % \hspace{0.06\textwidth}
-    % \begin{subfigure}[t]{0.3\textwidth}
-    %     \centering
-    %     \includegraphics[width=\textwidth]{figs/globalorderi_heuristic_comparison.jpg}
-    %     \caption{Order $i$ beforehand in increasing order}
-    %     \label{fig:cautical-vs-prelearn}
-    % \end{subfigure}
     \begin{subfigure}[t]{0.3\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/global_time_lim_heuristic_comparison.jpg}
         \caption{Time limit}
-        \label{fig:global-time-comparison}
+        \label{fig:global-time-limit}
     \end{subfigure}
     \begin{subfigure}[t]{0.3\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/globalisort_heuristic_comparison.jpg}
         \caption{Sort $i$ beforehand by frequency used}
-        \label{fig:cautical-vs-prelearn}
+        \label{fig:global-sort-i}
     \end{subfigure}
     \begin{subfigure}[t]{0.3\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/globaltouch_heuristic_comparison.jpg}
         \caption{Touched heuristic}
-        \label{fig:cautical-vs-prelearn}
+        \label{fig:global-touched}
     \end{subfigure}
-
     \caption{Performance comparison of \tool with other solvers}
-    % \label{fig:solver-comparison}
 \end{figure*}
 
 
-\subsection{Research Questions}~\label{subsec:eval-research-questions}
+% \subsection{Research Questions}~\label{subsec:eval-research-questions}
 
-We answer the research questions posed at the start of this section. For
-question 1, we conclude positively that \tool is able to provide short \pr
-proofs for certain benchmark families. We match the best known result for The
-
-However, it is currently unknown whether conditional autarkies can be used to
-learn the shortest known \pr proofs for the mutilated
-chessboard~\cite{mutilatedchessboard-pr} or Tseitin graph
-formulae~\cite{sadical}. Additionally, there are benchmarks in the ??, ??, and
-?? families that \prelearn solves and \tool does not.
-
-For question 2, we can conclude positively that \tool is less sensitive to
-encoding choices compared to other \pr learning techniques. We show that \tool
-has $O(n^3)$ proofs for the pigeonhole principle even when the variables are
-permuted, clauses are permuted, and literals are flipped. Additionally, \tool
-does not consider any information about the encoding when propagating literals
-(it does so randomly). In fact, we show that heuristics used to rank order
-literals have an adverse effect on performance.

@@ -1,1 +1,20 @@
-% \section{Conclusion and Future Work}~\label{sec:conclusion}
+\section{Conclusion and Future Work}~\label{sec:conclusion}
+
+
+We answer the research questions posed at the start of this section. For
+question 1, we conclude positively that \tool is able to provide short \pr
+proofs for certain benchmark families. We match the best known result for The
+
+However, it is currently unknown whether conditional autarkies can be used to
+learn the shortest known \pr proofs for the mutilated
+chessboard~\cite{mutilatedchessboard-pr} or Tseitin graph
+formulae~\cite{sadical}. Additionally, there are benchmarks in the ??, ??, and
+?? families that \prelearn solves and \tool does not.
+
+For question 2, we can conclude positively that \tool is less sensitive to
+encoding choices compared to other \pr learning techniques. We show that \tool
+has $O(n^3)$ proofs for the pigeonhole principle even when the variables are
+permuted, clauses are permuted, and literals are flipped. Additionally, \tool
+does not consider any information about the encoding when propagating literals
+(it does so randomly). In fact, we show that heuristics used to rank order
+literals have an adverse effect on performance.
