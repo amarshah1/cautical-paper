@@ -110,7 +110,7 @@ minimize it using \autoref{alg:leastcond} from Kiesl et al.
         $\alpha_c := \emptyset$\;
         \For{$C \in \formula$}{
             \If{$\alpha$ touches $C$ without satisfying $C$}{
-                $\alpha_c := \alpha_c \cup (\alpha \cap \overline{C})$\;
+                $\alpha_c := \alpha_c \cup (\alpha \cap \lnot{C})$\;
             }
         }
         \Return{$\alpha_c$, $\alpha \backslash \alpha_c$}\;
