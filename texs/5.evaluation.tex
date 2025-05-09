@@ -238,12 +238,18 @@ We identify six benchmark families for which \pr clauses perform well. We choose
     \item \texttt{relativized\_pigeonhole}: A generalization of the pigeonhole principle where we place $n+1$ pigeons in $n$ holes with $k$ nesting places~\cite{relativized-pigeonhole}.
     % todo: ask joseph about citation
     \item \texttt{satcoin}: An unsatisfiable variant of a bitcoin mining problem~\cite{satcoin}.
-    \item \texttt{test\_configuration}: A problem asking if there is a list of configurations of size $k$ that covers every pairwise combination of configurations of a SAT solver~\cite{test-configuration}.
+    \item \texttt{test=configuration}: A problem asking if there is a list of configurations of size $k$ that covers every pairwise combination of configurations of a SAT solver~\cite{test-configuration}.
 \end{enumerate}
+
+These formulas are mostly UNSAT as these are most benefitted by \pr clause learning. SAT formulas are very sensitive to search heuristics, so adding a \pr clause can have a significant (positive or negative) effect on performance, regardless if a clause is actually useful. \autoref{fig:solver-comparison-familis} compares the performance of \tool compared to \cadical and \prelearn on the benchmark families. 
+
+\tool compares favorably to \cadical on all benchmark families (except \texttt{relativized\_pigeon\_hole}), showing especially large speedups on \texttt{register\_allocation}, \texttt{mutilated-chessboard} and \texttt{perfect-matching}.
+\prelearn overall performs better with large speedups over \tool on \texttt{test-configuration} and \texttt{pcmax-scheduling}. \tool performs better on smaller instances of \texttt{register-allocation} and \texttt{mutilated-chessboard}, while \prelearn performs better on larger instances. \tool can also solve a few instances of \texttt{satcoin} that \prelearn cannot.
+
 
 \begin{figure*}[!t]
     \centering
-    \begin{subfigure}[t]{0.3\textwidth}
+    \begin{subfigure}[t]{0.45\textwidth}
             \centering
             \includegraphics[width=\textwidth]{figs/cadical_vs_cautical_interesting.jpg}
             \caption{Comparison with \cadical}
@@ -251,21 +257,21 @@ We identify six benchmark families for which \pr clauses perform well. We choose
     \end{subfigure}
         % \hspace{0.06\textwidth}
     % \hspace{0.06\textwidth}
-    \begin{subfigure}[t]{0.3\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/prelearn_vs_cadical_interesting.jpg}
-        \caption{Comparison with \prelearn}
-        \label{fig:cautical-vs-prelearn}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.3\textwidth}
+    % \begin{subfigure}[t]{0.3\textwidth}
+    %     \centering
+    %     \includegraphics[width=\textwidth]{figs/prelearn_vs_cadical_interesting.jpg}
+    %     \caption{Comparison with \prelearn}
+    %     \label{fig:cautical-vs-prelearn}
+    % \end{subfigure}
+    \begin{subfigure}[t]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/prelearn_vs_cautical_interesting_legend.jpg}
         \caption{Comparison with \prelearn}
         \label{fig:cautical-vs-prelearn}
     \end{subfigure}
 
-    \caption{Performance comparison of \tool with other solvers}
-    % \label{fig:solver-comparison}
+    \caption{Performance comparison of \tool with other solvers on benchmark families.}
+    \label{fig:solver-comparison-familis}
 \end{figure*}
 
 
