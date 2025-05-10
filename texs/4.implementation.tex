@@ -14,10 +14,12 @@ We discuss three important design decisions in \tool:
   \item \textsf{filter-triv}: We filter out clauses that are trivial, i.e. if
   $\formula \impunit C$ for some clause $C$.
   \item \textsf{filter-long}: We filter out clauses that are longer than some
-  set length $l$. We pick $l = 2$ and thus only learn binary and unit
+  set length $l$. We pick $l = 2$ as a default and thus only learn binary and unit
   clauses.
 \end{enumerate}
 
+The filter function in \autoref{alg:methodology} combines \textsf{filter-triv} and \textsf{filter-long},
+disallowing trivial clauses or clauses with length greater than $2$.
 
 Additionally, we describe three natural design decisions that we did not make:
 
@@ -33,9 +35,14 @@ Additionally, we describe three natural design decisions that we did not make:
   we iterate through all possible literals $j$. However, we
   could just choose some subset of possible literals $j$. One such example is to pick $j$ from 
   the neighbors of $i$. This was originally proposed in Reeves et al.~\cite{prelearn}.
-  The neighbors of $i$ include $i$ itself and all variables that are fixed
-  by performing unit propagation on $i$.
+  The neighbors of $i$ include any literal $j$ that belongs to the same clause as
+  a literal fixed by unit propagation on $i$ (including $i$ itself).
 \end{enumerate}
+
+We evaluate these heuristics in Appendix \ref{app:heuristics} and find that
+\textsf{shrink}, \textsf{filter-triv}, and \textsf{filter-long} are all
+beneficial. On the other hand \textsf{longer-preprocess}, \textsf{order-i}, and
+\textsf{select-j} are not beneficial and can sometimes be harmful.
 
 
 

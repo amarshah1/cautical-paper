@@ -27,7 +27,7 @@ Thus, constraint (1) asks that each row has at least one $+$ cell and
 constraint (2) asks that at most one $+$ cell share a column.
 
 % We only consider the case where $m = n + 1$ which we denote \ph{n}. 
-We achieve an $O(n^3)$ \pr proof, matching the best known
+We achieve an $O(n^3)$ \pr proof for \ph{n}, matching the best known
 result~\cite{prclauses}. We learn these proofs with a very low constant
 factor and robustness against encoding perturbations (see \autoref{subsec:eval-pigeonhole}).
 %  todo: add a forward reference to where we evaluate this
@@ -57,7 +57,7 @@ factor and robustness against encoding perturbations (see \autoref{subsec:eval-p
                 $\alpha_c, \alpha_a := \LCP(\formula, \alpha)$; \\
                 $C := \Shrink(\formula,\alpha_c, \alpha_a)$; \\
                 \If{not \Filter{C,$\formula$}}{
-                $\formula := \formula \land C$;} \\
+                $\formula := \formula \land C$;}
                 \Backtrack{};
             }
         }
@@ -70,7 +70,7 @@ so the algorithm first selects a set of literals to propagate (lines $4,5$), cre
 We propagate two literals at a time using nested for loops, and undo the propagations after each iteration (backtracking in line $10$).
 Then, in line $6$ \autoref{alg:leastcond} makes a single pass over the formula to generate a conditional autarky, with conditional part ($\alpha_c$) and autarky part ($\alpha_a$).
 The PR clause $C$ is generated from the conditional autarky and shrunk in line $7$, and if $C$ does not pass the usefulness heuristics it is filtered away in line $8$. 
-Details regarding design choices and heuristics are found in \autoref{sec:implementation}.
+Details regarding design choices and heuristics are found in \autoref{sec:implementation}, including a discussion of \texttt{Filter}.
 
 In the following sections, we will describe PR clause learning and shrinking in the context of our running example  \ph{4}.
 We will consider the decisions $i = x_{1, 1}$ and $j = x_{2, 2}$ shown in \autoref{subfig:pigeonholeclause-a}, with unit propagation shown in \autoref{subfig:pigeonholeclause-b}.
@@ -102,11 +102,11 @@ We will consider the decisions $i = x_{1, 1}$ and $j = x_{2, 2}$ shown in \autor
 As described in \autoref{subsec:autarkies}, any partial assignment can be split 
 into a conditional and autarky part, 
 $\alpha = \alpha_c \sqcup \alpha_a$, 
-and the following clauses are PR: $\bigvee_{c \in \alpha_c} \overline{c} \lor a$ for
+and the following clauses are \pr: $\bigvee_{c \in \alpha_c} \overline{c} \lor a$ for
 any $a \in \alpha_a$. 
-In order to produce smaller PR clauses, we use the technique 
+In order to produce smaller \pr clauses, we use 
 \autoref{alg:leastcond} from Kiesl et al.
-\cite{conditionalautarkies} to find the unique smallest possible $\alpha_c$:
+\cite{conditionalautarkies} to find the unique smallest possible $\alpha_c$.
 
 %Since all of $\alpha_c$ appears in such a clause, we want
 %minimize it using \autoref{alg:leastcond} from Kiesl et al.
@@ -127,15 +127,16 @@ In order to produce smaller PR clauses, we use the technique
         $\alpha_c := \emptyset$\;
         \For{$C \in \formula$}{
             \If{$\alpha$ touches $C$ without satisfying $C$}{
-                $\alpha_c := \alpha_c \cup (\alpha \cap \lnot{C})$\;
+                $\alpha_c := \alpha_c \cup (\alpha \cap \overline{C})$\;
             }
         }
         \Return{$\alpha_c$, $\alpha \backslash \alpha_c$}\;
     }
 \end{algorithm}
 
-This is a conditional autarky, since every clause that $\alpha_a$ touches is
-satisfied by some literal in $\alpha$.
+\autoref{alg:leastcond} provides $\alpha_c$, which is a conditional autarky, as every
+clause that $\alpha_a$ touches is
+satisfied by a literal in $\alpha$.
 
 Additionally, $\alpha_c$ is minimal: for each clause that is touched but not
 satisfied, we add to $\alpha_c$ all literals from the assignment that touch and do
@@ -149,7 +150,7 @@ The assigned literals from pigeons $3,4,$ and $5$ appear in $\alpha_c$ because t
 but do not satisfy the constraint ($1$) clauses for the respective pigeons stating that every pigeon is in a hole. 
 However, the constraint ($1$) clauses are satisfied for pigeons $1$ and $2$, 
 along with the touched constraint $2$ clauses, placing the pigeons $1$ and $2$ literals in $\alpha_a$. 
-Intuitively, if pigeons $3,4,$ and $5$ are not in holes $1$ or $2$, then piegon $1$ can be placed in hole $1$ : 
+Intuitively, if pigeons $3,4,$ and $5$ are not in holes $1$ or $2$, then pigeon $1$ can be placed in hole $1$ : 
 $x_{3,1} \lor x_{3,2} \lor x_{4,1} \lor x_{4,2} \lor x_{5,1} \lor x_{5,2} \lor x_{1,1} $ and pigeon $1$ can be kept out of hole $2$ :
 $x_{3,1} \lor x_{3,2} \lor x_{4,1} \lor x_{4,2} \lor x_{5,1} \lor x_{5,2} \lor \overline{x}_{1,2} $ (likewise for pigeon $2$ but with the holes swapped). 
 %and pigeon $2$ can be placed in hole $2$ : $x_{3,1} \lor x_{3,2} \lor x_{4,1} \lor x_{4,2} \lor x_{5,1} \lor x_{5,2} \lor x_{2,2} $. 
@@ -292,13 +293,14 @@ The algorithm terminates once all sets in $\{SETS(a) \cap (\alpha_c \backslash C
         % $\alpha_a$ := \texttt{sort($\alpha_a$)}\;
         $SETS$ := init \texttt{Array[len($\alpha_a$)]}\;
         \For{$i \in \texttt{range}(\alpha_a)$}{
-            \texttt{Propagate($-\alpha_a[i]$)}\;
+            \texttt{Propagate($\overline{\alpha_a[i]}$)}\;
             \texttt{implied} := $\{\}$\;
             \For{$c \in \alpha_c$}{
-                \texttt{propagate(-c)}\;
+                \texttt{Propagate($\overline{c}$)}\;
                 \If{\texttt{unsat}}{
                 $\texttt{implied} := \texttt{implied} \cup \{c\}$\;
             }
+                \texttt{Backtrack(1)}\;
             }
             $SETS[i]$ := \texttt{implied}\;
         }

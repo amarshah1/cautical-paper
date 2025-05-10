@@ -1,47 +1,46 @@
 \section{Background}~\label{sec:background}
 
 We begin with some SAT preliminaries. Variables $x_1, x_2, \dots$ take values
-\emph{true} ($\top$) or \emph{false} ($\bot$). A literal $l$ is a variable
-$x$ or its negation $\overline{x}$. A clause $C$ is a disjunction of literals,
-e.g., $C = x_1 \lor \overline{x}_4 \lor x_6$. A clause may also be represented by the set of its literals:
-e.g., the prior clause $C = \{x_1, \overline{x}_4, x_6\}$. This motivates denoting that a literal
-$l$ occurs in clause $C$ via $l \in C$. A conjunctive normal form (CNF)
-formula $\formula$ is a conjunction of (disjunctive) clauses. In this paper,
-all formulae $\formula$ are CNF.
+\emph{true} ($\top$) or \emph{false} ($\bot$). A literal $l$ is a variable $x$
+or its negation $\overline{x}$. A clause $C$ is a disjunction of literals, e.g.,
+$C = x_1 \lor \overline{x}_4 \lor x_6$. A clause may also be represented by the
+set of its literals: e.g., the prior clause $C = \{x_1, \overline{x}_4, x_6\}$.
+Hence, we denote that a literal $l$ occurs in clause $C$ via $l \in C$ and the
+negation of clause is the set of negations of its literals, $\overline{C} =
+\{\overline{x}_1, x_4, \overline{x}_6\}$. A conjunctive normal form (CNF)
+formula $\formula$ is a conjunction of (disjunctive) clauses. In this paper, all
+formulas $\formula$ are CNF.
 
-We use $var(\formula)$ to represent the set of variables occurring in formula $\formula$.
-A partial assignment $\alpha : V \rightarrow \{\top, \bot\}$ on $\formula$
-maps variables $V \subseteq var(\formula)$ to true or false. If $V
-= var(\formula)$, then $\alpha$ is a total assignment. We abuse notation by
+We use $var(\formula)$ to represent the set of variables occurring in formula
+$\formula$. A partial assignment $\alpha : V \rightarrow \{\top, \bot\}$ on
+$\formula$ maps variables $V \subseteq var(\formula)$ to true or false. If $V =
+var(\formula)$, then $\alpha$ is a total assignment. We abuse notation by
 denoting $\alpha(l) = \alpha(x)$ if $l = x$ and $\alpha(l) = \neg \alpha(x)$ if
 $l = \overline{x}$.
 
-A formula restricted to a partial assignment $\formula|_\alpha$ is the formula resulting from
-mapping variables in the domain of $\alpha$ to their assignments. We can
-simplify such a formula by removing \emph{literals} assigned false and
-\emph{clauses} including a literal assigned true (which are thus satisfied).
-For example, with formula $\formula =
-(x_1 \lor \overline{x}_4 \lor x_6) \land (x_2 \lor x_3) \land \overline{x}_5$
-and assignment $\alpha$ mapping $x_1$ to $\bot$ and $x_2$ to $\top$,
-we have $\formula|_\alpha = (\overline{x}_4 \lor x_6) \land \overline{x}_5$.
+A formula restricted to a partial assignment $\formula|_\alpha$ is the formula
+resulting from mapping variables in the domain of $\alpha$ to their assignments.
+We can simplify such a formula by removing \emph{literals} assigned false and
+\emph{clauses} including a literal assigned true (which are thus satisfied). For
+example, with formula $\formula = (x_1 \lor \overline{x}_4 \lor x_6) \land (x_2
+\lor x_3) \land \overline{x}_5$ and assignment $\alpha$ mapping $x_1$ to $\bot$
+and $x_2$ to $\top$, we have $\formula|_\alpha = (\overline{x}_4 \lor x_6) \land
+\overline{x}_5$.
 
 A clause $C = l_1 \lor \dots \lor l_m$ is \emph{blocked} by an assignment
-mapping each $l \in C$ to false ($\bot$). An assignment $\alpha$
-\emph{touches} a clause $C$ if there is a variable $x$ assigned by $\alpha$
-such that $x \in C$ or $\overline{x} \in C$. We say $\alpha$ \emph{satisfies}
-$C$ if there is some $l \in C$ with $\alpha(l) = \top$.
+mapping each $l \in C$ to false ($\bot$). An assignment $\alpha$ \emph{touches}
+a clause $C$ if there is a variable $x$ assigned by $\alpha$ such that $x \in C$
+or $\overline{x} \in C$. We say $\alpha$ \emph{satisfies} $C$ if there is some
+$l \in C$ with $\alpha(l) = \top$.
 
 Assignment $\alpha$ \emph{satisfies} formula $\formula$ if it satisfies every
-clause $C \in \formula$. If such a satisfying assignment exists, then $\formula$ is
-\emph{satisfiable}. The Boolean satisfiability problem asks whether or not a given
-formula $\formula$ is satisfiable.
+clause $C \in \formula$. If such a satisfying assignment exists, then $\formula$
+is \emph{satisfiable}.
 
-\subsection{Redundant Clauses}~\label{subsec:redundant}
-
-A clause $C$ is \emph{redundant} (or \emph{satisfiability-preserving}) with
-respect to a formula $\formula$ if the formulae $\formula$ and $\formula \land
-C$ are \emph{equisatisfiable}, i.e., $\formula$ is satisfiable if and only if
-$\formula \land C$ is satisfiable.
+\textbf{Redundant Clauses}: A clause $C$ is \emph{redundant} (or
+\emph{satisfiability-preserving}) with respect to a formula $\formula$ if the
+formulas $\formula$ and $\formula \land C$ are \emph{equisatisfiable}, i.e.,
+$\formula$ is satisfiable if and only if $\formula \land C$ is satisfiable.
 
 In a \emph{clausal proof system}, each step adds or removes a redundant clause
 $C$. The step may contain extra information, such as a boolean witness
@@ -52,39 +51,42 @@ clause $\bot$ is a proof of unsatisfiability for formula $\formula$.
 % However, when solving, we do not know whether $\formula$ is satisfiable a
 % priori. Clausal proof systems can justify that a clause is redundant.
 
-Adding redundant clauses may be helpful to a solver if they greatly
-constrain the set of possible solutions, giving the solver
-less area to search; however, the addition of these clauses
-could negatively interact with solver heuristics, increasing solve time.
+Adding redundant clauses may be helpful to a solver if they greatly constrain
+the set of possible solutions, giving the solver less area to search; however,
+the addition of these clauses could negatively interact with solver heuristics,
+increasing solve time.
 
 % \subsection{Reasoning Steps}~\label{subsec:reasoning-steps}
 
-Clausal proof systems range in complexity, with one of the simplest derivation rules being resolution. 
-Given two clauses, $C \lor x$ and $\overline{x} \lor D$,  \emph{resolution} produces the logically implied clause  $C
-\lor D$ .
+Clausal proof systems range in complexity, with one of the simplest derivation
+rules being resolution. Given two clauses, $C \lor x$ and $\overline{x} \lor D$,
+\emph{resolution} produces the logically implied clause  $C \lor D$ .
 
 %
 %\emph{Resolution} is the main proof step of clausal proof systems. Given two
 %clauses in a formula, $C \lor x$ and $\overline{x} \lor D$, resolution gives $C
 %\lor D$ as an equisatisfiable clause.
 %
-%\begin{equation*}
-%    \inferrule*[Right=Resolution]{
-%        C \lor x \\ \overline{x} \lor D
+%\begin{equation*} \inferrule*[Right=Resolution]{ C \lor x \\ \overline{x} \lor
+%    D
 %    }{
 %        C \lor D
 %    }    
 %\end{equation*}
 %
-\emph{Unit propagation} is a core reasoning technique in a SAT solver. Starting with empty assignment $\alpha$, if a formula $\formula$ contains a \emph{unit clause} $l$, i.e., a clause with only a single literal, we set $\alpha(l) = \top$. Then, this unit is propagated: we consider the formula $\formula|_\alpha$ and continue this process until no unit clauses remain. When unit propagation terminates with $\formula|_\alpha = \bot$, we say that it derives a conflict.
-% todo: notation issue: I never defined \bot as the empty clause and I also am using \bot both as false and the empty clause.
+\emph{Unit propagation} is a core reasoning technique in a SAT solver. Starting
+with empty assignment $\alpha$, if a formula $\formula$ contains a \emph{unit
+clause} $l$, i.e., a clause with only a single literal, we set $\alpha(l) =
+\top$. Then, this unit is propagated: we consider the formula $\formula|_\alpha$
+and continue this process until no unit clauses remain. When unit propagation
+terminates with $\formula|_\alpha = \bot$, we say that it derives a conflict.
+% todo: notation issue: I never defined \bot as the empty clause and I also am
+% using \bot both as false and the empty clause.
 %
-%Unit propagation can be thought of as a proof step. Indeed, it can be thought of
-%as a mechanized application of resolution.
+%Unit propagation can be thought of as a proof step. Indeed, it can be thought
+%of as a mechanized application of resolution.
 %
-%\begin{equation*}
-%    % \inferrule*[Right=Unit-Pos]{
-%    %     C \lor l \\ l
+%\begin{equation*} % \inferrule*[Right=Unit-Pos]{ %     C \lor l \\ l
 %    % }{
 %    %     \bot
 %    % }
@@ -96,21 +98,28 @@ Given two clauses, $C \lor x$ and $\overline{x} \lor D$,  \emph{resolution} prod
 %    }
 %\end{equation*}
 
-Given a formula $\formula$ and clause $C = l_1 \lor \dots \lor l_k$, we can say $\formula \impunit C$, read as ``$\formula$ implies $C$ via unit propagation,'' if $\formula \land \lnot C \equiv \formula \land \overline{l}_1 \land \dots \land \overline{l}_k$ derives a conflict. Here, $C$ is a simple example of a redundant clause w.r.t. $\formula$. 
+Given a formula $\formula$ and clause $C = l_1 \lor \dots \lor l_k$, we can say
+$\formula \impunit C$, read as ``$\formula$ implies $C$ via unit propagation,''
+if $\formula \land \overline{C} \equiv \formula \land \overline{l}_1 \land \dots
+\land \overline{l}_k$ derives a conflict. Here, $C$ is a \emph{reverse unit propagation (RUP)}
+clause, a simple example of a redundant clause w.r.t. $\formula$. 
 
-% This can be justified in almost any proof system for propositional logic. However, this is not very useful as it rules out
-For two formulae, we say $\formula \impunit \formula'$ if $\formula \impunit C$ for every clause $C \in \formula'$. 
-% For literals $l_1$ and $l_2$, we sometimes notate $l_1 \impunit^\formula l_2$ to mean $\formula \vdash_1 \overline{l}_1 \land l_2$. Informally, we can think of this as saying ``$l_1$ implies $l_2$ via unit propagation on $\formula$,'' which means that .
-% see definition here: https://www.cs.cmu.edu/~mheule/publications/prencode.pdf
-% However, this is not very useful as it is quiet easy for the solver to figure this out. Instead, we must appeal to a more complicated notion of redundancy.
+% This can be justified in almost any proof system for propositional logic.
+% However, this is not very useful as it rules out For two formulas, we say
+% $\formula \impunit \formula'$ if $\formula \impunit C$ for every clause $C \in
+% \formula'$. For literals $l_1$ and $l_2$, we sometimes notate $l_1
+% \impunit^\formula l_2$ to mean $\formula \vdash_1 \overline{l}_1 \land l_2$.
+% Informally, we can think of this as saying ``$l_1$ implies $l_2$ via unit
+% propagation on $\formula$,'' which means that . see definition here:
+% https://www.cs.cmu.edu/~mheule/publications/prencode.pdf However, this is not
+% very useful as it is quiet easy for the solver to figure this out. Instead, we
+% must appeal to a more complicated notion of redundancy.
 
 % The propagation redundant (\pr)
 
-\subsection{Propagation Redundant}~\label{subsec:pr}
-
-While resolution is complete for propositional logic, more powerful proof steps
-can yield shorter proofs and faster runtimes. One such step is based on \pr
-clauses.
+\textbf{Propagation Redundant:} While resolution is complete for propositional
+logic, more powerful proof steps can yield shorter proofs and faster runtimes.
+One such step is based on \pr clauses.
 
 \begin{definition}[Propagation Redundant (\pr) clauses]
     For formula $\formula$, we say that clause $C$ is propagation redundant
@@ -121,10 +130,12 @@ $$
 \end{definition}
 
 
-   Or more informally, a clause $C$ is $\pr$ if every assignment that 
-   satisfies $\formula$ but falsifies $C$ can be turned into an assignment
-   that satisfies $\formula \land C$, while this property can be validated 
-   in polynomial time (i.e., via implied by unit propagation).  
+   Or more informally, a clause $C$ is $\pr$ if every assignment that satisfies
+   $\formula$ but falsifies $C$ can be turned into an assignment that satisfies
+   $\formula \land C$. While this property can be validated in polynomial time
+   (i.e., via implied by unit propagation), checking if a clause is redundant
+   without hints is NP-complete~\cite{prclauses}. Thus, \pr introduces witnesses,
+   which must be provided for proof checking.  
 
 %    For formula $\formula$, we say that clause $C$ is propagation redundant
 %    (\pr) if there exists a \emph{witness} assignment $\omega$ implying the
@@ -154,8 +165,7 @@ $$
 % C$ are equisatisfiable. Indeed, the clause defined in \autoref{thm:gbcequisat}
 % is \pr with witness $\alpha_a$. 
 
-Checking if a clause is redundant without hints is NP-complete~\cite{prclause}.
-Thus, \pr introduces witnesses, which must be provided for proof checking.
+
 
 \pr clauses subsume many classes of redundant clauses, including resolution
 asymmetric tautologies (RATs)~\cite{rat}, blocked clauses~\cite{blockedclause},
@@ -175,11 +185,12 @@ clauses~\cite{conditionalautarkies}.
 % \land a_m$ is an equisatisfiable clause. However, these can be difficult to
 % find.
 
-In plain words, an autarky is an assignment that satisfies every clause it touches. Satisfying assignments and pure literals are examples of autarkies.
+In plain words, an autarky is a partial assignment that satisfies every clause it
+touches.
 
-However, formulae often do not contain autarkies, and they are difficult to find
-even when they do exist. Much easier to find is the following weakening of the
-concept of an autarky. 
+Unfortunately, formulas often do not contain autarkies, and they are difficult
+to find even when they do exist. The following weakening of an autarky is much
+easier to find: 
 
 \begin{definition}[Conditional Autarky]
     A nonempty assignment $\alpha = \alpha_c \sqcup \alpha_a$ (disjoint union)
@@ -187,20 +198,21 @@ concept of an autarky.
     autarky for $\formula|_{\alpha_c}$.
 \end{definition}
 
-Consider, as an example, the formula with aptly named variables $\formula = (c \lor
-a) \land (\overline{a} \lor x) \land (\overline{c} \lor \overline{a} \lor
+Consider, as an example, the formula with aptly named variables $\formula = (c
+\lor \overline{a}) \land (a \lor x) \land (\overline{c} \lor a \lor
 \overline{y})$. We have a conditional autarky $\alpha = \alpha_c \sqcup \alpha_a
 = c\;a$, with $\alpha_c = c$ and $\alpha_a = a$. Since $\formula|_{\alpha_c} =
 (a \lor x) \land (a \lor \overline{y})$ and $a$ occurs here only positively, $a$
-is an autarky. Thus, $\alpha$ is a conditional autarky on $\formula$.
+is an autarky. Thus, $\alpha$ is a conditional autarky.
 
 % Specifically, we can think about searching for conditional autarkies by first
 % looking for a partial assignment $\alpha_c$, and then finding an autarky
 % $\alpha_a$ on the reduced formula $\formula|_{\alpha_c}$.
 
-Conditional autarkies can be very useful for learning equisatisfiable clauses,
+Conditional autarkies can be very useful for learning satisfiability-preserving
+clauses,
 for instance, if $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$,
-we add clauses of the form:
+we can learn clauses of the form:
 
 \begin{equation*}
     [c_1 \land \dots \land c_n] \rightarrow [a_1 \land \dots \land a_m]
@@ -216,9 +228,11 @@ al.~\cite{conditionalautarkies}:
     \lor \dots \lor \overline{c}_n \lor a_i)$ are equisatisfiable.
 \end{theorem}
 
-That is, a formula $\formula$ is satisfiable if and only if $\formula \land
-\bigwedge_{1 \leq i \leq m} (\overline{c}_1 \lor \dots \lor \overline{c}_n \lor
-a_i)$ is satisfiable. A solver may thus add any of the $m$ clauses
+% That is, a formula $\formula$ is satisfiable if and only if $\formula \land
+% \bigwedge_{1 \leq i \leq m} (\overline{c}_1 \lor \dots \lor \overline{c}_n \lor
+% a_i)$ is satisfiable. 
+
+A solver may thus add any of the $m$ clauses
 $\overline{c}_1 \lor \dots \lor \overline{c}_n \lor a_i$ and preserve
 satisfiability. Each of these is a \pr clause with witness $\alpha_a$.
 % Each of these clauses is a \emph{globally blocked clause}, however, this is
@@ -244,49 +258,60 @@ satisfiability. Each of these is a \pr clause with witness $\alpha_a$.
 
 \subsection{Related Work}~\label{subsec:relatedwork}
 
-The pigeonhole problem asks if $n+1$ pigeons can fit into $n$ holes without overlap. The
-mutilated chessboard problem asks if a $2n \times 2n$ board with two diagonally
-opposite corners removed can be tiled with $1 \times 2$ rectangular dominoes.
-It is easy to convince a human that both problems are unsatisfiable. However, it has
-been shown that there are no polynomial-sized resolution proofs for either
-problem~\cite{hakenpigeonhole,mutilatedchessboard-exponential}.
-% todo: need to clarify if I should say that there are not polynomial-sized
-% resolution proofs for these problems or if there are no sub-exponential-sized
-% resolution proofs for these problems.
-
-% todo: need to be consistent about whether I am using terminology "pigeonhole
-% principle" or "pigeonhole problem"
-
-% todo: I need to cite some paper that introduces pigeonhole and mutilated
-% chessboard
+% The pigeonhole problem asks if $n+1$ pigeons can fit into $n$ holes without
+% overlap. The mutilated chessboard problem asks if a $2n \times 2n$ board with
+% two diagonally opposite corners removed can be tiled with $1 \times 2$
+% rectangular dominoes. It is easy to convince a human that both problems are
+% unsatisfiable. However, it has been shown that there are no polynomial-sized
+% resolution proofs for either
+% problem~\cite{hakenpigeonhole,mutilatedchessboard-exponential}.
 
 
- While extended resolution (\er) provides proofs of size $O(n^4)$ for the pigeonhole problems, it involves introducing new variables~\cite{er}. In general, the search space for new variables is infinite and thus tools like \glucoser based on \er do not scale well~\cite{glucoser}.
+%  While extended resolution (\er) provides proofs of size $O(n^4)$ for the
+%  pigeonhole problems, it involves introducing new variables~\cite{er}. In
+%  general, the search space for new variables is infinite and thus tools like
+%  \glucoser based on \er do not scale well~\cite{glucoser}.
 
-The \pr proof system remedies this by producing $O(n^3)$ proofs for the pigeonhole formula~\cite{prclauses} without learning any new variables. 
-Later, this system was shown to additionally produce short proofs for mutilated chessboard problems~\cite{mutilatedchessboard-pr}. 
-% todo we use O(n^_) where n is formula, but also where n is the number of variables.
-
-Solvers that implement the \pr proof system typically use the satisfaction-driven clause learning (SDCL) framework~\cite{sdcl}, which extends conflict-driven clause learning (CDCL)~\cite{cdcl}. 
-% Here, if unit propagation does not lead to a conflict, then they attempt to learn a \pr clause instead.
-% \pr clause learning was first introduced in an extension of the solver \lingeling~\cite{prclause}.
-After propagating an assignment, they check if the clause $C$ blocked by this assignment is \pr by creating a new SAT formula called the \emph{positive reduct}.
-If the positive reduct is satisfiable, then $C$ is a \pr clause and is added. 
-This was implemented in an extension of the solver \lingeling and was shown to scale well on pigeonhole benchmarks.
-
-Later, two new variants of the positive reduct were proposed for more aggressive pruning of the search space \cite{sadical}. This allowed SDCL to solve other difficult problems such as Tseitin formulae~\cite{hardexamplesresolution}. This is implemented in a new SDCL solver \sadical.
+% The \pr proof system remedies this by producing $O(n^3)$ proofs for the
+% pigeonhole formula~\cite{prclauses} without learning any new variables. Later,
+% this system was shown to additionally produce short proofs for mutilated
+% chessboard problems~\cite{mutilatedchessboard-pr}. 
 
 
-\prelearn is a preprocessing technique for \pr clauses~\cite{prelearn}. It initially considers many possible clauses and queries \sadical to see which are \pr.
+Solvers that implement the \pr proof system typically use the
+satisfaction-driven clause learning (SDCL) framework~\cite{sdcl}, which extends
+conflict-driven clause learning (CDCL)~\cite{sat-handbook}. 
+% Here, if unit propagation does not lead to a conflict, then they attempt to
+% learn a \pr clause instead. \pr clause learning was first introduced in an
+% extension of the solver \lingeling~\cite{prclause}.
+After propagating an assignment, they check if the clause $C$ blocked by this
+assignment is \pr by creating a new SAT formula called the \emph{positive
+reduct}. If the positive reduct is satisfiable, then $C$ is a \pr clause and is
+added. This was implemented in an extension of the solver \lingeling and was
+shown to scale well on pigeonhole benchmarks.
+
+Later, two new variants of the positive reduct were proposed for more aggressive
+pruning of the search space \cite{sadical}. This allowed SDCL to solve other
+difficult problems such as mutilated chessboard~\cite{mutilatedchessboard-pr} and
+ Tseitin formulas~\cite{hardexamplesresolution}. This
+is implemented in a new SDCL solver \sadical.
+
+
+\prelearn is a preprocessing technique for \pr clauses~\cite{prelearn}. It
+initially considers many possible clauses and queries \sadical to see which are
+\pr.
 
 Our work differs as we do not use a \emph{positive reduct} to test if a clause
-is \pr. Instead, our clauses are \pr by construction, as they come from a conditional
-autarky. This has the potential downside that our clause may be large, and thus weak. To
-remedy this, we apply a shrinking technique, reducing the size of a clause.
-Additionally, prior techniques are sensitive to the encoding of the problem.
-Minor changes such as literal and clause reordering can tank performance. We
-provide two techniques to handle reordering. We
-compare our implementation \tool to \sadical and \prelearn in
-\autoref{sec:evaluation}.
+is \pr. Instead, our clauses are \pr by construction, as they come from a
+conditional autarky. This has the potential downside that our clause may be
+large, and thus weak. To remedy this, we apply a shrinking technique, reducing
+the size of a clause. Additionally, prior techniques are sensitive to the
+encoding of the problem. Minor changes such as literal and clause reordering can
+tank performance. We compare our
+implementation \tool to \sadical and \prelearn in \autoref{sec:evaluation}.
 
-Kiesl et al.~\cite{conditionalautarkies} first introduced conditional autarkies to identify globally blocked clauses. They aimed to eliminate globally blocked clauses from a formula. This technique allowed them to simulate circuit-simplification techniques. Our work differs from this as we add clauses instead of removing them, and we target a different class of benchmarks.
+Kiesl et al.~\cite{conditionalautarkies} first introduced conditional autarkies
+to identify a class of \pr clauses known as globally blocked clauses. They aimed to eliminate globally blocked
+clauses from a formula. This technique allowed them to simulate
+circuit-simplification techniques. Our work differs from this as we add clauses
+instead of removing them, and we target a different class of formulas.

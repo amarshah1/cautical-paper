@@ -1,54 +1,111 @@
 \section{Introduction}~\label{sec:intro}
 
 
-Boolean satisfiability (SAT) solving is a core tool in computer science with applications in program verification~\cite{BillionQueries,sat-hardwareverification,ic3,bmc}, planning~\cite{planning,planningassat}, cryptography~\cite{cryptominisat}, and mathematics~\cite{chromaticnumber,pythagoreantriples,kellersconjecture,emptyhexagon}. As its usage expands, so too does the need for more powerful and specialized solving techniques.
+Boolean satisfiability (SAT) solving is a core tool in computer science with
+applications in program
+verification~\cite{BillionQueries,sat-hardwareverification,ic3,bmc},
+planning~\cite{planning,planningassat}, cryptography~\cite{cryptominisat}, and
+mathematics~\cite{chromaticnumber,pythagoreantriples,kellersconjecture,emptyhexagon}.
+As its usage expands, so too does the need for more powerful and specialized
+solving techniques.
 
 
 
-% It is most commonly solved using the conflict-driven clause learning (CDCL) framework. This framework explores the state space of possible solutions, while learning clauses when it reaches a conflict, to aid future explorations.
-One such class of techniques is propagation redundant (\pr) clause learning. In this technique, a solver generates and adds clauses which are satisfiability-preserving; that is, clauses whose conjunction with the formula is satisfiable if and only if the original formula is satisfiable. The solver aims to learn clauses that drastically shrink the potential solution space, such as clauses that break symmetries.
+% It is most commonly solved using the conflict-driven clause learning (CDCL)
+% framework. This framework explores the state space of possible solutions,
+% while learning clauses when it reaches a conflict, to aid future explorations.
+One such class of techniques is propagation redundant (\pr) clause learning. In
+this technique, a solver generates and adds clauses which are
+satisfiability-preserving; that is, clauses whose conjunction with the formula
+is satisfiable if and only if the original formula is satisfiable. The solver
+aims to learn clauses that drastically shrink the potential solution space, such
+as clauses that break symmetries.
 
-%A classic problem involving symmetries is the pigeonhole problem, which asks if it is possible to fit $n+1$ pigeons into $n$ holes with at most one pigeon per hole. In this problem, one may learn a clause equivalent to the lemma: \emph{pigeon 1 is not in hole 1}. Adding this clause restricts the search space for the first pigeon (and thus the problem), but it preserves satisfiability, as hole 1 is symmetric with all holes.
+%A classic problem involving symmetries is the pigeonhole problem, which asks if
+%it is possible to fit $n+1$ pigeons into $n$ holes with at most one pigeon per
+%hole. In this problem, one may learn a clause equivalent to the lemma:
+%\emph{pigeon 1 is not in hole 1}. Adding this clause restricts the search space
+%for the first pigeon (and thus the problem), but it preserves satisfiability,
+%as hole 1 is symmetric with all holes.
 
-% One can ensure that these clauses are satisfiable within the given proof system.
+% One can ensure that these clauses are satisfiable within the given proof
+% system.
 
-% for instance vivification and blocked clause addition. These techinques use other facts about the formula to learn clauses which are often useful for solving.
+% for instance vivification and blocked clause addition. These techinques use
+% other facts about the formula to learn clauses which are often useful for
+% solving.
 
-The power of this technique is tied to the strength of the underlying proof system. Most SAT solvers rely on resolution-based proof systems, which are ineffective for many hard instances. 
-Consider the pigeonhole problem, which asks if it is possible to fit $n+1$ pigeons into $n$ holes with at most one pigeon per hole. With a linear number of PR reasoning steps, one may learn a PR clause equivalent to the lemma: \emph{pigeon 1 is not in hole 1}. Adding this clause restricts the search space for the first pigeon (and thus the problem), but it preserves satisfiability, as hole 1 is symmetric with all holes. 
-It is difficult to perform similar reasoning compactly with resolution, and in fact, problems like pigeonhole and mutilated chessboard are known to require exponentially large resolution proofs~\cite{hakenpigeonhole,mutilatedchessboard-exponential}. Proof systems based on \pr clauses, however, have short proofs for such problems, including a cubic proof for mutilated chessboard~\cite{mutilatedchessboard-pr}.
+The power of this technique is tied to the strength of the underlying proof
+system. Most SAT solvers rely on resolution-based proof systems, which are
+ineffective for many hard instances. Consider the pigeonhole problem, which asks
+if it is possible to fit $n+1$ pigeons into $n$ holes with at most one pigeon
+per hole. With a linear number of \pr reasoning steps, one may learn a \pr clause
+equivalent to the lemma: \emph{pigeon 1 is not in hole 1}. Adding this clause
+restricts the search space for the first pigeon (and thus the problem), but it
+preserves satisfiability, as hole 1 is symmetric with all holes. It is difficult
+to perform similar reasoning compactly with resolution, and in fact, pigeonhole
+is known to require exponentially
+large resolution proofs~\cite{hakenpigeonhole,mutilatedchessboard-exponential}.
+Proof systems based on \pr clauses, however, have short proofs for such
+problems, including a cubic proof for mutilated
+pigeonhole~\cite{prclauses}.
 
-The theoretical power of \pr learning comes at a cost, and efficiently learning useful \pr clauses is a challenge. State-of-the-art techniques such as Satisfiability Driven Clause Learning (SDCL) rely on calling another SAT solver to verify that a candidate clause is \pr \cite{sadical}. 
+The theoretical power of \pr learning comes at a cost, and efficiently learning
+useful \pr clauses is a challenge. State-of-the-art techniques such as
+Satisfiability Driven Clause Learning (SDCL) rely on calling another SAT solver
+to verify that a candidate clause is \pr \cite{sadical}. 
 % This is both expensive and difficult to integrate into existing tools. 
-Thus, in the worst case, the solver takes exponential time to learn a single \pr clause. This makes integration into high-performance solvers difficult and limits their practical impact. As of today, the most popular SAT solvers such as \cadical~\cite{cadical}, \kissat~\cite{kissat}, \cryptoMiniSAT~\cite{cryptominisat}, and \lingeling~\cite{lingeling} do not support \pr clause learning.
-% maybe cite cryptominisat instead of lingeling?
-% todo : check crypto mini sat to see if it uses PR clauses
+Thus, in the worst case, the solver takes exponential time to learn a single \pr
+clause. This makes integration into high-performance solvers difficult and
+limits their practical impact. As of today, all of the most popular SAT solvers such as
+\cadical~\cite{cadical}, \kissat~\cite{kissat},
+\cryptoMiniSAT~\cite{cryptominisat}, or \lingeling~\cite{lingeling} do not
+support \pr clause learning in their main branch.
+% maybe cite cryptominisat instead of lingeling? todo : check crypto mini sat to
+% see if it uses \pr clauses
 
-% todo : should we explain what conditional autarkies are? or go more into depth about globally blocked clauses?
-In this work, we propose a new, more efficient approach to learn \pr clauses based on conditional autarkies. 
-Intuitively, a conditional autarky provides a way to force the value of certain variables given a set of assumption, e.g., 
-in PHP if pigeons $3 $ to $ n+1$ are not in hole $1$ or hole $2$, then pigeon $1$ can be placed in hole $1$ and pigeon $2$ can be placed in hole $2$. 
-Kiesl et. al. proposed an algorithm for finding conditional autarkies in linear time~\cite{conditionalautarkies}, using them to delete clauses.
-In our work, we  will use the conditional autarkies to add PR clauses. 
-%We make use of an algorithm proposed by Kiesl et. al. for finding a conditional autarky given a partial assignment in linear time. 
+% todo : should we explain what conditional autarkies are? or go more into depth
+% about globally blocked clauses?
+In this work, we propose a new, more efficient approach to learn \pr clauses
+based on conditional autarkies. Intuitively, a conditional autarky provides a
+way to force the value of certain variables given a set of assumption, e.g., in
+PHP if pigeons $3 $ to $ n+1$ are not in hole $1$ or hole $2$, then pigeon $1$
+can be placed in hole $1$ and pigeon $2$ can be placed in hole $2$. Kiesl et.
+al. proposed an algorithm for finding conditional autarkies in linear
+time~\cite{conditionalautarkies}, using them to delete clauses. In our work, we
+will use the conditional autarkies to add \pr clauses. 
+%We make use of an algorithm proposed by Kiesl et. al. for finding a conditional
+%autarky given a partial assignment in linear time. 
 %
-%Given a partial assignment to a SAT formula, our method divides the assignment into a \emph{conditional} part and an \emph{autarky} part. 
-%Using this distinction, we can learn a globally blocked clause (a type of \pr clause) in linear time.
+%Given a partial assignment to a SAT formula, our method divides the assignment
+%into a \emph{conditional} part and an \emph{autarky} part. Using this
+%distinction, we can learn a globally blocked clause (a type of \pr clause) in
+%linear time.
 
-While conditional autarkies present a means for bridging the theoretical gap in identifying \pr clauses, 
-the PR clauses they produce are not immediately useful in real SAT solving applications. 
-There are two major practical limitations: (1) larger PR clauses may not meaningfully constrain the search space, and (2) some smaller PR clauses may be trivial and distract the solver. We solve (1) by introducing a shrinking procedure to extract compact, useful \pr clauses, and (2) by introducing a number of heuristics for filtering away trivial PR clauses. 
-Returning to PHP, instead of the conditional autarky described above which produces a clause with at least $2n$ literals, it is possible through shrinking to learn a binary PR clause forbidding pigeon $1$ in hole $1$ and pigeon $2$ in hole $2$.
+While conditional autarkies present a means for bridging the theoretical gap in
+identifying \pr clauses, the \pr clauses they produce are not immediately useful
+in real SAT solving applications. There are two major practical limitations: (1)
+larger \pr clauses may not meaningfully constrain the search space, and (2) some
+smaller \pr clauses may be trivial and distract the solver. We solve (1) by
+introducing a shrinking procedure to extract compact, useful \pr clauses, and
+(2) by introducing a number of heuristics for filtering away trivial \pr clauses.
+Returning to PHP, instead of the conditional autarky described above which
+produces a clause with at least $2n$ literals, it is possible through shrinking
+to learn a binary \pr clause forbidding pigeon $1$ in hole $2$ and pigeon $2$ in
+hole $1$.
 % todo: would like to say more about what these heuristics are
 
-% Integrating \pr clause learning into a SAT solver is still an active area of study
+% Integrating \pr clause learning into a SAT solver is still an active area of
+% study
 
 To summarize, we make the following contributions: 
 
 \begin{enumerate} 
-    % todo : not 100% sure if we should claim this as a contribution
-    \item We introduce a method for learning \pr clauses in linear time in the size of the formula. 
-    \item We develop a number of shrinking and filtering heuristics, to learn concise and useful \pr clauses.% from conditional autarkies.. 
-    \item We implement these techniques in a solver, \tool (a fork of the SoTA SAT solver \cadical), and evaluate it on a suite of benchmarks the annual SAT competitions.
-    % , demonstrating substantial performance improvements.
+    \item We introduce a method for learning \pr clauses in linear time in the
+    size of the formula. 
+    \item We develop a number of shrinking and filtering heuristics, to learn
+    concise and useful \pr clauses.% from conditional autarkies.. 
+    \item We implement these techniques in a solver, \tool\footnote{We plan to
+    open source \tool.} (a fork of the SoTA SAT solver \cadical), and evaluate
+    it on a suite of benchmarks from the annual SAT competitions.
 \end{enumerate}
