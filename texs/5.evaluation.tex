@@ -142,6 +142,47 @@ demonstrating that it learns useful \pr clauses regardless of the encoding.
     \label{tab:solver-stats}
   \end{table}
 
+
+%   Category                                        0-10k SAT  0-10k UNSAT  10k-20M SAT  10k-20M UNSAT  20M+ SAT  20M+ UNSAT  Total
+% Total Formulas                                         70          132          395            416        40          46   1099
+% Cadical Solved                                         54           73          319            303        35          46    830
+% Has PR Clauses                                         57           90          224            220         0           3    594
+% Has Many PR Clauses                                    36           66          131            137         0           0    370
+% Prelearn Solved                                        52           90          322            307        35          46    852
+% Prelearn Only                                           1           17            6              6         0           0     30
+% Prelearn Only (on formulas we learn stuff)              1           17            6              5         0           0     29
+% Prelearn Improved                                      11           42           57             36         1           1    148
+% Prelearn Improved (on formulas we learn stuff)          9           41           51             27         0           0    128
+% Cautical Solved                                        52           87          317            298        32          29    815
+% Cautical Only                                           0           18            9              9         0           0     36
+% Cautical Only (on formulas we learn stuff)              0           18            1              4         0           0     23
+% Cautical Improved                                      23           48           89             59         0           8    227
+% Cautical Improved (on formulas we learn stuff)          7           38            4              7         0           0     56
+% Blocked Clauses                                        16           61           36             74         0           0    187
+% Has Many Blocked Clauses                                1           42            7             45         0           0     95
+
+%   Category                                          0-10k SAT  0-10k UNSAT  10k-20M SAT  10k-20M UNSAT        Total
+% Total Formulas                                    70.000000   132.000000   395.000000     416.000000  1013.000000
+% Cadical Solved                                    54.000000    73.000000   319.000000     303.000000   749.000000
+% Has PR Clauses                                    57.000000    90.000000   224.000000     220.000000   591.000000
+% Has Many PR Clauses                               36.000000    66.000000   131.000000     137.000000   370.000000
+% Prelearn Solved                                   52.000000    90.000000   322.000000     307.000000   771.000000
+% Prelearn Only                                      1.000000    17.000000     6.000000       6.000000    30.000000
+% Prelearn Only (on formulas we learn stuff)         1.000000    17.000000     6.000000       5.000000    29.000000
+% Prelearn Only % (on formulas we learn stuff)       0.017544     0.188889     0.026786       0.022727     0.255946
+% Prelearn Improved                                 11.000000    42.000000    57.000000      36.000000   146.000000
+% Prelearn Improved (on formulas we learn stuff)     9.000000    41.000000    51.000000      27.000000   128.000000
+% Prelearn Improved % (on formulas we learn stuff)   0.157895     0.455556     0.227679       0.122727     0.963856
+% Cautical Solved                                   52.000000    87.000000   317.000000     298.000000   754.000000
+% Cautical Only                                      0.000000    18.000000     9.000000       9.000000    36.000000
+% Cautical Only (on formulas we learn stuff)         0.000000    18.000000     1.000000       4.000000    23.000000
+% Cautical Only % (on formulas we learn stuff)       0.000000     0.295082     0.027778       0.054054     0.376914
+% Cautical Improved                                 23.000000    48.000000    89.000000      59.000000   219.000000
+% Cautical Improved (on formulas we learn stuff)     7.000000    38.000000     4.000000       7.000000    56.000000
+% Cautical Improved % (on formulas we learn stuff)   0.437500     0.622951     0.111111       0.094595     1.266157
+% Blocked Clauses                                   16.000000    61.000000    36.000000      74.000000   187.000000
+% Has Many Blocked Clauses                           1.000000    42.000000     7.000000      45.000000    95.000000
+
   % Category                  0-10k SAT  0-10k UNSAT  10k-20M SAT  10k-20M UNSAT
   % 20M+ SAT  20M+ UNSAT  Total
 % Total Formulas                   70          132          395            416
@@ -163,6 +204,8 @@ demonstrating that it learns useful \pr clauses regardless of the encoding.
 % 1           39            6             11         0           0     57
 
 
+
+
 \begin{figure*}[!t]
     \centering
     \begin{subfigure}[t]{0.45\textwidth}
@@ -171,7 +214,7 @@ demonstrating that it learns useful \pr clauses regardless of the encoding.
         \caption{Comparing \tool to \cadical. The color indicates the number of \pr clauses learnt by \tool}
         \label{fig:cautical-vs-cadical}
     \end{subfigure}
-    % \hspace{0.06\textwidth}
+    \hspace{0.06\textwidth}
     \begin{subfigure}[t]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/cadical_vs_prelearn_nontrivial.jpg}
@@ -183,17 +226,26 @@ demonstrating that it learns useful \pr clauses regardless of the encoding.
 \end{figure*}
 
 We compare the performance of \tool with \cadical and \prelearn on the
-benchmarks from the '22,'23, and '24 SAT competition's main
+benchmarks from the '22, '23, and '24 SAT competition's main
 tracks~\cite{satcomp2022,satcomp2023,satcomp2024}. We remove duplicates and
-exclude all benchmarks with more than twenty million clauses. This gives us a
-total of 1089 benchmarks. We excluded \sadical as it can only solve 22 of these
-benchmarks.
+exclude all benchmarks with more than twenty million clauses as our technique
+is not designed to handle such large formulas and will oftentimes memout. This gives us a
+total of 1089 benchmarks. We excluded \sadical from our evaluation as it 
+only solves 22 of these benchmarks.
 
 \autoref{tab:solver-stats} shows the number of instances solved by each solver
 and the number of queries for which \prelearn and \cadical learn additional \pr
 clauses, how many improve upon \cadical by at least 5\%, and how many solve a
 formula that \cadical does not solve. We divide the benchmarks based on number
-of clauses (0-10k or 10k-20M) and status (SAT or UNSAT).
+of clauses (0-10k or 10k-20M) and status (SAT or UNSAT). 
+
+The number of clauses 
+is a good indicator of the type of benchmark, formulas with less that ten thousand
+clauses are mostly combinatorial problems, while formulas with more than ten thousand
+clauses are mostly industrial. Whether a formula is SAT or UNSAT is a good indicator 
+of how helpful \pr clauses are. SAT formulas are sensitive to search heuristics, so 
+adding a \pr clause can have a significant (positive or negative) effect on performance
+regardless of whether the clause is actually useful.
 
 PAR-2 score is a standard metric used to evaluate the performance of solvers. It
 is evaluated as the sum of the runtimes of solved instances and twice the
@@ -209,8 +261,10 @@ solves 30 that \cadical does not solve. \tool improves on 219 formulae from
 selective \pr clause learning techniques in \tool. Learning unhelpful \pr
 clauses can have a detrimental effect on performance. \tool only learns 50 \pr
 clauses or more for 57 formulae, while \prelearn learns 50 \pr clauses or more
-for 256 formulae. On those clauses, \tool improves the \cadical's runtime by
-??\%, while \prelearn improves it by ??\%.
+for 256 formulae. On those clauses, \tool improves the \cadical's runtime on
+29.9\% of benchmarks, while \prelearn improves it by 24.7\% of benchmarks.
+% todo: double check these numbers and table
+% todo: maybe add numbers for formula where we learn 50 clauses or more
 
 \autoref{fig:solver-comparison} shows \tool and \cadical's performance relative
 to \cadical. We only include points where \tool (for
@@ -242,7 +296,7 @@ other formulae.
         \subcaption{Performance comparison of \tool to \prelearn. The color indicates the number of \pr clauses learnt by \tool. We filter out all formula where neither \tool nor \prelearn learnt any \pr clauses.}
         \label{fig:cautical-vs-cadical}
     \end{subfigure}
-    % \hspace{0.06\textwidth}
+    \hspace{0.06\textwidth}
     \begin{subfigure}[t]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/clauses_histogram.jpg}
@@ -363,29 +417,8 @@ instances. \tool can also solve a few instances of \texttt{satcoin} that
 \end{figure*}
 
 
-\subsection{Analysis of heuristics}~\label{subsec:eval-heuristics}
+% \subsection{Analysis of heuristics}~\label{subsec:eval-heuristics}
 
-\autoref{fig:global-heuristics} shows the performance of \tool with different
-heuristics turned on and off. First we consider turning three optimizations off.
-\autoref{fig:globaldontfilter} compares against when we turn off filtering short
-and non-trivial \pr clauses. \autoref{fig:global-max-length} compares against
-when we filter only clauses of length $10$ or greater.
-\autoref{fig:global-no-shrink} compares to when we decide not to shrink clauses.
-When we disable all three optimizations, the performance is significantly,
-especially on \texttt{perfect-matching}, \texttt{mutilated-chessboard}, and
-\texttt{register-allocation} benchmarks.
-
-Additionally, we consider potential improvements to the heuristics used in
-\tool. Three possible options are to change the time limit of preprocessing, try
-to efficiently sort the first propagated variable $i$ and try to sort the second
-propagated variable $j$. \autoref{fig:global-time-limit} does the first, by
-setting the pre-processing time limit to 100 seconds.
-\autoref{fig:global-time-limit}. \autoref{fig:global-sort-i} does the second by
-propagating $i$ in order of which literals occurs most frequently in the
-original formula. Finally, \autoref{sub@fig:global-touched} does the the third,
-for each $i$ propagated, for each other $j$, it counts the number of clauses
-that contain $j$ and $i$ (or a literal propagate by $i$). It then picks $j$
-based on which has the highest of this score.
 
 
 %  shows that the time limit heuristic is not useful for \tool.
@@ -395,46 +428,7 @@ based on which has the highest of this score.
 
 
 
-\begin{figure*}[!t]
-    \centering
-    \begin{subfigure}[t]{0.3\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/globaldontfilter_heuristic_comparison.jpg}
-        \caption{No filter}
-        \label{fig:globaldontfilter}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.3\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/globalmaxlen_heuristic_comparison.jpg}
-        \caption{Max length}
-        \label{fig:global-max-length}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.3\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{figs/globalnoshrink_heuristic_comparison.jpg}
-            \caption{No shrink}
-            \label{fig:global-no-shrink}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.3\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/global_time_lim_heuristic_comparison.jpg}
-        \caption{Time limit}
-        \label{fig:global-time-limit}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.3\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/globalisort_heuristic_comparison.jpg}
-        \caption{Sort $i$ beforehand by frequency used}
-        \label{fig:global-sort-i}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.3\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/globaltouch_heuristic_comparison.jpg}
-        \caption{Touched heuristic}
-        \label{fig:global-touched}
-    \end{subfigure}
-    \caption{Performance comparison of \tool with other solvers}
-\end{figure*}
+
 
 
 % \subsection{Research Questions}~\label{subsec:eval-research-questions}
