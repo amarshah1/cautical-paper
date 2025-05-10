@@ -240,9 +240,8 @@ formula that \cadical does not solve. We divide the benchmarks based on number
 of clauses (0-10k or 10k-20M) and status (SAT or UNSAT). 
 
 The number of clauses 
-is a good indicator of the type of benchmark, formulas with less that ten thousand
-clauses are mostly combinatorial problems, while formulas with more than ten thousand
-clauses are mostly industrial. Whether a formula is SAT or UNSAT is a good indicator 
+is a good indicator of the type of benchmark, with many hard combinatorial problems containing fewer than ten thousand clauses. %, and many industrial clauses containing large numbers of clauses. 
+Whether a formula is SAT or UNSAT is a good indicator 
 of how helpful \pr clauses are. SAT formulas are sensitive to search heuristics, so 
 adding a \pr clause can have a significant (positive or negative) effect on performance
 regardless of whether the clause is actually useful.
