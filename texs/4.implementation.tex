@@ -2,14 +2,42 @@
 
 We implement our technique in \tool (a fork of \cadical
 %  commit f13d74439a5b5c963ac5b02d05ce93a8098018b8
-). By default, \tool searches for \pr clauses as a preprocessing step for 30
-seconds. After this time limit, the solver exits and commences normal solving,
+). By default, \tool spends 30 seconds searching for \pr clauses in a preprocessing step. After this time limit, the solver exits and commences normal solving,
 regardless of whether or not it has found any \pr clauses. This adds $\sim\!800$ lines
 of C++ code to \cadical and is implementable within any CDCL SAT solver.
- 
 
-We experimented with other heuristics, which we briefly describe.
-We include an evaluation of the heuristics in \autoref{subsec:heuristics}.
+We discuss three important design decisions in \tool:
+
+\begin{enumerate}
+  \item \textsf{shrink}: As discussed in \autoref{subsec:shrinking}, we may
+  shrink a clause using the techniques inspired by Greedy Set Cover.
+  \item \textsf{filter-triv}: We filter out clauses that are trivial, i.e. if
+  $\formula \impunit C$ for some clause $C$.
+  \item \textsf{filter-long}: We filter out clauses that are longer than some
+  set length $l$. We pick $l = 2$ and thus only learn binary and unit
+  clauses.
+\end{enumerate}
+
+
+Additionally, we describe three natural design decisions that we did not make:
+
+\begin{enumerate}
+  \item \textsf{longer-preprocess}: We choose 30 seconds as the default
+  preprocessing time. However, we could choose a longer time limit, for instance
+  100 seconds.
+  \item \textsf{order-i}: On \autoref{alg:methodology} \autoref{line:choose-i},
+  by default we pick $i$ randomly. However, we could choose $i$ based
+  on some ordering. For instance, we could order literals $i$ by how frequently
+  they occur in the original formula.
+  \item \textsf{select-j}: On \autoref{alg:methodology} \autoref{line:choose-j},
+  we iterate through all possible literals $j$. However, we
+  could just choose some subset of possible literals $j$. One such example is to pick $j$ from 
+  the neighbors of $i$. This was originally proposed in Reeves et al.~\cite{prelearn}.
+  The neighbors of $i$ include $i$ itself and all variables that are fixed
+  by performing unit propagation on $i$.
+\end{enumerate}
+
+
 
 % \subsection{Other Heuristics}~\label{subsec:heuristics}
 
@@ -20,56 +48,56 @@ We include an evaluation of the heuristics in \autoref{subsec:heuristics}.
 
 % Thus, greedy set cover could pick $\{a_1\}$ or $\{a_2\}$ as singleton sets. However, since $a_1 \impunit^\formula a_2$, we really want to learn the unit clause $a_1$ since it is much more powerful.
 
-\subsubsection{Sorting $\alpha_a$ by Implication}~\label{subsubsec:impordering}
-% The greedy set cover algorithm described above is almost sufficient for being
-% insensitive to heuristics, but there is one other optimization that we made.
-We could sort $\alpha_a$ by implication before \autoref{alg:finda0}
-\autoref{line:sort-alphaa}. This is important when there is more than one set
-cover of the same size. For instance, if  $a_1, a_2 \in \alpha_a$ and
-% todo: fix overline over a_1
-$\impunitclause{\formula}{a_1}{a_2}$. Then, we would prefer to learn a clause with 
-$a_1$ since it implies $a_2$. We select for this by first sorting $\alpha_a$ by
-implication, i.e., we would move $a_1$ before $a_2$ in $\alpha_a$ if it were not
-already there.
-% todo: maybe delete this, if we do not evaluate on it
+% \subsubsection{Sorting $\alpha_a$ by Implication}~\label{subsubsec:impordering}
+% % The greedy set cover algorithm described above is almost sufficient for being
+% % insensitive to heuristics, but there is one other optimization that we made.
+% We could sort $\alpha_a$ by implication before \autoref{alg:finda0}
+% \autoref{line:sort-alphaa}. This is important when there is more than one set
+% cover of the same size. For instance, if  $a_1, a_2 \in \alpha_a$ and
+% % todo: fix overline over a_1
+% $\impunitclause{\formula}{a_1}{a_2}$. Then, we would prefer to learn a clause with 
+% $a_1$ since it implies $a_2$. We select for this by first sorting $\alpha_a$ by
+% implication, i.e., we would move $a_1$ before $a_2$ in $\alpha_a$ if it were not
+% already there.
+% % todo: maybe delete this, if we do not evaluate on it
 
-% and $\alpha_c = c$, we may have
-% $\impunitclause{\psi}{a_1}{a_2}$ and $\impunitclause{\psi}{a_2}{c}$. Hence, we
-% would also have $\impunitclause{\psi}{a_1}{c}$. Thus, we could learn the unit
-% clause $a_1$ or the unit clause $a_2$.
+% % and $\alpha_c = c$, we may have
+% % $\impunitclause{\psi}{a_1}{a_2}$ and $\impunitclause{\psi}{a_2}{c}$. Hence, we
+% % would also have $\impunitclause{\psi}{a_1}{c}$. Thus, we could learn the unit
+% % clause $a_1$ or the unit clause $a_2$.
 
-% Here $a_1 \lor c$ is the more
-% ``powerful'' clause, so it is better to learn. 
+% % Here $a_1 \lor c$ is the more
+% % ``powerful'' clause, so it is better to learn. 
 
-% todo: talk about the multiple propagation heuristic used for mutilated chessboard
+% % todo: talk about the multiple propagation heuristic used for mutilated chessboard
 
-\subsubsection{Filtering Trivial Clauses}~\label{subsubsec:filteringtriv}
-Introducing globally blocked clauses can affect how we divide $\alpha = \alpha_c
-\sqcup \alpha_a$ as in \autoref{alg:leastcond}. Thus, it is better to avoid
-introducing globally blocked clauses if they are not useful. We do this by
-checking if $\formula \impunit C$ for each potential clause $C$. If it is implied by
-unit propagation, we consider it easy to learn and do not add it.
+% \subsubsection{Filtering Trivial Clauses}~\label{subsubsec:filteringtriv}
+% Introducing globally blocked clauses can affect how we divide $\alpha = \alpha_c
+% \sqcup \alpha_a$ as in \autoref{alg:leastcond}. Thus, it is better to avoid
+% introducing globally blocked clauses if they are not useful. We do this by
+% checking if $\formula \impunit C$ for each potential clause $C$. If it is implied by
+% unit propagation, we consider it easy to learn and do not add it.
 
-\subsubsection{Filtering Long Clauses}~\label{subsubsec:filtering-length}
-Another heuristic for filtering is based on clause size. If a clause is longer
-than some set length, we may choose not to learn it, as shorter clauses are
-typically more useful. This can be combined with filtering out trivial clauses
-or used separately.
+% \subsubsection{Filtering Long Clauses}~\label{subsubsec:filtering-length}
+% Another heuristic for filtering is based on clause size. If a clause is longer
+% than some set length, we may choose not to learn it, as shorter clauses are
+% typically more useful. This can be combined with filtering out trivial clauses
+% or used separately.
 
-\subsubsection{Ordering Literals}~\label{subsubsec:ordering-literals}
-So far, we propagate on literals $i$ and $j$ selected randomly.
-However, there could be better ways to order literals. One technique is to order
-$i$ based on the number of clauses it occurs in. Another is to pick $j$ from the neighbors of $i$. This was originally proposed in
-Reeves et al.~\cite{prelearn}.
+% \subsubsection{Ordering Literals}~\label{subsubsec:ordering-literals}
+% So far, we propagate on literals $i$ and $j$ selected randomly.
+% However, there could be better ways to order literals. One technique is to order
+% $i$ based on the number of clauses it occurs in. Another is to pick $j$ from the neighbors of $i$. This was originally proposed in
+% Reeves et al.~\cite{prelearn}.
 
-\subsubsection{Alternative Shrinking
-techniques}~\label{subsubsec:shrink-techniques} As discussed in
-\autoref{subsec:shrinking}, we may shrink a clause if
-$\impunitclause{\formula}{a}{c}$, where $a \in \alpha_a$ and $c \in \alpha_c$.
-Checking if $\impunitclause{\formula}{a}{c}$ can be expensive. A cheaper option is
-to see if there is a clause $a \lor c$ in the original formula. While this may
-miss some pairs, it is sufficient in certain cases, such as for the
-pigeonhole benchmarks. Another alternative is to not shrink the clause
-at all.
+% \subsubsection{Alternative Shrinking
+% techniques}~\label{subsubsec:shrink-techniques} As discussed in
+% \autoref{subsec:shrinking}, we may shrink a clause if
+% $\impunitclause{\formula}{a}{c}$, where $a \in \alpha_a$ and $c \in \alpha_c$.
+% Checking if $\impunitclause{\formula}{a}{c}$ can be expensive. A cheaper option is
+% to see if there is a clause $a \lor c$ in the original formula. While this may
+% miss some pairs, it is sufficient in certain cases, such as for the
+% pigeonhole benchmarks. Another alternative is to not shrink the clause
+% at all.
 
 % Here is a complete list of flags discussed in 

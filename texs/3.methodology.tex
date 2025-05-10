@@ -48,7 +48,7 @@ The \texttt{Propagate} function represents unit propagation.
 (\autoref{subsec:learning}). The \texttt{Shrink} function takes care of 3
 (\autoref{subsec:shrinking}). All four stages require several heuristic choices (\autoref{sec:implementation}).
 
-\begin{algorithm} \caption{Learning \pr clauses}
+\begin{algorithm} \caption{Learning \pr clauses}\label{alg:methodology}
     \SetAlgoNoLine
     \SetKwFunction{Learn}{LearnClause}
     \SetKwFunction{LCP}{LeastConditional}
@@ -59,8 +59,8 @@ The \texttt{Propagate} function represents unit propagation.
     \SetKwProg{Fn}{Function}{:}{}
     \SetKwBlock{Begin}{}{}
     \Fn{\Learn{$\formula$, $\alpha$}}{
-        \For{$i \in vars(\formula)$}{ \label{line:sort-alphaa}
-            \For{$j \in vars(\formula)$}{
+        \For{$i \in vars(\formula)$}{ \label{line:choose-i}
+            \For{$j \in vars(\formula)$}{ \label{line:choose-j}
                 \Propagate($i$); \\
                 \Propagate($j$); \\
                 $\alpha_c, \alpha_a := \LCP(\formula, \alpha)$; \\
@@ -69,7 +69,6 @@ The \texttt{Propagate} function represents unit propagation.
             }
         }
     }
-    \label{alg:methodology}
 \end{algorithm}
 
 For motivation, we will discuss the pigeonhole example \ph{4}, where we make
