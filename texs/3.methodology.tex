@@ -258,19 +258,24 @@ but if a smaller $A_0$ exists it can be used to shrink the size of the PR clause
 %on the two clauses.
 % twain : i tried to explain this at the start of the section; hopefully effectively
 
-\subsection{Shrinking with Greedy Set Cover}~\label{subsec:sym}
+%\subsection{Shrinking with Greedy Set Cover}~\label{subsec:sym}
+%
+%In this section we present a heuristic for minimizing the size of $A_0$ without drastically increasing complexity.
 
-In this section we present a heuristic for minimizing the size of $A_0$ without drastically increasing complexity.
+
+\noindent \textbf{Greedy Set Cover.}~\label{subsec:sym} %~\label{subsubsec:greedysetcover}
+We can interpret the problem of finding the smallest possible $A_0$ as a set cover problem 
+where each literal $a \in \alpha_a$ defines the set  $SETS(a) = \{ c \in \alpha_c \; | \; \impunitclause{\formula}{a}{c}\}$.
+Finding the minimum set cover is NP-hard, so we instead approximate using the greedy algorithm, returning a set cover at most roughly $(\ln |\alpha_c| + 1)\times$ the size of the smallest set cover~\cite{greedysetcover}. 
 
 
-\noindent \textbf{Greedy Set Cover:} %~\label{subsubsec:greedysetcover}
-In order to minimize the size of the clause, we may want the smallest possible $A_0$ that maximizes $C_0$. Say for each $a \in \alpha_a$, we define $\alpha_a^\mathrm{SETS}(a) = \{ c \in \alpha_c \; | \; \impunitclause{\formula}{a}{c}\}$. 
-
-When $C_0 = \alpha_c$, finding the smallest $A_0$ is exactly the set cover problem with $\alpha_a^\mathrm{SETS}$. This is NP-hard, so we instead approximate using the greedy algorithm, returning a set cover at most roughly $(\ln |\alpha_c| + 1)\times$ the size of the smallest set cover~\cite{greedysetcover}. 
+%Say for each $a \in \alpha_a$, we define $\alpha_a^\mathrm{SETS}(a) = \{ c \in \alpha_c \; | \; \impunitclause{\formula}{a}{c}\}$. 
+%When $C_0 = \alpha_c$, finding the smallest $A_0$ is exactly the set cover problem with $\alpha_a^\mathrm{SETS}$. This is NP-hard, so we instead approximate using the greedy algorithm, returning a set cover at most roughly $(\ln |\alpha_c| + 1)\times$ the size of the smallest set cover~\cite{greedysetcover}. 
 %  in actuality it is $\ln |\alpha_c| - \ln \ln |\alpha_c| + O(1)$
 
 
-Specifically, the greedy algorithm finds the largest set in $\{\alpha_a^\mathrm{SETS} \cap (\alpha_c \backslash C_0) | a \in \alpha_a \}$ at each step and adds it to $C_0$. It stops when each of the $\alpha_a^\mathrm{SETS} \cap (\alpha_c \backslash C_0)$ are empty.
+The greedy algorithm initializes $C_0$ as empty, and in each iteration finds the $a \in \alpha_a$ that generates the largest set $SETS(a) \cap (\alpha_c \backslash C_0)$, adding $a$ to $A_0$ and adding $SETS(a)$ to $C_0$.
+The algorithm terminates once all sets in $\{SETS(a) \cap (\alpha_c \backslash C_0) | a \in \alpha_a \}$ are empty.
 % either $C_0 = \alpha_C$ or there are no terms 
 
 
@@ -283,7 +288,7 @@ Specifically, the greedy algorithm finds the largest set in $\{\alpha_a^\mathrm{
     \SetKwProg{Fn}{Function}{:}{}
     \Fn{\Shrink{$\formula$, $\alpha_a$, $\alpha_c$}}{
         % $\alpha_a$ := \texttt{sort($\alpha_a$)}\;
-        $\alpha_a^\mathrm{SETS}$ := init \texttt{Array[len($\alpha_a$)]}\;
+        $SETS$ := init \texttt{Array[len($\alpha_a$)]}\;
         \For{$i \in \texttt{range}(\alpha_a)$}{
             \texttt{Propagate($-\alpha_a[i]$)}\;
             \texttt{implied} := $\{\}$\;
@@ -293,9 +298,9 @@ Specifically, the greedy algorithm finds the largest set in $\{\alpha_a^\mathrm{
                 $\texttt{implied} := \texttt{implied} \cup \{c\}$\;
             }
             }
-            $\alpha_a^\mathrm{SETS}[i]$ := \texttt{implied}\;
+            $SETS[i]$ := \texttt{implied}\;
         }
-        \Return{\texttt{GreedySetCover}($\alpha_a^\mathrm{SETS}$)}\;
+        \Return{\texttt{GreedySetCover}($SETS$)}\;
     }
 \end{algorithm}
 % todo : this algorithm is not actually what we do, since we don't propagate on c -> see if this is a problem ever
@@ -303,18 +308,28 @@ Specifically, the greedy algorithm finds the largest set in $\{\alpha_a^\mathrm{
 In \autoref{alg:finda0}, we describe our process for calculating $A_0$. 
 % We initially pre-sort $\alpha_a$ by implication, which we will discuss in more
 % detail. 
-We initialize $\alpha_a^\mathrm{SETS}$ as an array, iterate the counter
-$i$ through $\alpha_a$, populating $\alpha_a^\mathrm{SETS}[i]$ with the set of literals
-$c \in \alpha_c$ such that $\impunitclause{\formula}{\alpha_a^\mathrm{SETS}[i]}{c}$. Finally, we apply
+We initialize $SETS$ as an array, iterate the counter
+$i$ through $\alpha_a$, populating $SETS[i]$ with the set of literals
+$c \in \alpha_c$ such that $\impunitclause{\formula}{a_i}{c}$. Finally, we apply
 \texttt{GreedySetCover} to get a small set $A_0$ that covers as much of $C$ as possible.
 
-In the context of the pigeonhole example, out of the $\alpha_a$,
-$\overline{x}_{2, 1}$ can remove $\overline{x}_{3, 1}, \ldots, \overline{x}_{5,
-1}$ from $\alpha_c$. Additionally, $\overline{x}_{1, 2}$ can be used to remove
-$\overline{x}_{3, 2}, \ldots, \overline{x}_{5, 2}$ from $\alpha_c$. However,
-$x_{1, 1}$ and $x_{2, 2}$ do not remove anything. Thus, the greedy set cover
-algorithm will give us $A_0 = \{\overline{x}_{2, 1}, \overline{x}_{1, 2}\}$ and
-$C_0 = C$.
+Returning to the pigeonhole example, 
+$C_0$ contains all of the literals in $\alpha_c$ because of the binary clauses in constraint (2). 
+The smallest possible $A_0$ includes $\overline{x}_{2, 1}$ and $\overline{x}_{1, 2}$, whose 
+sets cover \overline{x}_{3, 1}, \overline{x}_{4, 1},  \ldots, \overline{x}_{5,
+1}$and  $\overline{x}_{3, 2}, \overline{x}_{4, 2},  \ldots, \overline{x}_{5,
+2}$ respectively. 
+Whereas, the sets from $x_{1, 1}$ and $x_{2, 2}$ are empty (they are not inconsistent with the other literals).
+Therefore, we can learn the clause $\overline{x}_{2, 1} \lor \overline{x}_{1, 2}$, shown in 
+\autoref{subfig:pigeonholeclause-d}.
+
+%In the context of the pigeonhole example, out of the $\alpha_a$,
+%$\overline{x}_{2, 1}$ can remove $\overline{x}_{3, 1}, \ldots, \overline{x}_{5,
+%1}$ from $\alpha_c$. Additionally, $\overline{x}_{1, 2}$ can be used to remove
+%$\overline{x}_{3, 2}, \ldots, \overline{x}_{5, 2}$ from $\alpha_c$. However,
+%$x_{1, 1}$ and $x_{2, 2}$ do not remove anything. Thus, the greedy set cover
+%algorithm will give us $A_0 = \{\overline{x}_{2, 1}, \overline{x}_{1, 2}\}$ and
+%$C_0 = C$.
 
 % \subsection{Algorithm on Pigeonhole Principle}~\label{subsec:pigeonhole}
 
