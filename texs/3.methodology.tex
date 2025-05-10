@@ -43,6 +43,7 @@ factor and robustness against encoding perturbations (see \autoref{subsec:eval-p
     \SetKwFunction{LCP}{LeastConditional}
     \SetKwFunction{Propagate}{Propagate}
     \SetKwFunction{Shrink}{Shrink}
+    \SetKwFunction{Backtrack}{Backtrack}
     \SetKwFunction{Filter}{Filter}
     \SetKwFor{For}{for}{:}{}
     \SetKwFor{If}{if}{:}{}
@@ -56,7 +57,8 @@ factor and robustness against encoding perturbations (see \autoref{subsec:eval-p
                 $\alpha_c, \alpha_a := \LCP(\formula, \alpha)$; \\
                 $C := \Shrink(\formula,\alpha_c, \alpha_a)$; \\
                 \If{not \Filter{C,$\formula$}}{
-                $\formula := \formula \land C$;}
+                $\formula := \formula \land C$;} \\
+                \Backtrack{};
             }
         }
     }
@@ -65,7 +67,7 @@ factor and robustness against encoding perturbations (see \autoref{subsec:eval-p
 We present the general framework for using conditional autarkies to learn PR clauses in \autoref{alg:methodology}. 
 A conditional autarky is computed based on a partial assignment, 
 so the algorithm first selects a set of literals to propagate (lines $4,5$), creating the partial assignment $\alpha$.
-We propagate two literals at a time using nested for loops. 
+We propagate two literals at a time using nested for loops, and undo the propagations after each iteration (backtracking in line $10$).
 Then, in line $6$ \autoref{alg:leastcond} makes a single pass over the formula to generate a conditional autarky, with conditional part ($\alpha_c$) and autarky part ($\alpha_a$).
 The PR clause $C$ is generated from the conditional autarky and shrunk in line $7$, and if $C$ does not pass the usefulness heuristics it is filtered away in line $8$. 
 Details regarding design choices and heuristics are found in \autoref{sec:implementation}.
@@ -149,7 +151,7 @@ However, the constraint ($1$) clauses are satisfied for pigeons $1$ and $2$,
 along with the touched constraint $2$ clauses, placing the pigeons $1$ and $2$ literals in $\alpha_a$. 
 Intuitively, if pigeons $3,4,$ and $5$ are not in holes $1$ or $2$, then piegon $1$ can be placed in hole $1$ : 
 $x_{3,1} \lor x_{3,2} \lor x_{4,1} \lor x_{4,2} \lor x_{5,1} \lor x_{5,2} \lor x_{1,1} $ and pigeon $1$ can be kept out of hole $2$ :
-$x_{3,1} \lor x_{3,2} \lor x_{4,1} \lor x_{4,2} \lor x_{5,1} \lor x_{5,2} \lor \overline{x}_{1,2} $ (likewise for pigeon $2$). 
+$x_{3,1} \lor x_{3,2} \lor x_{4,1} \lor x_{4,2} \lor x_{5,1} \lor x_{5,2} \lor \overline{x}_{1,2} $ (likewise for pigeon $2$ but with the holes swapped). 
 %and pigeon $2$ can be placed in hole $2$ : $x_{3,1} \lor x_{3,2} \lor x_{4,1} \lor x_{4,2} \lor x_{5,1} \lor x_{5,2} \lor x_{2,2} $. 
 The shrinking technique in the following section will help reduce the size of these large PR clauses. 
 
@@ -171,7 +173,7 @@ but shrinking the PR clause, i.e., removing literals from the clause via resolut
 %Thus, our goal is to find resolution candidates containing literals from the autarky part. 
 %We thus aim to see which literals from the autarky part we may use to resolve with values from $\alpha_c$ (and thus $C$).
 
-At a high-level, we will generate two sets: $C_0 \subset \alpha_c$ and $A_0 \subset \alpha_a$, 
+At a high-level, we will generate two sets: $C_0 \subseteq \alpha_c$ and $A_0 \subseteq \alpha_a$, 
 and show that we can learn the PR clause $\bigvee_{c \in C \backslash C_0} \overline{c} \lor
 \bigvee_{a \in A_0} a$. 
 
@@ -266,7 +268,7 @@ but if a smaller $A_0$ exists it can be used to shrink the size of the PR clause
 \noindent \textbf{Greedy Set Cover.}~\label{subsec:sym} %~\label{subsubsec:greedysetcover}
 We can interpret the problem of finding the smallest possible $A_0$ as a set cover problem 
 where each literal $a \in \alpha_a$ defines the set  $SETS(a) = \{ c \in \alpha_c \; | \; \impunitclause{\formula}{a}{c}\}$.
-Finding the minimum set cover is NP-hard, so we instead approximate using the greedy algorithm, returning a set cover at most roughly $(\ln |\alpha_c| + 1)\times$ the size of the smallest set cover~\cite{greedysetcover}. 
+Finding the minimum set cover is NP-hard, so we instead approximate using a greedy algorithm, returning a set cover at most roughly $(\ln |\alpha_c| + 1)\times$ the size of the smallest set cover~\cite{greedysetcover}. 
 
 
 %Say for each $a \in \alpha_a$, we define $\alpha_a^\mathrm{SETS}(a) = \{ c \in \alpha_c \; | \; \impunitclause{\formula}{a}{c}\}$. 
@@ -317,7 +319,7 @@ Returning to the pigeonhole example,
 $C_0$ contains all of the literals in $\alpha_c$ because of the binary clauses in constraint (2). 
 The smallest possible $A_0$ includes $\overline{x}_{2, 1}$ and $\overline{x}_{1, 2}$, whose 
 sets cover $\overline{x}_{3, 1}, \overline{x}_{4, 1},  \ldots, \overline{x}_{5,
-1}$ and $\overline{x}_{3, 2}, \overline{x}_{4, 2},  \ldots, \overline{x}_{5,
+1}$and  $\overline{x}_{3, 2}, \overline{x}_{4, 2},  \ldots, \overline{x}_{5,
 2}$ respectively. 
 Whereas, the sets from $x_{1, 1}$ and $x_{2, 2}$ are empty (they are not inconsistent with the other literals).
 Therefore, we can learn the clause $\overline{x}_{2, 1} \lor \overline{x}_{1, 2}$, shown in 
