@@ -14,9 +14,9 @@ formulas $\formula$ are CNF.
 We use $var(\formula)$ to represent the set of variables occurring in formula
 $\formula$. A partial assignment $\alpha : V \rightarrow \{\top, \bot\}$ on
 $\formula$ maps variables $V \subseteq var(\formula)$ to true or false. If $V =
-var(\formula)$, then $\alpha$ is a total assignment. We abuse notation by
-denoting $\alpha(l) = \alpha(x)$ if $l = x$ and $\alpha(l) = \neg \alpha(x)$ if
-$l = \overline{x}$.
+var(\formula)$, then $\alpha$ is a total assignment. We abuse notation, to
+extend $\alpha$ to literals, by denoting $\alpha(l) = \alpha(x)$
+if $l = x$ and $\alpha(l) = \neg \alpha(x)$ if $l = \overline{x}$.
 
 A formula restricted to a partial assignment $\formula|_\alpha$ is the formula
 resulting from mapping variables in the domain of $\alpha$ to their assignments.
@@ -27,7 +27,7 @@ example, with formula $\formula = (x_1 \lor \overline{x}_4 \lor x_6) \land (x_2
 and $x_2$ to $\top$, we have $\formula|_\alpha = (\overline{x}_4 \lor x_6) \land
 \overline{x}_5$.
 
-A clause $C = l_1 \lor \dots \lor l_m$ is \emph{blocked} by an assignment
+A clause $C = l_1 \lor \dots \lor l_m$ is \emph{blocks} an assignment
 mapping each $l \in C$ to false ($\bot$). An assignment $\alpha$ \emph{touches}
 a clause $C$ if there is a variable $x$ assigned by $\alpha$ such that $x \in C$
 or $\overline{x} \in C$. We say $\alpha$ \emph{satisfies} $C$ if there is some
@@ -78,7 +78,7 @@ rules being resolution. Given two clauses, $C \lor x$ and $\overline{x} \lor D$,
 with empty assignment $\alpha$, if a formula $\formula$ contains a \emph{unit
 clause} $l$, i.e., a clause with only a single literal, we set $\alpha(l) =
 \top$. Then, this unit is propagated: we consider the formula $\formula|_\alpha$
-and continue this process until no unit clauses remain. When unit propagation
+and continue this process until no unit clauses remain. If unit propagation
 terminates with $\formula|_\alpha = \bot$, we say that it derives a conflict.
 % todo: notation issue: I never defined \bot as the empty clause and I also am
 % using \bot both as false and the empty clause.
@@ -101,7 +101,8 @@ terminates with $\formula|_\alpha = \bot$, we say that it derives a conflict.
 Given a formula $\formula$ and clause $C = l_1 \lor \dots \lor l_k$, we can say
 $\formula \impunit C$, read as ``$\formula$ implies $C$ via unit propagation,''
 if $\formula \land \overline{C} \equiv \formula \land \overline{l}_1 \land \dots
-\land \overline{l}_k$ derives a conflict. Here, $C$ is a \emph{reverse unit propagation (RUP)}
+\land \overline{l}_k$ derives a conflict after applying unit propagation. 
+Here, $C$ is a \emph{reverse unit propagation (RUP)}
 clause, a simple example of a redundant clause w.r.t. $\formula$. 
 
 % This can be justified in almost any proof system for propositional logic.
@@ -121,9 +122,10 @@ clause, a simple example of a redundant clause w.r.t. $\formula$.
 logic, more powerful proof steps can yield shorter proofs and faster runtimes.
 One such step is based on \pr clauses.
 
-\begin{definition}[Propagation Redundant (\pr) clauses]
+\begin{definition}[Propagation Redundant (\pr) clauses~\cite{prclauses}]
     For formula $\formula$, we say that clause $C$ is propagation redundant
     (\pr) if there exists a \emph{witness} assignment $\omega$ such that
+    $\omega$ satisfies $C$ and
 $$
     \formula \land \lnot C \impunit (\formula \land C)|_\omega.
 $$
@@ -133,7 +135,7 @@ $$
    Or more informally, a clause $C$ is $\pr$ if every assignment that satisfies
    $\formula$ but falsifies $C$ can be turned into an assignment that satisfies
    $\formula \land C$. While this property can be validated in polynomial time
-   (i.e., via implied by unit propagation), checking if a clause is redundant
+   (by unit propagation), checking if a clause is redundant
    without hints is NP-complete~\cite{prclauses}. Thus, \pr introduces witnesses,
    which must be provided for proof checking.  
 
@@ -176,7 +178,7 @@ clauses~\cite{conditionalautarkies}.
 
 % A key realization in prior work~\cite{}
 
-\begin{definition}[Autarky]
+\begin{definition}[Autarky~\cite{conditionalautarkies}]
     A nonempty assignment $\alpha$ is an autarky for a formula $\formula$ if
     every clause $C \in \formula$ touched by $\alpha$ is satisfied.
 \end{definition}
@@ -192,7 +194,7 @@ Unfortunately, formulas often do not contain autarkies, and they are difficult
 to find even when they do exist. The following weakening of an autarky is much
 easier to find: 
 
-\begin{definition}[Conditional Autarky]
+\begin{definition}[Conditional Autarky~\cite{conditionalautarkies}]
     A nonempty assignment $\alpha = \alpha_c \sqcup \alpha_a$ (disjoint union)
     is a conditional autarky for a formula $\formula$ if $\alpha_a$ is an
     autarky for $\formula|_{\alpha_c}$.
@@ -200,26 +202,18 @@ easier to find:
 
 Consider, as an example, the formula with aptly named variables $\formula = (c
 \lor \overline{a}) \land (a \lor x) \land (\overline{c} \lor a \lor
-\overline{y})$. We have a conditional autarky $\alpha = \alpha_c \sqcup \alpha_a
-= c\;a$, with $\alpha_c = c$ and $\alpha_a = a$. Since $\formula|_{\alpha_c} =
+\overline{y})$. We have a conditional autarky $\alpha = \alpha_c \sqcup
+\alpha_a$, with $\alpha_c = c$ and $\alpha_a = a$. Since $\formula|_{\alpha_c} =
 (a \lor x) \land (a \lor \overline{y})$ and $a$ occurs here only positively, $a$
-is an autarky. Thus, $\alpha$ is a conditional autarky.
+is an autarky for $\formula|_{\alpha_c}$. Thus, $\alpha$ is a conditional autarky.
 
 % Specifically, we can think about searching for conditional autarkies by first
 % looking for a partial assignment $\alpha_c$, and then finding an autarky
 % $\alpha_a$ on the reduced formula $\formula|_{\alpha_c}$.
 
 Conditional autarkies can be very useful for learning satisfiability-preserving
-clauses,
-for instance, if $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$,
-we can learn clauses of the form:
-
-\begin{equation*}
-    [c_1 \land \dots \land c_n] \rightarrow [a_1 \land \dots \land a_m]
-\end{equation*}
-
-This results in $m$ different clauses as in the following theorem from Kiesl et
-al.~\cite{conditionalautarkies}:
+clauses as in the
+following theorem from Kiesl et al.~\cite{conditionalautarkies}:
 
 \begin{theorem}~\label{thm:gbcequisat} Let $\Gamma$ be a formula and $\alpha =
     \alpha_c \sqcup \alpha_a$ be a conditional autarky on $\Gamma$, with
@@ -234,7 +228,16 @@ al.~\cite{conditionalautarkies}:
 
 A solver may thus add any of the $m$ clauses
 $\overline{c}_1 \lor \dots \lor \overline{c}_n \lor a_i$ and preserve
-satisfiability. Each of these is a \pr clause with witness $\alpha_a$.
+satisfiability. Each of these is a \pr clause with witness $\alpha_a$~\cite{conditionalautarkies}.
+% todo: don't know if the citation actually says this, but I don't want to prove it here
+
+Intuitively, \autoref{thm:gbcequisat} states that adding this implication preserves satisfiability:
+
+\begin{equation*}
+    [c_1 \land \dots \land c_n] \rightarrow [a_1 \land \dots \land a_m]
+\end{equation*}
+
+When converted to clausal form, this results in the $m$ different clauses from the theorem.
 % Each of these clauses is a \emph{globally blocked clause}, however, this is
 % not too important for our purposes, so we will not discuss it further.
 % Additionally, we can see that this is a \pr clause:
@@ -284,7 +287,7 @@ conflict-driven clause learning (CDCL)~\cite{sat-handbook}.
 % Here, if unit propagation does not lead to a conflict, then they attempt to
 % learn a \pr clause instead. \pr clause learning was first introduced in an
 % extension of the solver \lingeling~\cite{prclause}.
-After propagating an assignment, they check if the clause $C$ blocked by this
+After propagating an assignment, they check if the clause $C$ blocking this
 assignment is \pr by creating a new SAT formula called the \emph{positive
 reduct}. If the positive reduct is satisfiable, then $C$ is a \pr clause and is
 added. This was implemented in an extension of the solver \lingeling and was
@@ -311,7 +314,8 @@ tank performance. We compare our
 implementation \tool to \sadical and \prelearn in \autoref{sec:evaluation}.
 
 Kiesl et al.~\cite{conditionalautarkies} first introduced conditional autarkies
-to identify a class of \pr clauses known as globally blocked clauses. They aimed to eliminate globally blocked
-clauses from a formula. This technique allowed them to simulate
-circuit-simplification techniques. Our work differs from this as we add clauses
-instead of removing them, and we target a different class of formulas.
+to identify a class of \pr clauses known as globally blocked clauses. They aimed
+to eliminate globally blocked clauses from a formula. This technique allowed
+them to simulate circuit-simplification techniques. Our work differs from this
+as we add clauses instead of removing them.
+

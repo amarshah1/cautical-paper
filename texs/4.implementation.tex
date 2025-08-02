@@ -33,13 +33,13 @@ Additionally, we describe three natural design decisions that we did not make:
   they occur in the original formula.
   \item \textsf{select-j}: On \autoref{alg:methodology} \autoref{line:choose-j},
   we iterate through all possible literals $j$. However, we
-  could just choose some subset of possible literals $j$. One such example is to pick $j$ from 
+  could choose some subset of possible literals $j$. One such example is to pick $j$ from 
   the neighbors of $i$. This was originally proposed in Reeves et al.~\cite{prelearn}.
   The neighbors of $i$ include any literal $j$ that belongs to the same clause as
   a literal fixed by unit propagation on $i$ (including $i$ itself).
 \end{enumerate}
 
-We evaluate these heuristics in Appendix \ref{app:heuristics} and find that
+We evaluate these heuristics in \autoref{sec:heuristics} and find that
 \textsf{shrink}, \textsf{filter-triv}, and \textsf{filter-long} are all
 beneficial. On the other hand \textsf{longer-preprocess}, \textsf{order-i}, and
 \textsf{select-j} are not beneficial and can sometimes be harmful.

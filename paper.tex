@@ -168,6 +168,7 @@
 %   \usepackage{stys/smtlib}
   % \usepackage{array}
   \usepackage{tabularx}
+  \usepackage{enumitem}
   
 %   \input{00-common-preamble.tex}
   
@@ -216,19 +217,19 @@
   \begin{abstract}
     State-of-the-art Boolean satisfiability (SAT) solvers increasingly use
     techniques beyond resolution. One of the strongest such techniques is
-    Propagation Redundancy (PR) learning. Solvers utilizing PR learning may
+    Propagation Redundancy (\pr) learning. Solvers utilizing \pr learning may
     admit short proofs for benchmark families with exponentially large
     resolution proofs, including pigeonhole and mutilated chessboard. However,
-    existing PR clause learning techniques require an NP-hard check; hence, they
+    existing \pr clause learning techniques require an NP-hard check; hence, they
     are computationally expensive and difficult to add to existing tools.
 
-    We propose a new technique for learning PR clauses based on conditional
+    We propose a new technique for learning \pr clauses based on conditional
     autarkies and implement it in the SAT solver \cadical. Our method is
-    modular, allowing for cross-solver compatibility, and learns PR clauses in
+    modular, allowing for cross-solver compatibility, and learns \pr clauses in
     linear time. Additionally, we introduce a number of heuristics, including a
-    clause-shrinking technique and filtering to avoid trivial PR clauses,
+    clause-shrinking technique and filtering to avoid trivial \pr clauses,
     ensuring that our method learns useful clauses. We show that this is
-    competitive with state-of-the-art PR clause learning techniques, and
+    competitive with state-of-the-art \pr clause learning techniques, and
     improves performance on a portion of SAT competition benchmarks.
 
   \end{abstract}
@@ -242,9 +243,9 @@
   \input{texs/3.methodology}
   \input{texs/4.implementation}
   \input{texs/5.evaluation}
-  \input{texs/6.heuristics}
-  \input{texs/7.futurework}
-  \input{texs/8.conclusion}
+  \input{texs/6.futurework}
+  \input{texs/7.conclusion}
+  \input{texs/8.acknowledgements}
 
 
 
