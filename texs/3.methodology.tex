@@ -5,26 +5,26 @@
 \begin{figure*}[!t]
     \centering
     \input{figs/pigeonholeclause.tex}
-    \caption{Learning the clause $\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$ for \ph{4}}~\label{fig:pigeonholeclauses}
+    \caption{Learning the clause $\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$
+    for \ph{4}}~\label{fig:pigeonholeclauses}
   \end{figure*}
 
-We use the pigeonhole principle as a motivating example.
-The problem $\ph{n}$ asks whether we can put $n+1$ pigeons in $n$ holes such
-that (1)~every pigeon is in a hole, and (2)~no hole contains more than one
-pigeon. This can be encoded as a SAT problem where variable $x_{i, j}$
-represents putting the $i$-th pigeon into the $j$-th hole. Constraint (1)
-is encoded as $\bigvee_{1 \leq j \leq n} x_{i, j}$ for each $1 \leq i \leq n+1$ and
-(2) as $\overline{x}_{i, j} \lor \overline{x}_{k, j}$ for each $ 1
-\leq i < k \leq n+1$ and $1 \leq j \leq n$.
+We use the pigeonhole principle as a motivating example. The problem $\ph{n}$
+asks whether we can put $n+1$ pigeons in $n$ holes such that (1)~every pigeon is
+in a hole, and (2)~no hole contains more than one pigeon. This can be encoded as
+a SAT problem where variable $x_{i, j}$ represents putting the $i$-th pigeon
+into the $j$-th hole. Constraint (1) is encoded as $\bigvee_{1 \leq j \leq n}
+x_{i, j}$ for each $1 \leq i \leq n+1$ and (2) as $\overline{x}_{i, j} \lor
+\overline{x}_{k, j}$ for each $ 1 \leq i < k \leq n+1$ and $1 \leq j \leq n$.
 
-\autoref{fig:pigeonholeclauses} provides a visualization where the
-rows represent the pigeons and the columns represent the holes. The cell in row
-$i$ and column $j$ represents the literal $x_{i, j}$.
+\autoref{fig:pigeonholeclauses} provides a visualization where the rows
+represent the pigeons and the columns represent the holes. The cell in row $i$
+and column $j$ represents the literal $x_{i, j}$.
 % i.e. whether the $i$-th pigeon is in the $j$-th hole.
-A $+$ in the $(i, j)$-th cell indicates that $x_{i, j}$ is set to
-true, and a $-$ symbol indicates falsehood.
-Thus, constraint (1) asks that each row has at least one $+$ cell and
-constraint (2) asks that at most one $+$ cell share a column.
+A $+$ in the $(i, j)$-th cell indicates that $x_{i, j}$ is set to true, and a
+$-$ symbol indicates falsehood. Thus, constraint (1) asks that each row has at
+least one $+$ cell and constraint (2) asks that at most one $+$ cell share a
+column.
 
 % We only consider the case where $m = n + 1$ which we denote \ph{n}. 
 We achieve an $O(n^3)$ \pr proof for \ph{n}, matching the best known
@@ -35,62 +35,52 @@ Since there are n+1 pigeons and n holes, we must rule out $O(n^2)$ pigeon-hole
 pairs, so the proof has size $O(n^3)$. We learn these proofs with a very low
 constant factor and robustness against encoding perturbations (see
 \autoref{subsec:eval-pigeonhole}).
-%  todo: add a forward reference to where we evaluate this
-%  todo: is this the best possible result theoretically?
+%  todo: add a forward reference to where we evaluate this todo: is this the
+%  best possible result theoretically?
 
-% There are $O(n^3)$ \pr proofs of the pigeonhole principle, but this is difficult to achieve in practice and requires specific techniques~\cite{prclauses}. We can learn these proofs, with a very low constant factor and little sensitivity to the encoding. 
+% There are $O(n^3)$ \pr proofs of the pigeonhole principle, but this is
+% difficult to achieve in practice and requires specific
+% techniques~\cite{prclauses}. We can learn these proofs, with a very low
+% constant factor and little sensitivity to the encoding. 
 
 \subsection{PR Clause Learning Framework}~\label{subsec:methodology}
 
 \begin{algorithm}\caption{Learning \pr clauses}\label{alg:methodology}
-    \SetAlgoNoLine
-    \SetKwFunction{Learn}{LearnClause}
-    \SetKwFunction{LCP}{LeastConditional}
-    \SetKwFunction{Propagate}{Propagate}
-    \SetKwFunction{Shrink}{Shrink}
-    \SetKwFunction{Backtrack}{Backtrack}
-    \SetKwFunction{Filter}{Filter}
-    \SetKwFor{For}{for}{:}{}
-    \SetKwFor{If}{if}{:}{}
-    \SetKwProg{Fn}{Function}{:}{}
-    \SetKwBlock{Begin}{}{}
-    \Fn{\Learn{$\formula$, $\alpha$}}{
-        \For{$i \in vars(\formula)$}{ \label{line:choose-i}
-            \For{$j \in vars(\formula)$}{ \label{line:choose-j}
-                \Propagate($i$); \\
+    \SetAlgoNoLine \SetKwFunction{Learn}{LearnClause}
+    \SetKwFunction{LCP}{LeastConditional} \SetKwFunction{Propagate}{Propagate}
+    \SetKwFunction{Shrink}{Shrink} \SetKwFunction{Backtrack}{Backtrack}
+    \SetKwFunction{Filter}{Filter} \SetKwFor{For}{for}{:}{}
+    \SetKwFor{If}{if}{:}{} \SetKwProg{Fn}{Function}{:}{} \SetKwBlock{Begin}{}{}
+    \Fn{\Learn{$\formula$, $\alpha$}}{ \For{$i \in vars(\formula)$}{
+    \label{line:choose-i} \For{$j \in vars(\formula)$}{ \label{line:choose-j}
+    \Propagate($i$); \\
                 \Propagate($j$); \\
                 $\alpha_c, \alpha_a := \LCP(\formula, \alpha)$; \\
                 $C := \Shrink(\formula,\alpha_c, \alpha_a)$; \\
-                \If{not \Filter{C,$\formula$}}{
-                $\formula := \formula \land C$;}
-                \Backtrack{};
-            }
-        }
-    }
+                \If{not \Filter{C,$\formula$}}{ $\formula := \formula \land C$;}
+                \Backtrack{}; } } }
 \end{algorithm}
 
 We present the general framework for using conditional autarkies to learn PR
 clauses in \autoref{alg:methodology}. A conditional autarky is computed based on
-a partial assignment, so the algorithm first selects a set of literals to
-propagate (lines $4,5$), creating the partial assignment $\alpha$. We propagate
-two literals at a time using nested \textbf{for} loops, and undo the
-propagations after each iteration (backtracking in line $10$). Then, in line $6$
-\autoref{alg:leastcond} makes a single pass over the formula to generate a
-conditional autarky, with conditional part ($\alpha_c$) and autarky part
-($\alpha_a$). The \pr clause $C$ is generated from the conditional autarky and
-shrunk in line $7$, and if $C$ does not pass the usefulness heuristics it is
-filtered away in line $8$. Details regarding design choices and heuristics are
-found in \autoref{sec:implementation}, including a discussion of
-\texttt{Filter}.
+a assignment, so the algorithm first selects a set of literals to propagate
+(lines $4,5$), creating the assignment $\alpha$. We propagate two literals at a
+time using nested \textbf{for} loops, and undo the propagations after each
+iteration (backtracking in line $10$). Then, in line $6$ \autoref{alg:leastcond}
+makes a single pass over the formula to generate a conditional autarky, with
+conditional part ($\alpha_c$) and autarky part ($\alpha_a$). The \pr clause $C$
+is generated from the conditional autarky and shrunk in line $7$, and if $C$
+does not pass the usefulness heuristics it is filtered away in line $8$. Details
+regarding design choices and heuristics are found in
+\autoref{sec:implementation}, including a discussion of \texttt{Filter}.
 
 In the following sections, we will describe \pr clause learning and shrinking in
 the context of our running example  \ph{4}. We will consider the decisions $i =
 x_{1, 1}$ and $j = x_{2, 2}$ shown in \autoref{subfig:pigeonholeclause-a}, with
 unit propagation shown in \autoref{subfig:pigeonholeclause-b}.
 
-%. This lets us learn the clause
-%$\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$ (see
-%\autoref{fig:pigeonholeclauses}), which is necessary for the \pr proof of
+%. This lets us learn the clause $\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$
+%(see \autoref{fig:pigeonholeclauses}), which is necessary for the \pr proof of
 %pigeonhole \cite{prclauses}. 
 
 
@@ -99,9 +89,8 @@ unit propagation shown in \autoref{subfig:pigeonholeclause-b}.
 %decisions $i = x_{1, 1}$ and $j = x_{2, 2}$. This lets us learn the clause
 %$\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$ (see
 %\autoref{fig:pigeonholeclauses}), which is necessary for the \pr proof of
-%pigeonhole \cite{prclauses}. 
-% We explain how this clause is used in the proof in
-% Appendix~\ref{app:pigeonhole}.
+%pigeonhole \cite{prclauses}. We explain how this clause is used in the proof in
+%Appendix~\ref{app:pigeonhole}.
 
 
 %We start by propagating on $x_{1, 1}$ and $x_{2, 2}$, which assigns
@@ -112,54 +101,45 @@ unit propagation shown in \autoref{subfig:pigeonholeclause-b}.
 \subsection{Learning \pr Clauses}~\label{subsec:learning}
 
 
-As described in \autoref{subsec:autarkies}, any partial assignment can be split 
-into a conditional and autarky part, 
-$\alpha = \alpha_c \sqcup \alpha_a$, 
-and the following clauses are \pr: $\bigvee_{c \in \alpha_c} \overline{c} \lor a$ for
-any $a \in \alpha_a$. 
-In order to produce smaller \pr clauses, we use 
-\autoref{alg:leastcond} from Kiesl et al.
-\cite{conditionalautarkies} to find the unique smallest possible $\alpha_c$.
+As described in \autoref{subsec:autarkies}, any assignment can be split into a
+conditional and a (potentially empty) autarky part, $\alpha = \alpha_c \sqcup \alpha_a$, and the
+following clauses are \pr: $\bigvee_{c \in \alpha_c} \overline{c} \lor a$ for
+any $a \in \alpha_a$. In order to produce smaller \pr clauses, we use
+\autoref{alg:leastcond} from Kiesl et al. \cite{conditionalautarkies} to find
+the unique smallest possible $\alpha_c$.
 
-%Since all of $\alpha_c$ appears in such a clause, we want
-%minimize it using \autoref{alg:leastcond} from Kiesl et al.
-%\cite{conditionalautarkies} to find the unique smallest possible $\alpha_c$:
+%Since all of $\alpha_c$ appears in such a clause, we want minimize it using
+%\autoref{alg:leastcond} from Kiesl et al. \cite{conditionalautarkies} to find
+%the unique smallest possible $\alpha_c$:
 
 
 \begin{algorithm}
-    \caption{Unique minimal $\alpha_c$ in $\alpha = \alpha_c \sqcup \alpha_a$}\label{alg:leastcond}
-    \SetAlgoNoLine
-    \SetKwFunction{LCP}{LeastConditional}
-    \SetKwFor{For}{for}{:}{}
-    \SetKwFor{If}{if}{:}{}
-    \SetKwProg{Fn}{Function}{:}{}
-    \SetKwBlock{Begin}{}{}
+    \caption{Unique minimal $\alpha_c$ in $\alpha = \alpha_c \sqcup
+    \alpha_a$}\label{alg:leastcond} \SetAlgoNoLine
+    \SetKwFunction{LCP}{LeastConditional} \SetKwFor{For}{for}{:}{}
+    \SetKwFor{If}{if}{:}{} \SetKwProg{Fn}{Function}{:}{} \SetKwBlock{Begin}{}{}
 
     \Fn{\LCP{$\formula$, $\alpha$}}{
 
-        $\alpha_c := \emptyset$\;
-        \For{$C \in \formula$}{
-            \If{$\alpha$ touches $C$ without satisfying $C$}{
-                $\alpha_c := \alpha_c \cup (\alpha \cap \overline{C})$\;
-            }
+        $\alpha_c := \emptyset$\; \For{$C \in \formula$}{ \If{$\alpha$ touches
+        $C$ without satisfying $C$}{ $\alpha_c := \alpha_c \cup (\alpha \cap
+        \overline{C})$\; } } \Return{$\alpha_c$, $\alpha \backslash \alpha_c$}\;
         }
-        \Return{$\alpha_c$, $\alpha \backslash \alpha_c$}\;
-    }
 \end{algorithm}
 
-\autoref{alg:leastcond} provides $\alpha_c \sqcup \alpha_a$, which is a conditional autarky, as every
-clause that $\alpha_a$ touches is
-satisfied by a literal in $\alpha$.
+\autoref{alg:leastcond} returns $\alpha_c \sqcup \alpha_a$, which is a
+conditional autarky, as every clause that $\alpha_a$ touches is satisfied by a
+literal in $\alpha$.
 
 Additionally, $\alpha_c$ is minimal: for any other conditional autarky $\alpha =
 \alpha_c' \sqcup \alpha_a'$, it must be the case that $\alpha_c \subseteq
-\alpha_c'$. For each clause that is touched but not satisfied, we add to
+\alpha_c'$ since for each clause that is touched but not satisfied, we add to
 $\alpha_c$ all literals from the assignment that touch and do not satisfy this
-clause. They must be in $\alpha_c$, since otherwise $\alpha_a$ will touch a
+clause. These literals must be in $\alpha_c'$, since otherwise $\alpha_a'$ will touch a
 clause that is not satisfied by $\alpha$, violating the conditional autarky
 property.
 
-Running \autoref{alg:leastcond} on the partial assignment from
+Running \autoref{alg:leastcond} on the assignment from
 \autoref{subfig:pigeonholeclause-b}  
 gives the conditional part (red) and autarky part (orange) in
 \autoref{subfig:pigeonholeclause-c}. The assigned literals from pigeons $3,4,$
@@ -184,17 +164,22 @@ these large \pr clauses.
 %touched but not satisfied, and thus are in $\alpha_c$. However, the rows with a
 %$+$ will have their constraint (1) satisfied and thus are in $\alpha_a$. Thus,
 %$\alpha_a = \{x_{1, 1}, \overline{x}_{1, 2}, \overline{x}_{2, 1}, x_{2, 2}\}$
-%and $\alpha_c = \{\overline{x}_{3, 1}, \ldots, \overline{x}_{5, 1}, \overline{x}_{3,
-%2} \ldots, \overline{x}_{5, 2}\}$.
+%and $\alpha_c = \{\overline{x}_{3, 1}, \ldots, \overline{x}_{5, 1},
+%\overline{x}_{3, 2} \ldots, \overline{x}_{5, 2}\}$.
 
 \subsection{Shrinking \pr Clauses}~\label{subsec:shrinking}
 
-The \pr clause derived from a conditional autarky may be too weak to effectively reduce the search space, 
-%In a formula $\formula$ with conditional autarky $\alpha = \alpha_c \sqcup \alpha_a$ where $\alpha_c = c_1, \dots, c_n$ and $\alpha_a =
-%a_1, \dots, a_m$, the addition of clause $C = \alpha_c \lor a_i$ may be too weak to effectively reduce the search space.
-but shrinking the \pr clause, i.e., removing literals from the clause via resolution, will strengthen its pruning power. 
-%Thus, our goal is to find resolution candidates containing literals from the autarky part. 
-%We thus aim to see which literals from the autarky part we may use to resolve with values from $\alpha_c$ (and thus $C$).
+The \pr clause derived from a conditional autarky may be too weak to effectively
+reduce the search space, 
+%In a formula $\formula$ with conditional autarky $\alpha = \alpha_c \sqcup
+%\alpha_a$ where $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$,
+%the addition of clause $C = \alpha_c \lor a_i$ may be too weak to effectively
+%reduce the search space.
+but shrinking the \pr clause, i.e., removing literals from the clause via
+resolution, will strengthen its pruning power. 
+%Thus, our goal is to find resolution candidates containing literals from the
+%autarky part. We thus aim to see which literals from the autarky part we may
+%use to resolve with values from $\alpha_c$ (and thus $C$).
 
 At a high-level, we will generate two sets: $C_0 \subseteq \alpha_c$ and $A_0
 \subseteq \alpha_a$, and show that we can learn the \pr clause $\bigvee_{c \in C
@@ -218,43 +203,50 @@ if a smaller $A_0$ exists it can be used to shrink the size of the \pr clause.
 
 
 %
-%Consider the set $C_0$ of literals in the conditional part which
-%are inconsistent with any literal in the autarky part. 
-%Formally, let $C_0 = \{c_j \in C \mid \exists a_i \in
-%\alpha_a \text{ s.t. } \impunitclause{\formula}{a_i}{c_j} \}$.
-%  todo : provide some intutition for how we pick this set
+%Consider the set $C_0$ of literals in the conditional part which are
+%inconsistent with any literal in the autarky part. Formally, let $C_0 = \{c_j
+%\in C \mid \exists a_i \in \alpha_a \text{ s.t. }
+%\impunitclause{\formula}{a_i}{c_j} \}$. todo : provide some intutition for how
+%we pick this set
 %
-% This is essentially the set of literals in $\alpha_c$ that can be implied by unit propagation by negating some literal in $\alpha_a$.
+% This is essentially the set of literals in $\alpha_c$ that can be implied by
+% unit propagation by negating some literal in $\alpha_a$.
 %
-% we could add clauses of the form $\overline{c_1} \lor \dots \lor \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
+% we could add clauses of the form $\overline{c_1} \lor \dots \lor
+% \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
 %
-% , this may still lead to a long clause. We aim to shrink this clause. Notice that if $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$, we could add clauses of the form $\overline{c_1} \lor \dots \lor \overline{c_n} \lor a_i$ where $1 \leq i \leq m$.
+% , this may still lead to a long clause. We aim to shrink this clause. Notice
+% that if $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$, we
+% could add clauses of the form $\overline{c_1} \lor \dots \lor \overline{c_n}
+% \lor a_i$ where $1 \leq i \leq m$.
 %
 %
 % Consider $\overline{\alpha_a}$, the negation of the literals in $\alpha_a$. 
 %
-%  in the code we propagate -alpha_a[i]
-%  then if val (neg_alpha_c[j]) < 0, we add neg_alpha_c[j] to propagated and
-%  alpha_a[i] to useful
-%Consider additionally $A_0 \subseteq \alpha_a$ such that for each $c \in C_0$,
-%there is some $a \in A_0$ such that $\impunitclause{\formula}{a}{c}$.
-%There exists at least one such $A_0$ ($\alpha_a$ is a trivial example); however, a smaller set is typically more helpful for creating useful clauses. 
-%We discuss our method to efficiently choose $A_0$ in \autoref{subsec:sym}.
-%  as it will be important for having a technique resistant to different encodings. 
+%  in the code we propagate -alpha_a[i] then if val (neg_alpha_c[j]) < 0, we add
+%  neg_alpha_c[j] to propagated and alpha_a[i] to useful Consider additionally
+%  $A_0 \subseteq \alpha_a$ such that for each $c \in C_0$, there is some $a \in
+%  A_0$ such that $\impunitclause{\formula}{a}{c}$. There exists at least one
+%  such $A_0$ ($\alpha_a$ is a trivial example); however, a smaller set is
+%  typically more helpful for creating useful clauses. We discuss our method to
+%  efficiently choose $A_0$ in \autoref{subsec:sym}. as it will be important for
+%  having a technique resistant to different encodings. 
 
 
-% Instead we look at $\overline{I} = \{x_{2, 1}, x_{1, 2}\}$. Then take the set $\overline{I} \vdash_1 C_0 \subseteq C$, i.e., the maximal subset of $C$ that $\overline{I}$ implies via unit propagation.
+% Instead we look at $\overline{I} = \{x_{2, 1}, x_{1, 2}\}$. Then take the set
+% $\overline{I} \vdash_1 C_0 \subseteq C$, i.e., the maximal subset of $C$ that
+% $\overline{I}$ implies via unit propagation.
 
 %We want learn the clause $\bigvee_{c \in C \backslash C_0} \overline{c} \lor
 %\bigvee_{a \in A_0} a$
 
 
-\begin{theorem}~\label{thm:shrunkgbcequisat}
-    Let $\Gamma$ be a formula and $\alpha = \alpha_c \sqcup \alpha_a$ be a
-    conditional autarky on $\Gamma$, with $\alpha_c = c_1, \dots, c_n$ and
-    $\alpha_a = a_1, \dots, a_m$. If $A_0$ is non-empty, then formula $\formula$
-    is satisfiable if and only if $\formula \land (\bigvee_{c \in C \backslash
-    C_0} \overline{c} \lor \bigvee_{a \in A_0} a)$ is satisfiable.
+\begin{theorem}~\label{thm:shrunkgbcequisat} Let $\Gamma$ be a formula and
+    $\alpha = \alpha_c \sqcup \alpha_a$ be a conditional autarky on $\Gamma$,
+    with $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$. If $A_0$
+    is non-empty, then formula $\formula$ is satisfiable if and only if
+    $\formula \land (\bigvee_{c \in C \backslash C_0} \overline{c} \lor
+    \bigvee_{a \in A_0} a)$ is satisfiable.
 \end{theorem}
 
 \begin{proof}
@@ -267,105 +259,113 @@ if a smaller $A_0$ exists it can be used to shrink the size of the \pr clause.
     $\formula \land (\bigvee_{c \in C} \overline{c} \lor \bigvee_{a \in A_0} a)$
     is satisfiable since we are weakening a clause.
 
-    % We have that Γ is satisfiable =>  Γ ∧ (V c v a) is satisfiable =>  Γ ∧ (V c v V a) is satisfiable =>  Γ is satisfiable. The first implication follows from Theorem 1. The second implication follows from the fact that we are weakening a clause. The third implication follows from the fact that we are removing a clause. We will clarify this in the paper.
+    % We have that Γ is satisfiable =>  Γ ∧ (V c v a) is satisfiable =>  Γ ∧ (V
+    % c v V a) is satisfiable =>  Γ is satisfiable. The first implication
+    % follows from Theorem 1. The second implication follows from the fact that
+    % we are weakening a clause. The third implication follows from the fact
+    % that we are removing a clause. We will clarify this in the paper.
 
     
-    By the definition of inconsistency, for each $c \in C_0$ there exists an $a \in A_0$ such that $\impunitclause{\formula}{a}{c}$, 
-    allowing us to derive the RUP clause  $a \lor c$. 
-    Each binary clause can be resolved with $ (\bigvee_{c \in C}
-    \overline{c} \lor \bigvee_{a \in A_0} a)$, producing  $(\bigvee_{c \in C \backslash C_0} \overline{c} \lor \bigvee_{a \in A_0} a)$. 
+    By the definition of inconsistency, for each $c \in C_0$ there exists an $a
+    \in A_0$ such that $\impunitclause{\formula}{a}{c}$, allowing us to derive
+    the RUP clause  $a \lor c$. Each binary clause can be resolved with $
+    (\bigvee_{c \in C} \overline{c} \lor \bigvee_{a \in A_0} a)$, producing
+    $(\bigvee_{c \in C \backslash C_0} \overline{c} \lor \bigvee_{a \in A_0}
+    a)$. 
     
 
 %    Thus we can assume $\formula \land (\bigvee_{c \in C} \overline{c} \lor
-%    \bigvee_{a \in A_0} a)$ is satisfiable by some assignment
-%    $\beta$.
+%    \bigvee_{a \in A_0} a)$ is satisfiable by some assignment $\beta$.
 %
-%    We claim $\beta$ is a satisfying assignment for $\formula \land (\bigvee_{c \in
-%    C \backslash C_0} \overline{c} \lor \bigvee_{a \in A_0} a)$. If this was not
-%    the case then: (1)~for all $a \in A_0$ $\overline{a} \in \beta$ and (2)~there
-%    is some $c \in C_0$ such that $\overline{c} \in \beta$. 
+%    We claim $\beta$ is a satisfying assignment for $\formula \land (\bigvee_{c
+%    \in C \backslash C_0} \overline{c} \lor \bigvee_{a \in A_0} a)$. If this
+%    was not the case then: (1)~for all $a \in A_0$ $\overline{a} \in \beta$ and
+%    (2)~there is some $c \in C_0$ such that $\overline{c} \in \beta$. 
 %
 %    But by definition, there is some $a \in A_0$ such that
 %    $\impunitclause{\formula}{a}{c}$. Thus $\formula \land \overline{a} \land
-%    \overline{c}$ is unsatisfiable via unit propagation. However, this cannot be
-%    the case since $\beta$ is a satisfying assignment for $\formula$ and
+%    \overline{c}$ is unsatisfiable via unit propagation. However, this cannot
+%    be the case since $\beta$ is a satisfying assignment for $\formula$ and
 %    $\overline{a}, \overline{c} \in \beta$.
 \end{proof}
 
-In fact, $\bigvee_{c \in C \backslash C_0} \overline{c} \lor
-\bigvee_{a \in A_0} a$ is a \pr clause with witness $\alpha_a$. 
+In fact, $\bigvee_{c \in C \backslash C_0} \overline{c} \lor \bigvee_{a \in A_0}
+a$ is a \pr clause with witness $\alpha_a$. 
 % todo: might need to explain this more 
 
 %Another way to see this is: starting with $\bigvee_{c \in C} \overline{c} \lor
 %\bigvee_{a \in A_0} a$, we notice that if some clause $c_i \lor a_i$ is implied
 %via unit propagation, then we can remove $c_i$ from $C$ by applying resolution
-%on the two clauses.
-% twain : i tried to explain this at the start of the section; hopefully effectively
+%on the two clauses. twain : i tried to explain this at the start of the
+%section; hopefully effectively
 
 %\subsection{Shrinking with Greedy Set Cover}~\label{subsec:sym}
 %
-%In this section we present a heuristic for minimizing the size of $A_0$ without drastically increasing complexity.
+%In this section we present a heuristic for minimizing the size of $A_0$ without
+%drastically increasing complexity.
 
 
-\noindent \textbf{Greedy Set Cover.}~\label{subsec:sym} %~\label{subsubsec:greedysetcover}
-We can interpret the problem of finding the smallest possible $A_0$ as a set cover problem 
-where each literal $a \in \alpha_a$ defines the set  ${\it SETS}(a) = \{ c \in \alpha_c \; | \; \impunitclause{\formula}{a}{c}\}$.
-Finding the minimum set cover is NP-hard, so we instead approximate using a greedy algorithm, returning a set cover at most roughly $(\ln |\alpha_c| + 1)\times$ the size of the smallest set cover~\cite{greedysetcover}. 
+\noindent \textbf{Greedy Set Cover.}~\label{subsec:sym}
+%~\label{subsubsec:greedysetcover}
+We can interpret the problem of finding the smallest possible $A_0$ as a set
+cover problem where each literal $a \in \alpha_a$ defines the set  ${\it
+SETS}(a) = \{ c \in \alpha_c \; | \; \impunitclause{\formula}{a}{c}\}$. Finding
+the minimum set cover is NP-hard, so we instead approximate using a greedy
+algorithm, returning a set cover at most roughly $(\ln |\alpha_c| + 1)\times$
+the size of the smallest set cover~\cite{greedysetcover}. 
 
 
-%Say for each $a \in \alpha_a$, we define $\alpha_a^\mathrm{SETS}(a) = \{ c \in \alpha_c \; | \; \impunitclause{\formula}{a}{c}\}$. 
-%When $C_0 = \alpha_c$, finding the smallest $A_0$ is exactly the set cover problem with $\alpha_a^\mathrm{SETS}$. This is NP-hard, so we instead approximate using the greedy algorithm, returning a set cover at most roughly $(\ln |\alpha_c| + 1)\times$ the size of the smallest set cover~\cite{greedysetcover}. 
-%  in actuality it is $\ln |\alpha_c| - \ln \ln |\alpha_c| + O(1)$
+%Say for each $a \in \alpha_a$, we define $\alpha_a^\mathrm{SETS}(a) = \{ c \in
+%\alpha_c \; | \; \impunitclause{\formula}{a}{c}\}$. When $C_0 = \alpha_c$,
+%finding the smallest $A_0$ is exactly the set cover problem with
+%$\alpha_a^\mathrm{SETS}$. This is NP-hard, so we instead approximate using the
+%greedy algorithm, returning a set cover at most roughly $(\ln |\alpha_c| +
+%1)\times$ the size of the smallest set cover~\cite{greedysetcover}. in
+%actuality it is $\ln |\alpha_c| - \ln \ln |\alpha_c| + O(1)$
 
 
-The greedy algorithm initializes $C_0$ as empty, and in each iteration finds the $a \in \alpha_a$ that generates the largest set ${\it SETS}(a) \cap (\alpha_c \backslash C_0)$, adding $a$ to $A_0$ and adding ${\it SETS}(a)$ to $C_0$.
-The algorithm terminates once all sets in $\{{\it SETS}(a) \cap (\alpha_c \backslash C_0) | a \in \alpha_a \}$ are empty.
+The greedy algorithm initializes $C_0$ as empty, and in each iteration finds the
+$a \in \alpha_a$ that generates the largest set ${\it SETS}(a) \cap (\alpha_c
+\backslash C_0)$, adding $a$ to $A_0$ and adding ${\it SETS}(a)$ to $C_0$. The
+algorithm terminates once all sets in $\{{\it SETS}(a) \cap (\alpha_c \backslash
+C_0) | a \in \alpha_a \}$ are empty.
 % either $C_0 = \alpha_C$ or there are no terms 
 
 
 \begin{algorithm}
-    \caption{Algorithm finding $A_0$}\label{alg:finda0}
-    \SetAlgoNoLine
-    \SetKwFunction{Shrink}{Shrink}
-    \SetKwFor{For}{for}{:}{}
-    \SetKwFor{If}{if}{:}{}
-    \SetKwProg{Fn}{Function}{:}{}
-    \Fn{\Shrink{$\formula$, $\alpha_a$, $\alpha_c$}}{
+    \caption{Algorithm finding $A_0$}\label{alg:finda0} \SetAlgoNoLine
+    \SetKwFunction{Shrink}{Shrink} \SetKwFor{For}{for}{:}{}
+    \SetKwFor{If}{if}{:}{} \SetKwProg{Fn}{Function}{:}{} \Fn{\Shrink{$\formula$,
+    $\alpha_a$, $\alpha_c$}}{
         % $\alpha_a$ := \texttt{sort($\alpha_a$)}\;
-        ${\it SETS}$ := init \texttt{Array[len($\alpha_a$)]}\;
-        \For{$i \in \texttt{range}(\alpha_a)$}{
-            \texttt{Propagate($\overline{\alpha_a[i]}$)}\;
-            \texttt{implied} := $\{\}$\;
-            \For{$c \in \alpha_c$}{
-                \texttt{Propagate($\overline{c}$)}\;
-                \If{\texttt{unsat}}{
-                $\texttt{implied} := \texttt{implied} \cup \{c\}$\;
-            }
-                \texttt{Backtrack(1)}\;
-            }
-            ${\it SETS}[i]$ := \texttt{implied}\;
-        }
-        \Return{\texttt{GreedySetCover}(${\it SETS}$)}\;
-    }
+        ${\it SETS}$ := init \texttt{Array[len($\alpha_a$)]}\; \For{$i \in
+        \texttt{range}(\alpha_a)$}{
+        \texttt{Propagate($\overline{\alpha_a[i]}$)}\; \texttt{implied} :=
+        $\{\}$\; \For{$c \in \alpha_c$}{ \texttt{Propagate($\overline{c}$)}\;
+        \If{\texttt{unsat}}{ $\texttt{implied} := \texttt{implied} \cup \{c\}$\;
+        } \texttt{Backtrack(1)}\; } ${\it SETS}[i]$ := \texttt{implied}\; }
+        \Return{\texttt{GreedySetCover}(${\it SETS}$)}\; }
 \end{algorithm}
-% todo : this algorithm is not actually what we do, since we don't propagate on c -> see if this is a problem ever
+% todo : this algorithm is not actually what we do, since we don't propagate on
+% c -> see if this is a problem ever
 
 In \autoref{alg:finda0}, we describe our process for calculating $A_0$. 
 % We initially pre-sort $\alpha_a$ by implication, which we will discuss in more
 % detail. 
-We initialize ${\it SETS}$ as an array, iterate the counter
-$i$ through $\alpha_a$, populating ${\it SETS}[i]$ with the set of literals
-$c \in \alpha_c$ such that $\impunitclause{\formula}{a_i}{c}$. Finally, we apply
-\texttt{GreedySetCover} to get a small set $A_0$ that covers as much of $C$ as possible.
+We initialize ${\it SETS}$ as an array, iterate the counter $i$ through
+$\alpha_a$, populating ${\it SETS}[i]$ with the set of literals $c \in \alpha_c$
+such that $\impunitclause{\formula}{a_i}{c}$. Finally, we apply
+\texttt{GreedySetCover} to get a small set $A_0$ that covers as much of $C$ as
+possible.
 
-Returning to the pigeonhole example, 
-$C_0$ contains all of the literals in $\alpha_c$ because of the binary clauses in constraint (2). 
-The smallest possible $A_0$ includes $\overline{x}_{2, 1}$ and $\overline{x}_{1, 2}$, whose 
+Returning to the pigeonhole example, $C_0$ contains all of the literals in
+$\alpha_c$ because of the binary clauses in constraint (2). The smallest
+possible $A_0$ includes $\overline{x}_{2, 1}$ and $\overline{x}_{1, 2}$, whose
 sets cover $\overline{x}_{3, 1}, \overline{x}_{4, 1},  \ldots, \overline{x}_{5,
-1}$and  $\overline{x}_{3, 2}, \overline{x}_{4, 2},  \ldots, \overline{x}_{5,
-2}$ respectively. 
-Whereas, the sets from $x_{1, 1}$ and $x_{2, 2}$ are empty (they are not inconsistent with the other literals).
-Therefore, we can learn the clause $\overline{x}_{2, 1} \lor \overline{x}_{1, 2}$, shown in 
+1}$and  $\overline{x}_{3, 2}, \overline{x}_{4, 2},  \ldots, \overline{x}_{5, 2}$
+respectively. Whereas, the sets from $x_{1, 1}$ and $x_{2, 2}$ are empty (they
+are not inconsistent with the other literals). Therefore, we can learn the
+clause $\overline{x}_{2, 1} \lor \overline{x}_{1, 2}$, shown in
 \autoref{subfig:pigeonholeclause-d}.
 
 %In the context of the pigeonhole example, out of the $\alpha_a$,

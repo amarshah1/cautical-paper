@@ -12,16 +12,18 @@ formula $\formula$ is a conjunction of (disjunctive) clauses. In this paper, all
 formulas $\formula$ are CNF.
 
 We use $var(\formula)$ to represent the set of variables occurring in formula
-$\formula$. A partial assignment $\alpha : V \rightarrow \{\top, \bot\}$ on
+$\formula$. A assignment $\alpha : V \rightarrow \{\top, \bot\}$ on
 $\formula$ maps variables $V \subseteq var(\formula)$ to true or false. If $V =
-var(\formula)$, then $\alpha$ is a total assignment. We abuse notation, to
+var(\formula)$, then $\alpha$ is a total assignment. Often, an assignment that 
+is not total is called a \emph{partial assignment}. For this paper, assignment 
+refers to both total and partial assignments. We abuse notation, to
 extend $\alpha$ to literals, by denoting $\alpha(l) = \alpha(x)$
 if $l = x$ and $\alpha(l) = \neg \alpha(x)$ if $l = \overline{x}$.
 
-A formula restricted to a partial assignment $\formula|_\alpha$ is the formula
+A formula restricted to a assignment $\formula|_\alpha$ is the formula
 resulting from mapping variables in the domain of $\alpha$ to their assignments.
 We can simplify such a formula by removing \emph{literals} assigned false and
-\emph{clauses} including a literal assigned true (which are thus satisfied). For
+\emph{clauses} containing a literal assigned true (which are thus satisfied). For
 example, with formula $\formula = (x_1 \lor \overline{x}_4 \lor x_6) \land (x_2
 \lor x_3) \land \overline{x}_5$ and assignment $\alpha$ mapping $x_1$ to $\bot$
 and $x_2$ to $\top$, we have $\formula|_\alpha = (\overline{x}_4 \lor x_6) \land
@@ -122,7 +124,7 @@ clause, a simple example of a redundant clause w.r.t. $\formula$.
 logic, more powerful proof steps can yield shorter proofs and faster runtimes.
 One such step is based on \pr clauses.
 
-\begin{definition}[Propagation Redundant (\pr) clauses~\cite{prclauses}]
+\begin{definition}~\label{def:pr}[Propagation Redundant (\pr) clauses~\cite{prclauses}]
     For formula $\formula$, we say that clause $C$ is propagation redundant
     (\pr) if there exists a \emph{witness} assignment $\omega$ such that
     $\omega$ satisfies $C$ and
@@ -187,7 +189,7 @@ clauses~\cite{conditionalautarkies}.
 % \land a_m$ is an equisatisfiable clause. However, these can be difficult to
 % find.
 
-In plain words, an autarky is a partial assignment that satisfies every clause it
+In plain words, an autarky is a assignment that satisfies every clause it
 touches.
 
 Unfortunately, formulas often do not contain autarkies, and they are difficult
@@ -201,14 +203,14 @@ easier to find:
 \end{definition}
 
 Consider, as an example, the formula with aptly named variables $\formula = (c
-\lor \overline{a}) \land (a \lor x) \land (\overline{c} \lor a \lor
+\lor \overline{a}) \land (a \lor x) \land (\overline{c} \lor
 \overline{y})$. We have a conditional autarky $\alpha = \alpha_c \sqcup
 \alpha_a$, with $\alpha_c = c$ and $\alpha_a = a$. Since $\formula|_{\alpha_c} =
-(a \lor x) \land (a \lor \overline{y})$ and $a$ occurs here only positively, $a$
+(a \lor x) \land (\overline{y})$ and $a$ occurs here only positively, $a$
 is an autarky for $\formula|_{\alpha_c}$. Thus, $\alpha$ is a conditional autarky.
 
 % Specifically, we can think about searching for conditional autarkies by first
-% looking for a partial assignment $\alpha_c$, and then finding an autarky
+% looking for a assignment $\alpha_c$, and then finding an autarky
 % $\alpha_a$ on the reduced formula $\formula|_{\alpha_c}$.
 
 Conditional autarkies can be very useful for learning satisfiability-preserving

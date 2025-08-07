@@ -36,20 +36,21 @@ potential solution space, such as clauses that break symmetries.
 % solving.
 
 The power of this technique is tied to the strength of the underlying proof
-system. Most SAT solvers rely on resolution-based proof systems, which are
-ineffective for many hard instances. Consider the pigeonhole principle (PHP),
-which asks if it is possible to fit $n+1$ pigeons into $n$ holes with at most
-one pigeon per hole. With a linear number of \pr reasoning steps, one may learn
-a \pr clause equivalent to the lemma: \emph{pigeon 1 is not in hole 1}. Adding
-this clause restricts the search space for the first pigeon (and thus the
-problem), but it preserves satisfiability, as hole 1 is symmetric with all
-holes. 
+system. A more powerful proof system can admit shorter proofs, which can be
+found and checked quicker. Most SAT solvers rely on resolution-based proof
+systems, which are ineffective for many hard instances. Consider the pigeonhole
+principle (PHP), which asks if it is possible to fit $n+1$ pigeons into $n$
+holes with at most one pigeon per hole. With a linear number of \pr reasoning
+steps, one may learn a \pr clause equivalent to the lemma: \emph{pigeon 1 is not
+in hole 1}. Adding this clause restricts the search space for the first pigeon
+(and thus the problem), but it preserves satisfiability, as hole 1 is symmetric
+with all holes. 
 
 It is difficult to perform similar reasoning compactly with resolution, and in
 fact, PHP is known to require exponentially large resolution
 proofs~\cite{hakenpigeonhole,mutilatedchessboard-exponential}. Proof systems
 based on \pr clauses, however, have short proofs for such problems, including a
-cubic proof for PHP~\cite{prclauses}. Pigeonhole is an especially important
+cubic proof for PHP~\cite{prclauses}. PHP is an especially important
 problem as it occurs frequently as a subproblem for many different SAT
 benchmarks.
 
@@ -60,10 +61,10 @@ to verify that a candidate clause is \pr \cite{sadical}.
 % This is both expensive and difficult to integrate into existing tools. 
 Thus, in the worst case, the solver takes exponential time to learn a single \pr
 clause. This makes integration into high-performance solvers difficult and
-limits their practical impact. As of today, all of the most popular SAT solvers
+limits their practical impact. To the best of our knowledge, none of the most popular SAT solvers
 such as \cadical~\cite{cadical}, \kissat~\cite{kissat},
-\cryptoMiniSAT~\cite{cryptominisat}, or \lingeling~\cite{lingeling} do not
-support \pr clause learning in their main branch.
+\cryptoMiniSAT~\cite{cryptominisat}, or \lingeling~\cite{lingeling} support
+\pr clause learning in their main branch.
 % maybe cite cryptominisat instead of lingeling? todo : check crypto mini sat to
 % see if it uses \pr clauses
 
@@ -78,9 +79,9 @@ al. proposed an algorithm for finding conditional autarkies in linear
 time~\cite{conditionalautarkies}, using them to delete clauses. In our work, we
 will use the conditional autarkies to add \pr clauses. 
 %We make use of an algorithm proposed by Kiesl et. al. for finding a conditional
-%autarky given a partial assignment in linear time. 
+%autarky given a assignment in linear time. 
 %
-%Given a partial assignment to a SAT formula, our method divides the assignment
+%Given a assignment to a SAT formula, our method divides the assignment
 %into a \emph{conditional} part and an \emph{autarky} part. Using this
 %distinction, we can learn a globally blocked clause (a type of \pr clause) in
 %linear time.

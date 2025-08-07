@@ -1,25 +1,42 @@
-\section{Future Work}~\ref{sec:futurework}
+\section{Future Work}~\label{sec:futurework}
 
-The goal of this paper was to introduce the theory and provide a set of
-heuristics that work. \tool is designed so that trying different heuristics
-is easy. There are a number of interesting future directions to explore:
+% The goal of this paper was to introduce the theory and provide a set of
+% heuristics that work. \tool is designed so that trying different heuristics
+% is easy. There are a number of interesting future directions to explore:
+
+We believe conditional autarkies provide a route to incorporate \pr learning
+as a regular part of state-of-the-art SAT solvers such as \cadical. However,
+there are a few important limitations that need to be addressed first.
 
 \begin{enumerate}
-    \item \textbf{Improving the heuristics}: For example, we could embed the
-    binary clause filter by exiting the greedy set cover when more than 2
-    literals are used.
+    \item \textbf{Improving the algorithms}: The heuristics in \tool are
+    designed to be modular and easy to modify. However, they can
+    be directly incorporated into the main algorithm. For instance, we could embed the
+    binary clause filter by modifying the greedy set cover to discard clauses
+    with more than 2 literals.
     \item \textbf{Shortest proofs for specific families:} Prior work has shown
-    $O(n^3)$ \pr proofs of mutilated chessboard TODO: cite.  While we show that
-    we can learn useful clauses that speed up solving for mutilated chessboard
-    using our technique, it is still an open question whether this can match the
-    $O(n^3)$ complexity. Similar questions exist for other well-known families
-    such as Tseitin formulas TODO: cite and Urumquat TODO: cite.
+    $O(n^3)$ \pr proofs of mutilated chessboard~\cite{mutilatedchessboard-pr}.
+    While \tool learns useful clauses to speed up solving for
+    mutilated chessboard, it is unknown whether conditional autarkies can match
+    the $O(n^3)$ complexity. Similar questions exist for other well-known
+    families such as Tseitin formulas over expander
+    graphs~\cite{er,hardexamplesresolution}.
     \item \textbf{Learning \pr clauses with an inprocessing step:} We
     experimented with learning \pr clauses via inprocessing (instead of
-    preprocessing). However, the current \pr proof system is \pr relative to the
-    set of all clauses learnt so far. However, clauses that are \pr relative to
-    the original set of clauses are still satisfiability preserving and our
-    technique can learn easier clauses considering this notion of \pr. Resolving
-    this is much more complicated and requires updating the \pr proof system and
-    checker.
+    preprocessing). However, the current \pr proof system defines a \pr clause
+    as in \autoref{def:pr} where $\Gamma$ is the set of all clauses in the
+    formula, including the learnt clauses. However, if a learnt clause comes
+    from the weaker proof system, it does not need to be in $\Gamma$. This could
+    in theory allow us to learn a shorter clause, via conditional autarky.
+    However, to realize this, we need to change the definition of \pr and the
+    implementation of the \pr proof checker.
+
+    % todo: what is the definition of redundant here
+    
+    % is \pr relative to the
+    % set of all clauses learnt so far. However, clauses that are \pr relative to
+    % the original set of clauses are still satisfiability preserving and our
+    % technique can learn easier clauses considering this notion of \pr. Resolving
+    % this is much more complicated and requires updating the \pr proof system and
+    % checker.
 \end{enumerate}

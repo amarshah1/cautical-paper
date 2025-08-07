@@ -25,6 +25,7 @@
   % \usepackage{mathptm}     % Puts math text into the postscript Times font and symbol font (else uses the metafont-generated characters)
   % \usepackage{amsmath}     % Provides various features to facilitate writing math formulas and to improve the typographical quality of their output
   \usepackage{float}       % Basic package for floating objects like figures and tables
+  \usepackage{placeins}    % Provides \FloatBarrier for better float control
   % \usepackage{psfrag}      % Used to insert text into figures
   % \usepackage{floatflt}    % Used to wrap text around figures
   % \usepackage{graphicx}    % Used to display graphic figures and such
@@ -160,6 +161,7 @@
   \renewcommand{\sectionautorefname}{Section}
   \renewcommand{\subsectionautorefname}{Subsection}
   \renewcommand{\algorithmautorefname}{Algorithm}
+  \newcommand*{\definitionautorefname}{Definition}
 
 
   

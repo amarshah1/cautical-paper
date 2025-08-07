@@ -2,7 +2,11 @@
 
 We implement our technique in \tool (a fork of \cadical
 %  commit f13d74439a5b5c963ac5b02d05ce93a8098018b8
-). By default, \tool spends 30 seconds searching for \pr clauses in a preprocessing step. After this time limit, the solver exits and commences normal solving,
+). We choose \cadical as it has shown strong performance in the SAT Competition.
+For instance, a fork of CaDiCaL won in 2023~\cite{satcomp2023}. Our techniques
+can be implemented in any CDCL SAT solver, but we leave this as future work.
+
+By default, \tool spends 30 seconds searching for \pr clauses in a preprocessing step. After this time limit, the solver exits and commences normal solving,
 regardless of whether or not it has found any \pr clauses. This adds $\sim\!800$ lines
 of C++ code to \cadical and is implementable within any CDCL SAT solver.
 
