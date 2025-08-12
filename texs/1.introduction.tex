@@ -48,11 +48,10 @@ with all holes.
 
 It is difficult to perform similar reasoning compactly with resolution, and in
 fact, PHP is known to require exponentially large resolution
-proofs~\cite{hakenpigeonhole,mutilatedchessboard-exponential}. Proof systems
+proofs~\cite{hakenpigeonhole}. Proof systems
 based on \pr clauses, however, have short proofs for such problems, including a
-cubic proof for PHP~\cite{prclauses}. PHP is an especially important
-problem as it occurs frequently as a subproblem for many different SAT
-benchmarks.
+cubic proof (in the number of pigeons) for PHP~\cite{prclauses}. PHP is especially
+important as it occurs frequently as a subproblem for many different SAT benchmarks.
 
 The theoretical power of \pr learning comes at a cost, and efficiently learning
 useful \pr clauses is a challenge. State-of-the-art techniques such as
@@ -73,11 +72,12 @@ such as \cadical~\cite{cadical}, \kissat~\cite{kissat},
 In this work, we propose a new, more efficient approach to learn \pr clauses
 based on conditional autarkies. Intuitively, a conditional autarky provides a
 way to force the value of certain variables given a set of assumptions, e.g., in
-PHP if pigeons $3 $ to $ n+1$ are not in hole $1$ or hole $2$, then pigeon $1$
+PHP if pigeons $3 $ to $ n+1$ are not in hole $1$ or hole $2$ (see \autoref{subfig:pigeonholeclause-c}
+for a visual representation), then pigeon $1$
 can be placed in hole $1$ and pigeon $2$ can be placed in hole $2$. Kiesl et.
 al. proposed an algorithm for finding conditional autarkies in linear
 time~\cite{conditionalautarkies}, using them to delete clauses. In our work, we
-will use the conditional autarkies to add \pr clauses. 
+will use conditional autarkies to construct and add \pr clauses. 
 %We make use of an algorithm proposed by Kiesl et. al. for finding a conditional
 %autarky given a assignment in linear time. 
 %
@@ -95,7 +95,7 @@ introducing a shrinking procedure to extract compact, useful \pr clauses, and
 (2) by introducing a number of heuristics for filtering away trivial \pr
 clauses. Returning to PHP, instead of the conditional autarky described above
 which produces a clause with at least $2n$ literals, it is possible through
-shrinking to learn a binary \pr clause forbidding pigeon $1$ in hole $2$ and
+shrinking to learn a binary \pr clause either forbidding pigeon $1$ in hole $2$ or
 pigeon $2$ in hole $1$.
 % todo: would like to say more about what these heuristics are
 
@@ -111,6 +111,6 @@ To summarize, we make the following contributions:
     concise and useful \pr clauses.% from conditional autarkies.. 
     \item We implement these techniques in a solver, \tool\footnote{\tool's code
     is available at \url{https://github.com/amarshah10/cautical}.} (a fork of
-    the state-of-the-art SAT solver \cadical), and evaluate it on a suite of
-    benchmarks from the annual SAT competitions.
+    the state-of-the-art SAT solver \cadical), and evaluate it on pigeonhole 
+    principle benchmarks and a suite of benchmarks from the annual SAT competitions.
 \end{enumerate}

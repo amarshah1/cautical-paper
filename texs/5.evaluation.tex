@@ -51,7 +51,10 @@ the formula. In \autoref{subsec:eval-satcomp}, we evaluate the solvers on
 benchmarks from the '22, '23, and '24 SAT competition's main
 tracks~\cite{satcomp2022,satcomp2023,satcomp2024}. In
 \autoref{subsec:eval-discussion}, we highlight certain benchmark families that
-benefit from \pr clause learning.
+benefit from \pr clause learning. In \autoref{sec:heuristics}, we evaluate the 
+benefit of different heuristic choices in \tool. Finally, we conclude in 
+\autoref{subsec:researchquestions} with a discussion of how performed on RQ1 and 
+RQ2.
 %We evaluate the different approaches on these families. Finally, we analyze the
 % use of specific heuristic choices in \tool by turning heuristics off
 % individually and observing their effect (\autoref{subsec:eval-heuristics}). 
@@ -235,7 +238,7 @@ demonstrating that it learns useful \pr clauses regardless of the encoding.
       \; Unique from \cadical &   0 &  18 &   9 &   9 & 36 \\
       \bottomrule
     \end{tabular}
-    \caption{Number of formulas that \prelearn and \tool solve, divided between 0-10k clause and 10k-20M clause formulas, and SAT and UNSAT formulas.}
+    \caption{Number of formulas that \cadical, \prelearn and \tool solve, divided between 0-10k clause and 10k-20M clause formulas, and SAT and UNSAT formulas. For \prelearn and \tool we include the number of benchmarks with \pr clauses learnt, more than $50$ \pr clauses learnt, improved on \cadical by 5\% or more; and solved that \cadical did not solve.}
     \label{tab:solver-stats}
   \end{table}
 
@@ -346,14 +349,12 @@ stage, but eventually solve more benchmarks. In the end, \prelearn solving the m
 formulas at 771, followed by \tool at 754, and \cadical at 749. 
 
 %  I don't know if this actually makes sense
-\tool solves 36 formulas that \cadical does not solve, while
-\prelearn solves 30 that \cadical does not solve. \tool improves on 219 formulas
-from \cadical, while \prelearn improves on 146 formulas. 
-% \tool exercises more selective \pr clause learning techniques. When \tool does
-% not learn a \pr clause in preprocessing, it still modifies internal solver
-% data structures, which could potentially help (or hurt) performance. On the
-% other hand, learning unhelpful \pr clauses can have a detrimental effect on
-% performance. 
+% \tool solves 36 formulas that \cadical does not solve, while
+% \prelearn solves 30 that \cadical does not solve. \tool improves on 219 formulas
+% from \cadical, while \prelearn improves on 146 formulas. 
+
+
+
 
 
 \tool exercises more selective \pr clause learning techniques, only learning \pr
@@ -361,15 +362,7 @@ clauses for 139 formulas, while \prelearn learns \pr clauses for 431 formulas
 (see \autoref{fig:clauses-histogram}). On those formulas, \tool improves the
 \cadical's runtime on 29.9\% of benchmarks, while \prelearn improves it on
 24.7\% of benchmarks.
-% todo: double check these numbers and table todo: maybe add numbers for formula
-% where we learn 50 clauses or more
 
-
-
-% \autoref{fig:solver-comparison-cautical-prelearn-satcomp} compares \tool and
-% \prelearn on the SAT competition benchmarks based on their performance
-% (\autoref{subfig:cautical-vs-prelearn-performance}) and the number of \pr
-% clauses they learn (\autoref{subfig:cautical-vs-prelearn-histogram}).
 
 
 
@@ -530,12 +523,12 @@ evaluate on the different benchmark families discussed in
 \autoref{subsec:eval-discussion}.
 
 First we consider turning three optimizations off.
-\autoref{fig:global-no-shrink} compares \cadical to \cadical with
-\textsf{shrink} turned off, i.e. we do not shrink globally blocked clauses.
-\autoref{fig:globaldontfilter} compares \cadical to when we turn
+\autoref{fig:global-no-shrink} compares \tool to \tool with
+\textsf{shrink} turned off, i.e. we do not learn \pr clauses.
+\autoref{fig:globaldontfilter} compares \tool to \tool with
 \textsf{filter-triv} off, i.e. we do not filter trivial clauses.
-\autoref{fig:global-max-length} compares \cadical to when we turn
-\textsf{filter-long} to $10$, i.e. we filter out clauses of size $> 10$ (as
+\autoref{fig:global-max-length} compares \tool to \tool with
+\textsf{filter-long} set to $10$, i.e. we filter out clauses of size $> 10$ (as
 opposed to $2$ by default).
 
 When we disable any of three optimizations, the performance is significantly
@@ -551,7 +544,7 @@ occurs most frequently in the original formula. Finally,
 second literal by whether it ``touches'' the first literal $i$.
 
 Enabling any of these three ``optimizations'' does not improve performance and
-in the case of \textsf{order-i}, it actually hurts performance.
+in the case of \textsf{order-i}, it slightly hurts performance.
 
 \subsection{Research Questions}~\label{subsec:researchquestions}
 
@@ -563,6 +556,7 @@ PAR-2 score by 2.2\%. \prelearn performs even better, improving \cadical's PAR-2
 score by 5.4\%. However, compared to \prelearn, \tool outperforms \cadical on a
 greater number of benchmarks (219 vs 146) and solves more benchmarks that
 \cadical cannot solve (36 vs 30).
+
  
 For RQ2, \tool is the only solver to solve all pigeonhole formulas after
 scranfilization. Indeed, scranfilization has a negligible effect on \tool's

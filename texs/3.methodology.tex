@@ -169,13 +169,13 @@ these large \pr clauses.
 
 \subsection{Shrinking \pr Clauses}~\label{subsec:shrinking}
 
-The \pr clause derived from a conditional autarky may be too weak to effectively
-reduce the search space, 
+The \pr clause derived from a conditional autarky can be too weak to effectively
+reduce the search space.
 %In a formula $\formula$ with conditional autarky $\alpha = \alpha_c \sqcup
 %\alpha_a$ where $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$,
 %the addition of clause $C = \alpha_c \lor a_i$ may be too weak to effectively
 %reduce the search space.
-but shrinking the \pr clause, i.e., removing literals from the clause via
+Shrinking the \pr clause, i.e., removing literals from the clause via
 resolution, will strengthen its pruning power. 
 %Thus, our goal is to find resolution candidates containing literals from the
 %autarky part. We thus aim to see which literals from the autarky part we may
@@ -243,8 +243,12 @@ if a smaller $A_0$ exists it can be used to shrink the size of the \pr clause.
 
 \begin{theorem}~\label{thm:shrunkgbcequisat} Let $\Gamma$ be a formula and
     $\alpha = \alpha_c \sqcup \alpha_a$ be a conditional autarky on $\Gamma$,
-    with $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$. If $A_0$
-    is non-empty, then formula $\formula$ is satisfiable if and only if
+    with $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$.
+    Let $A_0 \subseteq \alpha_a$ be non-empty.
+    Let $C_0 = \{c_j \in \alpha_c
+\mid \exists a_i \in A_0 \text{ s.t. }
+\impunitclause{\formula}{a_i}{\overline{c}_j} \}$.
+    Then formula $\formula$ is satisfiable if and only if
     $\formula \land (\bigvee_{c \in C \backslash C_0} \overline{c} \lor
     \bigvee_{a \in A_0} a)$ is satisfiable.
 \end{theorem}
@@ -328,7 +332,8 @@ The greedy algorithm initializes $C_0$ as empty, and in each iteration finds the
 $a \in \alpha_a$ that generates the largest set ${\it SETS}(a) \cap (\alpha_c
 \backslash C_0)$, adding $a$ to $A_0$ and adding ${\it SETS}(a)$ to $C_0$. The
 algorithm terminates once all sets in $\{{\it SETS}(a) \cap (\alpha_c \backslash
-C_0) | a \in \alpha_a \}$ are empty.
+C_0) | a \in \alpha_a \}$ are empty. Notice that oftentimes, $C_0 \subsetneq \alpha_c$,
+i.e. we do not achieve a complete cover of $\alpha_c$.
 % either $C_0 = \alpha_C$ or there are no terms 
 
 
@@ -338,12 +343,12 @@ C_0) | a \in \alpha_a \}$ are empty.
     \SetKwFor{If}{if}{:}{} \SetKwProg{Fn}{Function}{:}{} \Fn{\Shrink{$\formula$,
     $\alpha_a$, $\alpha_c$}}{
         % $\alpha_a$ := \texttt{sort($\alpha_a$)}\;
-        ${\it SETS}$ := init \texttt{Array[len($\alpha_a$)]}\; \For{$i \in
-        \texttt{range}(\alpha_a)$}{
-        \texttt{Propagate($\overline{\alpha_a[i]}$)}\; \texttt{implied} :=
+        ${\it SETS}$ := init \texttt{Array[len($\alpha_a$)]}\label{line:setsinits}\; \For{$i \in
+        \texttt{range}(\alpha_a)$}{\label{line:fori}
+        \texttt{Propagate($\overline{\alpha_a[i]}$)}\label{line:propagate}\; \texttt{implied} :=
         $\{\}$\; \For{$c \in \alpha_c$}{ \texttt{Propagate($\overline{c}$)}\;
         \If{\texttt{unsat}}{ $\texttt{implied} := \texttt{implied} \cup \{c\}$\;
-        } \texttt{Backtrack(1)}\; } ${\it SETS}[i]$ := \texttt{implied}\; }
+        } \texttt{Backtrack(1)}\; } ${\it SETS}[i]$ := \texttt{implied}\label{line:setsi}\; }
         \Return{\texttt{GreedySetCover}(${\it SETS}$)}\; }
 \end{algorithm}
 % todo : this algorithm is not actually what we do, since we don't propagate on
@@ -352,9 +357,9 @@ C_0) | a \in \alpha_a \}$ are empty.
 In \autoref{alg:finda0}, we describe our process for calculating $A_0$. 
 % We initially pre-sort $\alpha_a$ by implication, which we will discuss in more
 % detail. 
-We initialize ${\it SETS}$ as an array, iterate the counter $i$ through
-$\alpha_a$, populating ${\it SETS}[i]$ with the set of literals $c \in \alpha_c$
-such that $\impunitclause{\formula}{a_i}{c}$. Finally, we apply
+We initialize ${\it SETS}$ as an array (line~\ref{line:setsinits}), iterate the counter $i$ through
+$\alpha_a$ (line~\ref{line:fori}), populating ${\it SETS}[i]$ with the set of literals $c \in \alpha_c$
+such that $\impunitclause{\formula}{a_i}{c}$ (lines~\ref{line:propagate}-\ref{line:setsi}). Finally, we apply
 \texttt{GreedySetCover} to get a small set $A_0$ that covers as much of $C$ as
 possible.
 

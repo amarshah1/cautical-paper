@@ -12,15 +12,15 @@ formula $\formula$ is a conjunction of (disjunctive) clauses. In this paper, all
 formulas $\formula$ are CNF.
 
 We use $var(\formula)$ to represent the set of variables occurring in formula
-$\formula$. A assignment $\alpha : V \rightarrow \{\top, \bot\}$ on
-$\formula$ maps variables $V \subseteq var(\formula)$ to true or false. If $V =
+$\formula$. An assignment $\alpha : V \rightarrow \{\top, \bot\}$ on
+$\formula$ maps variables $V \subseteq var(\formula)$ to \emph{true} or \emph{false}. If $V =
 var(\formula)$, then $\alpha$ is a total assignment. Often, an assignment that 
 is not total is called a \emph{partial assignment}. For this paper, assignment 
 refers to both total and partial assignments. We abuse notation, to
 extend $\alpha$ to literals, by denoting $\alpha(l) = \alpha(x)$
 if $l = x$ and $\alpha(l) = \neg \alpha(x)$ if $l = \overline{x}$.
 
-A formula restricted to a assignment $\formula|_\alpha$ is the formula
+A formula restricted to an assignment $\formula|_\alpha$ is the formula
 resulting from mapping variables in the domain of $\alpha$ to their assignments.
 We can simplify such a formula by removing \emph{literals} assigned false and
 \emph{clauses} containing a literal assigned true (which are thus satisfied). For
@@ -29,7 +29,7 @@ example, with formula $\formula = (x_1 \lor \overline{x}_4 \lor x_6) \land (x_2
 and $x_2$ to $\top$, we have $\formula|_\alpha = (\overline{x}_4 \lor x_6) \land
 \overline{x}_5$.
 
-A clause $C = l_1 \lor \dots \lor l_m$ is \emph{blocks} an assignment
+A clause $C = l_1 \lor \dots \lor l_m$ \emph{blocks} an assignment
 mapping each $l \in C$ to false ($\bot$). An assignment $\alpha$ \emph{touches}
 a clause $C$ if there is a variable $x$ assigned by $\alpha$ such that $x \in C$
 or $\overline{x} \in C$. We say $\alpha$ \emph{satisfies} $C$ if there is some
@@ -79,7 +79,7 @@ rules being resolution. Given two clauses, $C \lor x$ and $\overline{x} \lor D$,
 \emph{Unit propagation} is a core reasoning technique in a SAT solver. Starting
 with empty assignment $\alpha$, if a formula $\formula$ contains a \emph{unit
 clause} $l$, i.e., a clause with only a single literal, we set $\alpha(l) =
-\top$. Then, this unit is propagated: we consider the formula $\formula|_\alpha$
+\top$. Then, this unit is propagated: we consider the unit clauses of the formula $\formula|_\alpha$
 and continue this process until no unit clauses remain. If unit propagation
 terminates with $\formula|_\alpha = \bot$, we say that it derives a conflict.
 % todo: notation issue: I never defined \bot as the empty clause and I also am
@@ -105,7 +105,9 @@ $\formula \impunit C$, read as ``$\formula$ implies $C$ via unit propagation,''
 if $\formula \land \overline{C} \equiv \formula \land \overline{l}_1 \land \dots
 \land \overline{l}_k$ derives a conflict after applying unit propagation. 
 Here, $C$ is a \emph{reverse unit propagation (RUP)}
-clause, a simple example of a redundant clause w.r.t. $\formula$. 
+clause, a simple example of a redundant clause w.r.t. $\formula$. For some formula
+$\formula'$, we say $\formula \impunit \formula'$ if $\formula \impunit C$ for every 
+clause $C \in \formula'$.
 
 % This can be justified in almost any proof system for propositional logic.
 % However, this is not very useful as it rules out For two formulas, we say
@@ -122,24 +124,24 @@ clause, a simple example of a redundant clause w.r.t. $\formula$.
 
 \textbf{Propagation Redundant:} While resolution is complete for propositional
 logic, more powerful proof steps can yield shorter proofs and faster runtimes.
-One such step is based on \pr clauses.
+One such step is based on a type of redundant clause called a \pr clause.
 
 \begin{definition}~\label{def:pr}[Propagation Redundant (\pr) clauses~\cite{prclauses}]
     For formula $\formula$, we say that clause $C$ is propagation redundant
     (\pr) if there exists a \emph{witness} assignment $\omega$ such that
     $\omega$ satisfies $C$ and
 $$
-    \formula \land \lnot C \impunit (\formula \land C)|_\omega.
+    \formula \land \lnot C \impunit \formula|_\omega.
 $$
 \end{definition}
 
 
-   Or more informally, a clause $C$ is $\pr$ if every assignment that satisfies
-   $\formula$ but falsifies $C$ can be turned into an assignment that satisfies
-   $\formula \land C$. While this property can be validated in polynomial time
-   (by unit propagation), checking if a clause is redundant
-   without hints is NP-complete~\cite{prclauses}. Thus, \pr introduces witnesses,
-   which must be provided for proof checking.  
+Or more informally, a clause $C$ is $\pr$ if every assignment that satisfies
+$\formula$ but falsifies $C$ can be turned into an assignment that satisfies
+$\formula \land C$. While this property can be validated in polynomial time
+(by unit propagation), checking if a clause is \pr
+without hints is NP-complete~\cite{prclauses}. Thus, \pr introduces witnesses,
+which must be provided for proof checking.  
 
 %    For formula $\formula$, we say that clause $C$ is propagation redundant
 %    (\pr) if there exists a \emph{witness} assignment $\omega$ implying the
@@ -176,7 +178,7 @@ asymmetric tautologies (RATs)~\cite{rat}, blocked clauses~\cite{blockedclause},
 set-blocked clauses~\cite{setblocked}, and globally-blocked
 clauses~\cite{conditionalautarkies}.
 
-\subsection{Autarkies and Globally Blocked Clauses}~\label{subsec:autarkies}
+\subsection{Conditional Autarkies}~\label{subsec:autarkies}
 
 % A key realization in prior work~\cite{}
 
@@ -189,7 +191,7 @@ clauses~\cite{conditionalautarkies}.
 % \land a_m$ is an equisatisfiable clause. However, these can be difficult to
 % find.
 
-In plain words, an autarky is a assignment that satisfies every clause it
+In plain words, an autarky is an assignment that satisfies every clause it
 touches.
 
 Unfortunately, formulas often do not contain autarkies, and they are difficult
@@ -210,7 +212,7 @@ Consider, as an example, the formula with aptly named variables $\formula = (c
 is an autarky for $\formula|_{\alpha_c}$. Thus, $\alpha$ is a conditional autarky.
 
 % Specifically, we can think about searching for conditional autarkies by first
-% looking for a assignment $\alpha_c$, and then finding an autarky
+% looking for an assignment $\alpha_c$, and then finding an autarky
 % $\alpha_a$ on the reduced formula $\formula|_{\alpha_c}$.
 
 Conditional autarkies can be very useful for learning satisfiability-preserving
@@ -230,10 +232,11 @@ following theorem from Kiesl et al.~\cite{conditionalautarkies}:
 
 A solver may thus add any of the $m$ clauses
 $\overline{c}_1 \lor \dots \lor \overline{c}_n \lor a_i$ and preserve
-satisfiability. Each of these is a \pr clause with witness $\alpha_a$~\cite{conditionalautarkies}.
+satisfiability. Each of these is a \pr clause with witness $\alpha_a$.
 % todo: don't know if the citation actually says this, but I don't want to prove it here
 
-Intuitively, \autoref{thm:gbcequisat} states that adding this implication preserves satisfiability:
+Intuitively, \autoref{thm:gbcequisat} states that adding this implication
+preserves satisfiability:
 
 \begin{equation*}
     [c_1 \land \dots \land c_n] \rightarrow [a_1 \land \dots \land a_m]
@@ -298,7 +301,7 @@ shown to scale well on pigeonhole benchmarks.
 Later, two new variants of the positive reduct were proposed for more aggressive
 pruning of the search space \cite{sadical}. This allowed SDCL to solve other
 difficult problems such as mutilated chessboard~\cite{mutilatedchessboard-pr} and
- Tseitin formulas~\cite{hardexamplesresolution}. This
+ Tseitin formulas over expander graphs~\cite{hardexamplesresolution}. This
 is implemented in a new SDCL solver \sadical.
 
 

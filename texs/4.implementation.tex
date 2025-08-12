@@ -38,7 +38,7 @@ Additionally, we describe three natural design decisions that we did not make:
   \item \textsf{select-j}: On \autoref{alg:methodology} \autoref{line:choose-j},
   we iterate through all possible literals $j$. However, we
   could choose some subset of possible literals $j$. One such example is to pick $j$ from 
-  the neighbors of $i$. This was originally proposed in Reeves et al.~\cite{prelearn}.
+  the neighbors of $i$. This is implemented in \prelearn.
   The neighbors of $i$ include any literal $j$ that belongs to the same clause as
   a literal fixed by unit propagation on $i$ (including $i$ itself).
 \end{enumerate}

@@ -25,11 +25,9 @@ there are a few important limitations that need to be addressed first.
     experimented with learning \pr clauses via inprocessing (instead of
     preprocessing). However, the current \pr proof system defines a \pr clause
     as in \autoref{def:pr} where $\Gamma$ is the set of all clauses in the
-    formula, including the learnt clauses. However, if a learnt clause comes
-    from the weaker proof system, it does not need to be in $\Gamma$. This could
-    in theory allow us to learn a shorter clause, via conditional autarky.
-    However, to realize this, we need to change the definition of \pr and the
-    implementation of the \pr proof checker.
+    formula, including the learnt, redundant clauses. However, not all redundant clauses 
+    must be considered. This could produce shorter clauses via conditional autarky.
+    However, to realize this, we must reimplement a new \pr proof checker.
 
     % todo: what is the definition of redundant here
     
