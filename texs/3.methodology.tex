@@ -61,6 +61,7 @@ constant factor and robustness against encoding perturbations (see
                 \Backtrack{}; } } }
 \end{algorithm}
 
+%todo : use labels for line numbers
 We present the general framework for using conditional autarkies to learn PR
 clauses in \autoref{alg:methodology}. A conditional autarky is computed based on
 a assignment, so the algorithm first selects a set of literals to propagate
@@ -191,7 +192,7 @@ are inconsistent in a formula $\formula$ if
 $\impunitclauseNoNeg{\formula}{l_i}{\overline{l}_j}$, meaning the clause
 $\overline{l}_i \lor \overline{l}_j$ is RUP. Formally, $C_0 = \{c_j \in \alpha_c
 \mid \exists a_i \in \alpha_a \text{ s.t. }
-\impunitclause{\formula}{a_i}{\overline{c}_j} \}$, with $a_i$ appearing negated
+\impunitclause{\formula}{a_i}{c_j} \}$, with $a_i$ appearing negated
 in the inconsistency check so that we can perform a resolution between the
 derived binary clause  $a_i \lor c_j$ and the original \pr clause $C$.
 
@@ -247,7 +248,7 @@ if a smaller $A_0$ exists it can be used to shrink the size of the \pr clause.
     Let $A_0 \subseteq \alpha_a$ be non-empty.
     Let $C_0 = \{c_j \in \alpha_c
 \mid \exists a_i \in A_0 \text{ s.t. }
-\impunitclause{\formula}{a_i}{\overline{c}_j} \}$.
+\impunitclause{\formula}{a_i}{c_j} \}$.
     Then formula $\formula$ is satisfiable if and only if
     $\formula \land (\bigvee_{c \in C \backslash C_0} \overline{c} \lor
     \bigvee_{a \in A_0} a)$ is satisfiable.

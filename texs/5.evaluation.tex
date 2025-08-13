@@ -319,7 +319,7 @@ to \cadical.
 \autoref{subfig:cautical-vs-cadical-satcomp} shows that \tool learns a large
 number of \pr clauses for formulas which it solves quickly and \cadical times
 out on. \autoref{subfig:cautical-vs-prelearn-performance} shows that \prelearn
-also solve a number of formulas that \tool cannot, but \tool typically performs
+also solves a number of formulas that \tool cannot, but \tool typically performs
 better on formulas where it learns many \pr clauses.
 
 We find that \tool can show a performance improvement or degradation on formulas
@@ -345,7 +345,7 @@ score of 3442 seconds.
 
 \autoref{fig:cdf} shows the distribution of benchmarks solved by each solver.
 Both \prelearn and \tool lag behind \cadical during the 30 second preprocessing
-stage, but eventually solve more benchmarks. In the end, \prelearn solving the most
+stage, but eventually solve more benchmarks. In the end, \prelearn solves the most
 formulas at 771, followed by \tool at 754, and \cadical at 749. 
 
 %  I don't know if this actually makes sense
@@ -359,7 +359,7 @@ formulas at 771, followed by \tool at 754, and \cadical at 749.
 
 \tool exercises more selective \pr clause learning techniques, only learning \pr
 clauses for 139 formulas, while \prelearn learns \pr clauses for 431 formulas
-(see \autoref{fig:clauses-histogram}). On those formulas, \tool improves the
+(see \autoref{fig:clauses-histogram}). On those formulas, \tool improves
 \cadical's runtime on 29.9\% of benchmarks, while \prelearn improves it on
 24.7\% of benchmarks.
 
