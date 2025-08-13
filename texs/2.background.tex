@@ -9,7 +9,7 @@ Hence, we denote that a literal $l$ occurs in clause $C$ via $l \in C$ and the
 negation of clause is the set of negations of its literals, $\overline{C} =
 \{\overline{x}_1, x_4, \overline{x}_6\}$. A conjunctive normal form (CNF)
 formula $\formula$ is a conjunction of (disjunctive) clauses. In this paper, all
-formulas $\formula$ are CNF.
+formulas $\formula$ are in CNF.
 
 We use $var(\formula)$ to represent the set of variables occurring in formula
 $\formula$. An assignment $\alpha : V \rightarrow \{\top, \bot\}$ on
@@ -45,7 +45,7 @@ formulas $\formula$ and $\formula \land C$ are \emph{equisatisfiable}, i.e.,
 $\formula$ is satisfiable if and only if $\formula \land C$ is satisfiable.
 
 In a \emph{clausal proof system}, each step adds or removes a redundant clause
-$C$. The step may contain extra information, such as a boolean witness
+$C$. The step may contain extra information, such as a Boolean witness
 justifying $C$'s redundancy. A list of redundant clauses ending with the empty
 clause $\bot$ is a proof of unsatisfiability for formula $\formula$.
 
@@ -191,7 +191,7 @@ clauses~\cite{conditionalautarkies}.
 % \land a_m$ is an equisatisfiable clause. However, these can be difficult to
 % find.
 
-In plain words, an autarky is an assignment that satisfies every clause it
+Simply, an autarky is an assignment that satisfies every clause it
 touches.
 
 Unfortunately, formulas often do not contain autarkies, and they are difficult
@@ -315,7 +315,7 @@ conditional autarky. This has the potential downside that our clause may be
 large, and thus weak. To remedy this, we apply a shrinking technique, reducing
 the size of a clause. Additionally, prior techniques are sensitive to the
 encoding of the problem. Minor changes such as literal and clause reordering can
-tank performance. We compare our
+have a large effect on performance. We compare our
 implementation \tool to \sadical and \prelearn in \autoref{sec:evaluation}.
 
 Kiesl et al.~\cite{conditionalautarkies} first introduced conditional autarkies

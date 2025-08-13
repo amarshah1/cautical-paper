@@ -30,7 +30,7 @@ column.
 We achieve an $O(n^3)$ \pr proof for \ph{n}, matching the best known
 result~\cite{prclauses}. In \autoref{fig:pigeonholeclauses} we learn the clause
 $\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$. After learning $n$ such clauses,
-we learn the clause $\overline{x_{1, 2}}$, i.e. “pigeon 1 is not in hole 2.”
+we learn the clause $\overline{x}_{1, 2}$, i.e. “pigeon 1 is not in hole 2.”
 Since there are n+1 pigeons and n holes, we must rule out $O(n^2)$ pigeon-hole
 pairs, so the proof has size $O(n^3)$. We learn these proofs with a very low
 constant factor and robustness against encoding perturbations (see
@@ -57,7 +57,7 @@ constant factor and robustness against encoding perturbations (see
                 \Propagate($j$); \\
                 $\alpha_c, \alpha_a := \LCP(\formula, \alpha)$; \\
                 $C := \Shrink(\formula,\alpha_c, \alpha_a)$; \\
-                \If{not \Filter{C,$\formula$}}{ $\formula := \formula \land C$;}
+                \If{not  \Filter{C,$\formula$}}{ $\formula := \formula \land C$;}
                 \Backtrack{}; } } }
 \end{algorithm}
 
@@ -66,9 +66,9 @@ clauses in \autoref{alg:methodology}. A conditional autarky is computed based on
 a assignment, so the algorithm first selects a set of literals to propagate
 (lines $4,5$), creating the assignment $\alpha$. We propagate two literals at a
 time using nested \textbf{for} loops, and undo the propagations after each
-iteration (backtracking in line $10$). Then, in line $6$ \autoref{alg:leastcond}
+iteration (backtracking in line $10$). In line $6$ \autoref{alg:leastcond}
 makes a single pass over the formula to generate a conditional autarky, with
-conditional part ($\alpha_c$) and autarky part ($\alpha_a$). The \pr clause $C$
+conditional part $\alpha_c$ and autarky part $\alpha_a$. The \pr clause $C$
 is generated from the conditional autarky and shrunk in line $7$, and if $C$
 does not pass the usefulness heuristics it is filtered away in line $8$. Details
 regarding design choices and heuristics are found in
