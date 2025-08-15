@@ -127,11 +127,12 @@ logic, more powerful proof steps can yield shorter proofs and faster runtimes.
 One such step is based on a type of redundant clause called a \pr clause.
 
 \begin{definition}~\label{def:pr}[Propagation Redundant (\pr) clauses~\cite{prclauses}]
-    For formula $\formula$, we say that clause $C$ is propagation redundant
+    For formula $\formula$, clause $C$ and assignment $\alpha$ blocked by $C$,
+    we say that $C$ is propagation redundant
     (\pr) if there exists a \emph{witness} assignment $\omega$ such that
     $\omega$ satisfies $C$ and
 $$
-    \formula \land \lnot C \impunit \formula|_\omega.
+    \formula|_\alpha \impunit \formula|_\omega.
 $$
 \end{definition}
 
