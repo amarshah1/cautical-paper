@@ -232,7 +232,7 @@ following theorem from Kiesl et al.~\cite{conditionalautarkies}:
 
 A solver may thus add any of the $m$ clauses
 $\overline{c}_1 \lor \dots \lor \overline{c}_n \lor a_i$ and preserve
-satisfiability. Each of these is a \pr clause with witness $\alpha_a$.
+satisfiability. 
 % todo: don't know if the citation actually says this, but I don't want to prove it here
 
 Intuitively, \autoref{thm:gbcequisat} states that adding this implication
@@ -242,7 +242,32 @@ preserves satisfiability:
     [c_1 \land \dots \land c_n] \rightarrow [a_1 \land \dots \land a_m]
 \end{equation*}
 
-When converted to clausal form, this results in the $m$ different clauses from the theorem.
+When converted to clausal form, this results in the $m$ different clauses from
+the theorem. Indeed, each of these is a \pr clause with witness $\alpha_a$.
+
+% \begin{theorem}
+%     Let $\formula$ be a formula and $\alpha_c \sqcup \alpha_a$ be a conditional autarky on $\Gamma$, with
+%     $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$. Then for
+%     $1 \leq i \leq m$ $C_i = (\overline{c}_1 \lor \dots \lor \overline{c}_n \lor a_i)$ is a \pr clause with witness $\alpha_a$.
+% \end{theorem}
+
+% \begin{proof}
+%     Fix some $1 \leq i \leq m$. Clearly, $\alpha_a$ satisfies $C_i$, as it
+%     contains $a_i$
+
+%     We must show that $\gamma \land \neg C_i \impunit \formula|_\alpha_a$.
+
+%     For each clause $D' \in \formula|_{\alpha_a}$. There must be no literals
+%     $\alpha_a$ that occur in $D'$ positively. There must be a clause $D \in
+%     \formula$ such that $D|_{\alpha_a} = D'$. Now we show that $\gamma \land
+%     \neg C_i \impunit D|_\alpha_a$.
+
+%     If some literal in $\alpha_a$ occurs in $D$ negatively, then there must by
+%     definition of a conditional autarky.
+
+%     Otherwise there is $D \in \Gamma \land \overline{C}$ that gives a
+%     conflict with $D'$.
+% \end{proof}
 % Each of these clauses is a \emph{globally blocked clause}, however, this is
 % not too important for our purposes, so we will not discuss it further.
 % Additionally, we can see that this is a \pr clause:
