@@ -44,7 +44,7 @@ constant factor and robustness against encoding perturbations (see
 
 \subsection{PR Clause Learning Framework}~\label{subsec:methodology}
 
-\begin{algorithm}\caption{Learning \pr clauses}\label{alg:methodology}
+\begin{algorithm}\caption{Learning PR clauses}\label{alg:methodology}
     \SetAlgoNoLine \SetKwFunction{Learn}{LearnClause}
     \SetKwFunction{LCP}{LeastConditional} \SetKwFunction{Propagate}{Propagate}
     \SetKwFunction{Shrink}{Shrink} \SetKwFunction{Backtrack}{Backtrack}
@@ -56,7 +56,7 @@ constant factor and robustness against encoding perturbations (see
                 \Propagate($j$); \\
                 $\alpha_c, \alpha_a := \LCP(\formula, \alpha)$; \\
                 $C := \Shrink(\formula,\alpha_c, \alpha_a)$; \\
-                \If{not  \Filter{C,$\formula$}}{ $\formula := \formula \land C$;}
+                \If{not  \Filter{C, $\formula$}}{ $\formula := \formula \land C$;}
                 \Backtrack{}; } } }
 \end{algorithm}
 
@@ -68,43 +68,24 @@ a assignment, so the algorithm first selects a set of literals to propagate
 time using nested \textbf{for} loops, and undo the propagations after each
 iteration (backtracking in line $10$). In line $6$ \autoref{alg:leastcond}
 makes a single pass over the formula to generate a conditional autarky, with
-conditional part $\alpha_c$ and autarky part $\alpha_a$. The \pr clause $C$
+conditional part $\alpha_c$ and autarky part $\alpha_a$. The PR clause $C$
 is generated from the conditional autarky and shrunk in line $7$, and if $C$
 does not pass the usefulness heuristics it is filtered away in line $8$. Details
 regarding design choices and heuristics are found in
 \autoref{sec:implementation}, including a discussion of \texttt{Filter}.
 
-In the following sections, we will describe \pr clause learning and shrinking in
+In the following sections, we will describe PR clause learning and shrinking in
 the context of our running example  \ph{4}. We will consider the decisions $i =
 x_{1, 1}$ and $j = x_{2, 2}$ shown in \autoref{subfig:pigeonholeclause-a}, with
 unit propagation shown in \autoref{subfig:pigeonholeclause-b}.
 
-%. This lets us learn the clause $\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$
-%(see \autoref{fig:pigeonholeclauses}), which is necessary for the \pr proof of
-%pigeonhole \cite{prclauses}. 
-
-
-
-%For motivation, we will discuss the pigeonhole example \ph{4}, where we make
-%decisions $i = x_{1, 1}$ and $j = x_{2, 2}$. This lets us learn the clause
-%$\overline{x}_{1, 2} \lor \overline{x}_{2, 1}$ (see
-%\autoref{fig:pigeonholeclauses}), which is necessary for the \pr proof of
-%pigeonhole \cite{prclauses}. We explain how this clause is used in the proof in
-%Appendix~\ref{app:pigeonhole}.
-
-
-%We start by propagating on $x_{1, 1}$ and $x_{2, 2}$, which assigns
-%$\overline{x}_{2, 1}, \ldots, \overline{x}_{5, 1}, \overline{x}_{1, 2},
-%\overline{x}_{3, 2} \ldots, \overline{x}_{5, 2}$ by constraint (2) (see
-%\autoref{subfig:pigeonholeclause-b}).
-
-\subsection{Learning \pr Clauses}~\label{subsec:learning}
+\subsection{Learning PR Clauses}~\label{subsec:learning}
 
 
 As described in \autoref{subsec:autarkies}, any assignment can be split into a
 conditional and a (potentially empty) autarky part, $\alpha = \alpha_c \sqcup \alpha_a$, and the
-following clauses are \pr: $\bigvee_{c \in \alpha_c} \overline{c} \lor a$ for
-any $a \in \alpha_a$. In order to produce smaller \pr clauses, we use
+following clauses are PR: $\bigvee_{c \in \alpha_c} \overline{c} \lor a$ for
+any $a \in \alpha_a$. In order to produce smaller PR clauses, we use
 \autoref{alg:leastcond} from Kiesl et al. \cite{conditionalautarkies} to find
 the unique smallest possible $\alpha_c$.
 
@@ -156,7 +137,7 @@ pigeon $2$ but with the holes swapped).
 %and pigeon $2$ can be placed in hole $2$ : $x_{3,1} \lor x_{3,2} \lor x_{4,1}
 %\lor x_{4,2} \lor x_{5,1} \lor x_{5,2} \lor x_{2,2} $. 
 The shrinking technique in the following section will help reduce the size of
-these large \pr clauses. 
+these large PR clauses. 
 
 
 %From our pigeonhole example, we can see the rows in
@@ -167,22 +148,22 @@ these large \pr clauses.
 %and $\alpha_c = \{\overline{x}_{3, 1}, \ldots, \overline{x}_{5, 1},
 %\overline{x}_{3, 2} \ldots, \overline{x}_{5, 2}\}$.
 
-\subsection{Shrinking \pr Clauses}~\label{subsec:shrinking}
+\subsection{Shrinking PR Clauses}~\label{subsec:shrinking}
 
-The \pr clause derived from a conditional autarky can be too weak to effectively
+The PR clause derived from a conditional autarky can be too weak to effectively
 reduce the search space.
 %In a formula $\formula$ with conditional autarky $\alpha = \alpha_c \sqcup
 %\alpha_a$ where $\alpha_c = c_1, \dots, c_n$ and $\alpha_a = a_1, \dots, a_m$,
 %the addition of clause $C = \alpha_c \lor a_i$ may be too weak to effectively
 %reduce the search space.
-Shrinking the \pr clause, i.e., removing literals from the clause via
+Shrinking the PR clause, i.e., removing literals from the clause via
 resolution, will strengthen its pruning power. 
 %Thus, our goal is to find resolution candidates containing literals from the
 %autarky part. We thus aim to see which literals from the autarky part we may
 %use to resolve with values from $\alpha_c$ (and thus $C$).
 
 At a high-level, we will generate two sets: $C_0 \subseteq \alpha_c$ and $A_0
-\subseteq \alpha_a$, and show that we can learn the \pr clause $\bigvee_{c \in C
+\subseteq \alpha_a$, and show that we can learn the PR clause $\bigvee_{c \in C
 \backslash C_0} \overline{c} \lor \bigvee_{a \in A_0} a$. 
 
 First we start with $C_0$, the set of literals in the conditional part that are
@@ -193,13 +174,13 @@ $\overline{l}_i \lor \overline{l}_j$ is RUP. Formally, $C_0 = \{c_j \in \alpha_c
 \mid \exists a_i \in \alpha_a \text{ s.t. }
 \impunitclause{\formula}{a_i}{c_j} \}$, with $a_i$ appearing negated
 in the inconsistency check so that we can perform a resolution between the
-derived binary clause  $a_i \lor c_j$ and the original \pr clause $C$.
+derived binary clause  $a_i \lor c_j$ and the original PR clause $C$.
 
 Next we generate $A_0$ which is a subset of the autarky literals that are
 together inconsistent with the literals in $C_0$. So, for each $c \in C_0$ there
 exists an $a \in A_0$ such that $\impunitclause{\formula}{a}{c}$. There always
 exists at least one $A_0$, namely $\alpha_a$ which is used to define $C_0$, but
-if a smaller $A_0$ exists it can be used to shrink the size of the \pr clause. 
+if a smaller $A_0$ exists it can be used to shrink the size of the PR clause. 
 
 
 %
@@ -294,7 +275,7 @@ if a smaller $A_0$ exists it can be used to shrink the size of the \pr clause.
 \end{proof}
 
 In fact, $\bigvee_{c \in C \backslash C_0} \overline{c} \lor \bigvee_{a \in A_0}
-a$ is a \pr clause with witness $\alpha_a$. 
+a$ is a PR clause with witness $\alpha_a$. 
 % todo: might need to explain this more 
 
 %Another way to see this is: starting with $\bigvee_{c \in C} \overline{c} \lor

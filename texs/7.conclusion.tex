@@ -1,19 +1,19 @@
 \section{Conclusion}~\label{sec:conclusion}
 
 
-\pr clause learning is effective for learning short proofs for 
-difficult problems. However, current \pr clause learning techniques require
-an NP-hard check. We solve this by providing a technique that learns \pr clauses
+PR clause learning is effective for learning short proofs for 
+difficult problems. However, current PR clause learning techniques require
+an NP-hard check. We solve this by providing a technique that learns PR clauses
 in a linear time preprocessing step. We provide clause shrinking and filtering 
-techniques to ensure that we learn useful \pr clauses.
+techniques to ensure that we learn useful PR clauses.
 
-Our implementation, \tool, provides short \pr proofs matching the best possible results for 
-the pigeonhole principle. While prior work is only effective on specific pigeonhole
+Our implementation, \tool, provides short \pr proofs for the pigeonhole principle matching the best possible results.
+ While prior work is only effective on specific pigeonhole
 encodings, \tool finds these proofs even when the formula is scranfilized.
 
 Additionally, \tool is effective on a number of benchmarks from the SAT competition,
 including most of the families identified in \autoref{subsec:eval-discussion}.
 
-In the future, we hope that \pr clause learning can find its way into the main branch
+In the future, we hope that PR clause learning can find its way into the main branch
 of a popular SAT solver. We believe this work is an effective step in this direction.
 

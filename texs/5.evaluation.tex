@@ -19,7 +19,7 @@
     \label{fig:pigeonhole-results}
 \end{figure*}
 
-In this section, we empirically evaluate our technique against other \pr clause
+In this section, we empirically evaluate our technique against other PR clause
 learning techniques. In doing so, we aim to answer the following research
 questions:
 
@@ -27,17 +27,17 @@ questions:
 \begin{enumerate}[label={RQ\arabic*}]
     \item Can our approach provide a speedup on certain benchmark families?
     \item Is our approach less sensitive to encoding choices compared to other
-    \pr learning techniques?
+    PR learning techniques?
     % \item Can these techniques underperform or outperform SAT solvers on other
     % certain benchmark families?
 \end{enumerate}
 
 
-We compare the two main tools learning \pr clauses: \sadical (based on SDCL) and
+We compare the two main tools learning PR clauses: \sadical (based on SDCL) and
 \prelearn (a preprocessing technique that calls \sadical). To be consistent with
 our approach, we run \prelearn with its default settings for 30 seconds, then
 solve the preprocessed formula with \cadical. We also compare to \cadical as a
-baseline with no \pr clause learning. We check all proofs of unsatisfiability
+baseline with no PR clause learning. We check all proofs of unsatisfiability
 from \tool using \texttt{dpr-trim}~\cite{dpr-trim}.
 
 All experiments were performed in the Anvil Supercomputing Center on nodes with
@@ -51,7 +51,7 @@ the formula. In \autoref{subsec:eval-satcomp}, we evaluate the solvers on
 benchmarks from the '22, '23, and '24 SAT competition's main
 tracks~\cite{satcomp2022,satcomp2023,satcomp2024}. In
 \autoref{subsec:eval-discussion}, we highlight certain benchmark families that
-benefit from \pr clause learning. In \autoref{sec:heuristics}, we evaluate the 
+benefit from PR clause learning. In \autoref{sec:heuristics}, we evaluate the 
 benefit of different heuristic choices in \tool. Finally, we conclude in 
 \autoref{subsec:researchquestions} with a discussion of how performed on RQ1 and 
 RQ2.
@@ -77,7 +77,7 @@ $3.59$-$3.64\times$ shorter proofs compared to \sadical.
 % frequently. , as to not exclude other clauses from being learned. Frequent
 % deletion is not necessary in \tool because of its clause shrinking technique. 
 \prelearn scales cubicly on small formulas, but for \ph{22} and larger, will not
-learn enough useful \pr clauses in the preprocessing step and will timeout after
+learn enough useful PR clauses in the preprocessing step and will timeout after
 spending the rest of its time running \cadical.
 
 % As we discuss in \autoref{app:pigeonhole}, \tool learns proofs of size
@@ -96,11 +96,11 @@ with dashed lines.
 \sadical and \prelearn exhibit an exponential trend for runtime and proof size
 on the scranfilized benchmarks. \sadical will spend all its time in the main
 SDCL loop not learning enough useful clauses. \prelearn will learn some useful
-\pr clauses in preprocessing, but not enough to sufficiently shrink the search
+PR clauses in preprocessing, but not enough to sufficiently shrink the search
 space for formulas larger than \ph{16}.
 
 On the other hand, \tool almost matches its non-scranfilized performance,
-demonstrating that it learns useful \pr clauses regardless of the encoding.
+demonstrating that it learns useful PR clauses regardless of the encoding.
 
 % In conclusion, \tool is able to match \sadical's runtime for the pigeonhole
 % principle while shorter proofs by a constant factor. Additionally, \tool is
@@ -206,14 +206,14 @@ demonstrating that it learns useful \pr clauses regardless of the encoding.
     % on SAT competition benchmarks. We filter out all benchmarks where each
     % solver does not learn any \pr clauses. The color indicates the number of
     % \pr clauses learnt.}
-    \caption{Performance comparison of \tool with \prelearn and \cadical on SAT competition benchmarks. On each graph, we filter out all benchmarks where neither solver learns any \pr clauses. The color indicates the number of \pr clauses learnt by \tool.}
+    \caption{Performance comparison of \tool with \prelearn and \cadical on SAT competition benchmarks. On each graph, we filter out all benchmarks where neither solver learns any PR clauses. The color indicates the number of PR clauses learnt by \tool.}
     \label{fig:solver-comparison}
 \end{figure*}
 
 \begin{table}[h]
     \centering
     \captionsetup{position=above}
-    \caption{Number of formulas that \cadical, \prelearn and \tool solve, divided between 0-10k clause and 10k-20M clause formulas, and SAT and UNSAT formulas. For \prelearn and \tool we include the number of benchmarks with \pr clauses learnt, more than $50$ \pr clauses learnt, improved on \cadical by 5\% or more; and solved that \cadical did not solve.}
+    \caption{Number of formulas that \cadical, \prelearn and \tool solve, divided between 0-10k clause and 10k-20M clause formulas, and SAT and UNSAT formulas. For \prelearn and \tool we include the number of benchmarks with PR clauses learnt, more than $50$ PR clauses learnt, improved on \cadical by 5\% or more; and solved that \cadical did not solve.}
     \sisetup{table-format=3}        % remove if you are not using siunitx
     \begin{tabular}{lrrrrr}
       \toprule
@@ -227,15 +227,15 @@ demonstrating that it learns useful \pr clauses regardless of the encoding.
       \midrule
       \prelearn \\
       \; Total &  52 &  90 & 322 & 307 & 771 \\
-      \; Learn \pr clause   &  40 &  73 & 179 & 145 & 431\\
-      \; Learn $>50$ \pr clauses   &  22 &  51 & 104 &  79 & 256\\
+      \; Learn PR clause   &  40 &  73 & 179 & 145 & 431\\
+      \; Learn $>50$ PR clauses   &  22 &  51 & 104 &  79 & 256\\
       \; Improve on \cadical &  11 &  42 &  57 &  36 & 146\\
       \; Unique from \cadical &   1 &  17 &   6 &   6 & 30 \\
       \midrule
       \tool \\
       \; Total &  52 &  87 & 317 & 298 & 754 \\
-      \; Learn \pr clause     &   16 &  58 &  30 &  35 & 139 \\
-      \; Learn $>$$50$ \pr clauses  &   1  &  39 &  6 &  11 & 57 \\
+      \; Learn PR clause     &   16 &  58 &  30 &  35 & 139 \\
+      \; Learn $>$$50$ PR clauses  &   1  &  39 &  6 &  11 & 57 \\
       \; Improve on \cadical &  23  &  48 &  89 &  59 & 219 \\
       \; Unique from \cadical &   0 &  18 &   9 &   9 & 36 \\
       \bottomrule
@@ -248,14 +248,14 @@ demonstrating that it learns useful \pr clauses regardless of the encoding.
     \begin{minipage}[b]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/cdf.png}
-        \caption{CDF showing the number of formulas solved by \tool, \prelearn, and \cadical.}
+        \caption{The number of formulas solved by \tool, \prelearn, and \cadical.}
         \label{fig:cdf}
     \end{minipage}
     \hspace{0.06\textwidth}
     \begin{minipage}[b]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figs/clauses_histogram.jpg}
-        \caption{Histogram showing the number of \pr clauses learnt by \tool and \prelearn}
+        \caption{The size of PR clauses learnt by \tool and \prelearn}
         \label{fig:clauses-histogram}
     \end{minipage}
 \end{figure*}
@@ -299,7 +299,7 @@ scope for our technique. This gives us a total of 1,089 benchmarks. We exclude
 
 \autoref{tab:solver-stats} shows the number of instances solved by each solver.
 Out of the total number solved, it shows the number of formulas for which
-\prelearn and \tool learn additional \pr clauses, improve upon \cadical by at
+\prelearn and \tool learn additional PR clauses, improve upon \cadical by at
 least 5\%, and solve a formula that \cadical does not solve. 
 
 We divide the benchmarks based on number of clauses (0-10k or 10k-20M) and
@@ -318,13 +318,13 @@ to \cadical.
 % \autoref{subfig:cautical-vs-cadical-satcomp}) and \prelearn (for
 % \autoref{subfig:cautical-vs-prelearn-satcomp}) learn at least one \pr clause.
 \autoref{subfig:cautical-vs-cadical-satcomp} shows that \tool learns a large
-number of \pr clauses for formulas which it solves quickly and \cadical times
+number of PR clauses for formulas which it solves quickly and \cadical times
 out on. \autoref{subfig:cautical-vs-prelearn-performance} shows that \prelearn
 also solves a number of formulas that \tool cannot, but \tool typically performs
-better on formulas where it learns many \pr clauses.
+better on formulas where it learns many PR clauses.
 
 We find that \tool can show a performance improvement or degradation on formulas
-where it does not learn any \pr clauses. This is because as \tool runs, it
+where it does not learn any PR clauses. This is because as \tool runs, it
 updates internal data structures such as watched literals, clause occurrence
 lists, and variable phases. 
 
@@ -358,8 +358,8 @@ formulas at 771, followed by \tool at 754, and \cadical at 749.
 
 
 
-\tool exercises more selective \pr clause learning techniques, only learning \pr
-clauses for 139 formulas, while \prelearn learns \pr clauses for 431 formulas
+\tool exercises more selective PR clause learning techniques, only learning PR
+clauses for 139 formulas, while \prelearn learns PR clauses for 431 formulas
 (see \autoref{fig:clauses-histogram}). On those formulas, \tool improves
 \cadical's runtime on 29.9\% of benchmarks, while \prelearn improves it on
 24.7\% of benchmarks.
@@ -415,7 +415,7 @@ clauses for 139 formulas, while \prelearn learns \pr clauses for 431 formulas
 
 \subsection{Discussion of Benchmark Families}~\label{subsec:eval-discussion}
 
-We identify six benchmark families for which \pr clauses perform well. We choose
+We identify six benchmark families for which PR clauses perform well. We choose
 them based on prior work~\cite{prelearn} and our experiments on SAT competition
 benchmarks:
 
@@ -451,7 +451,7 @@ benchmarks:
     \caption{Overview of benchmark families used in evaluation}
     \begin{tabular}{lll}
         \hline
-        Benchmark Family & Number of Clauses  & \tool \# \pr  \\
+        Benchmark Family & Number of Clauses  & \tool \# PR  \\
         \hline
         mutilated-chessboard & 900-3K & 115-351 \\
         perfect\_matching & 300-1K & 183-447 \\
@@ -475,7 +475,7 @@ benchmarks:
 as it does very poorly on SAT competition benchmarks.
 \autoref{tab:benchmark-families} provides a brief overview of the families: the
 number of clauses in the original formulas (up to 1 significant digit) and the
-number of \pr clauses learnt by \tool.
+number of PR clauses learnt by \tool.
 
 \tool compares favorably to \cadical on all benchmark families, showing especially large speedups on
 \texttt{register\_allocation}, \texttt{mutilated\_chessboard} and
@@ -527,7 +527,7 @@ evaluate on the different benchmark families discussed in
 
 First we consider turning three optimizations off.
 \autoref{fig:global-no-shrink} compares \tool to \tool with
-\textsf{shrink} turned off, i.e. we do not learn \pr clauses.
+\textsf{shrink} turned off, i.e. we do not learn PR clauses.
 \autoref{fig:globaldontfilter} compares \tool to \tool with
 \textsf{filter-triv} off, i.e. we do not filter trivial clauses.
 \autoref{fig:global-max-length} compares \tool to \tool with
@@ -570,7 +570,7 @@ but not as significant as for pigeonhole. For instance, in the initial stage
 when propagating first on literal $i$ (see \autoref{alg:methodology}), we
 randomly pick the order for literal $i$.
 
-Prior \pr learning approaches such as \prelearn used specific orderings of
+Prior PR learning approaches such as \prelearn used specific orderings of
 literals to their advantage. We evaluated such an ordering in
 \autoref{fig:global-sort-i} and found that it did not make a difference for
 \tool.

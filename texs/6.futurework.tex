@@ -21,13 +21,13 @@ there are a few important limitations that need to be addressed first.
     the $O(n^3)$ complexity. Similar questions exist for other well-known
     families such as Tseitin formulas over expander
     graphs~\cite{er,hardexamplesresolution}.
-    \item \textbf{Learning \pr clauses with an inprocessing step:} We
-    experimented with learning \pr clauses via inprocessing (instead of
-    preprocessing). However, the current \pr proof system defines a \pr clause
+    \item \textbf{Learning PR clauses with an inprocessing step:} We
+    experimented with learning PR clauses via inprocessing (instead of
+    preprocessing). However, the current \pr proof system defines a PR clause
     as in \autoref{def:pr} where $\Gamma$ is the set of all clauses in the
     formula, including the learnt, redundant clauses. However, not all redundant clauses 
     must be considered. This could produce shorter clauses via conditional autarky.
-    However, to realize this, we must reimplement a new \pr proof checker.
+    However, to realize this, we must modify the \pr proof checker.
 
     % todo: what is the definition of redundant here
     

@@ -12,12 +12,12 @@ formula $\formula$ is a conjunction of (disjunctive) clauses. In this paper, all
 formulas $\formula$ are in CNF.
 
 We use $var(\formula)$ to represent the set of variables occurring in formula
-$\formula$. An assignment $\alpha : V \rightarrow \{\top, \bot\}$ on
+$\formula$. An \emph{assignment} $\alpha : V \rightarrow \{\top, \bot\}$ on
 $\formula$ maps variables $V \subseteq var(\formula)$ to $\top$ or $\bot$. If $V =
-var(\formula)$, then $\alpha$ is a total assignment. An assignment that 
+var(\formula)$, then $\alpha$ is a \emph{total assignment}. An assignment that 
 is not total is called a \emph{partial assignment}. For this paper, assignment 
 refers to both total and partial assignments. We abuse notation to
-extend $\alpha$ to literals, by denoting $\alpha(l) = \alpha(x)$
+extend  an assignment $\alpha$ to literals, by denoting $\alpha(l) = \alpha(x)$
 if $l = x$ and $\alpha(l) = \neg \alpha(x)$ if $l = \overline{x}$.
 
 A formula restricted to an assignment $\formula|_\alpha$ is the formula
@@ -30,10 +30,10 @@ and $x_2$ to $\top$, we have $\formula|_\alpha = (\overline{x}_4 \lor x_6) \land
 \overline{x}_5$.
 
 A clause $C = l_1 \lor \dots \lor l_m$ \emph{blocks} an assignment
-mapping each $l \in C$ to false ($\bot$). An assignment $\alpha$ \emph{touches}
+mapping each $l_i \in C$ to false ($\bot$). An assignment $\alpha$ \emph{touches}
 a clause $C$ if there is a variable $x$ assigned by $\alpha$ such that $x \in C$
 or $\overline{x} \in C$. We say $\alpha$ \emph{satisfies} $C$ if there is some
-$l \in C$ with $\alpha(l) = \top$.
+$l_i \in C$ with $\alpha(l_i) = \top$.
 
 Assignment $\alpha$ \emph{satisfies} formula $\formula$ if it satisfies every
 clause $C \in \formula$. If such a satisfying assignment exists, then $\formula$
@@ -45,7 +45,7 @@ formulas $\formula$ and $\formula \land C$ are \emph{equisatisfiable}, i.e.,
 $\formula$ is satisfiable if and only if $\formula \land C$ is satisfiable.
 
 In a \emph{clausal proof system}, each step adds or removes a redundant clause
-$C$. The step may contain extra information, such as a Boolean witness
+$C$. The step may contain extra information, such as a boolean witness
 justifying $C$'s redundancy. A list of redundant clauses ending with the empty
 clause $\bot$ is a proof of unsatisfiability for formula $\formula$.
 
@@ -126,8 +126,8 @@ clause $C \in \formula'$.
 % logic, more powerful proof steps can yield shorter proofs and faster runtimes.
 % One such step is based on a type of redundant clause called a \pr clause.
 
-\begin{definition}~\label{def:pr}[Propagation Redundant (\pr) clauses~\cite{prclauses}]
-    For formula $\formula$, clause $C$ and assignment $\alpha$ blocked by $C$,
+\begin{definition}~\label{def:pr}[Propagation Redundant (PR) clauses~\cite{prclauses}]
+    For formula $\formula$, clause $C$, and assignment $\alpha$ blocked by $C$,
     we say that $C$ is propagation redundant
     (\pr) if there exists a \emph{witness} assignment $\omega$ such that
     $\omega$ satisfies $C$ and
@@ -148,12 +148,12 @@ $$
 % \end{definition}
 
 
-Informally, a clause $C$ is $\pr$ if every assignment that satisfies
+Informally, a clause $C$ is PR if every assignment that satisfies
 $\formula$ but falsifies $C$ can be turned into an assignment that satisfies
 $\formula \land C$. While this property can be validated in polynomial time
-(by unit propagation), checking if a clause is \pr
-without hints is NP-complete~\cite{prclauses}. Thus, \pr introduces witnesses,
-which must be provided for proof checking.  
+(by unit propagation), checking if a clause is PR
+without hints is NP-complete~\cite{prclauses}. Thus, the propagation redundancy (\pr)
+proof system introduces witnesses, which must be provided for proof checking.  
 
 %    For formula $\formula$, we say that clause $C$ is propagation redundant
 %    (\pr) if there exists a \emph{witness} assignment $\omega$ implying the
@@ -185,7 +185,7 @@ which must be provided for proof checking.
 
 
 
-\pr clauses subsume many classes of redundant clauses, including resolution
+PR clauses subsume many classes of redundant clauses, including resolution
 asymmetric tautologies (RATs)~\cite{rat}, blocked clauses~\cite{blockedclause},
 set-blocked clauses~\cite{setblocked}, and globally-blocked
 clauses~\cite{conditionalautarkies}.
@@ -204,11 +204,8 @@ clauses~\cite{conditionalautarkies}.
 % find.
 
 Simply, an autarky is an assignment that satisfies every clause it
-touches.
-
-Unfortunately, formulas often do not contain autarkies, and they are difficult
-to find even when they do exist. The following weakening of an autarky is much
-easier to find: 
+touches. Unfortunately, formulas often do not contain autarkies, and they are difficult
+to find even when they exist. Instead, we use the following weakening of an autarky:
 
 \begin{definition}[Conditional Autarky~\cite{conditionalautarkies}]
     A nonempty assignment $\alpha = \alpha_c \sqcup \alpha_a$ (disjoint union)
