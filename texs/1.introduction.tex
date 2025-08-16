@@ -10,10 +10,6 @@ As its usage expands, so too does the need for more powerful and specialized
 solving techniques.
 
 
-
-% It is most commonly solved using the conflict-driven clause learning (CDCL)
-% framework. This framework explores the state space of possible solutions,
-% while learning clauses when it reaches a conflict, to aid future explorations.
 One such class of techniques is propagation redundant (PR) clause
 learning~\cite{prclauses}. In this technique, a solver generates and adds
 clauses which are satisfiability-preserving; that is, clauses whose conjunction
@@ -21,19 +17,6 @@ with the formula is satisfiable if and only if the original formula is
 satisfiable. The solver aims to learn clauses that drastically shrink the
 potential solution space, such as clauses that break symmetries.
 
-%A classic problem involving symmetries is the pigeonhole problem, which asks if
-%it is possible to fit $n+1$ pigeons into $n$ holes with at most one pigeon per
-%hole. In this problem, one may learn a clause equivalent to the lemma:
-%\emph{pigeon 1 is not in hole 1}. Adding this clause restricts the search space
-%for the first pigeon (and thus the problem), but it preserves satisfiability,
-%as hole 1 is symmetric with all holes.
-
-% One can ensure that these clauses are satisfiable within the given proof
-% system.
-
-% for instance vivification and blocked clause addition. These techinques use
-% other facts about the formula to learn clauses which are often useful for
-% solving.
 
 The power of this technique is tied to the strength of the underlying proof
 system: propagation redundancy (\pr). A more powerful proof system can admit
@@ -57,18 +40,13 @@ The theoretical power of PR learning comes at a cost: efficiently learning
 useful PR clauses is a challenge. State-of-the-art techniques such as
 Satisfiability Driven Clause Learning (SDCL) rely on calling another SAT solver
 to verify that a candidate clause is PR \cite{sadical}. 
-% This is both expensive and difficult to integrate into existing tools. 
 Thus, in the worst case, the solver takes exponential time to learn a single PR
 clause. This makes integration into high-performance solvers difficult and
 limits their practical impact. To the best of our knowledge, none of the most popular SAT solvers
 such as \cadical~\cite{cadical}, \kissat~\cite{kissat},
 \cryptoMiniSAT~\cite{cryptominisat}, or \lingeling~\cite{lingeling} support
 PR clause learning in their main branch.
-% maybe cite cryptominisat instead of lingeling? todo : check crypto mini sat to
-% see if it uses \pr clauses
 
-% todo : should we explain what conditional autarkies are? or go more into depth
-% about globally blocked clauses?
 In this work, we propose a new, efficient approach to learn PR clauses
 based on conditional autarkies. Intuitively, a conditional autarky provides a
 way to force the value of certain variables given a set of assumptions, e.g., in
@@ -78,13 +56,7 @@ can be placed in hole $1$ and pigeon $2$ can be placed in hole $2$. Kiesl et.
 al. proposed an algorithm for finding conditional autarkies in linear
 time~\cite{conditionalautarkies}, using them to delete clauses. In our work, we
 will use conditional autarkies to construct and add PR clauses. 
-%We make use of an algorithm proposed by Kiesl et. al. for finding a conditional
-%autarky given a assignment in linear time. 
-%
-%Given a assignment to a SAT formula, our method divides the assignment
-%into a \emph{conditional} part and an \emph{autarky} part. Using this
-%distinction, we can learn a globally blocked clause (a type of \pr clause) in
-%linear time.
+
 
 While conditional autarkies present a means for bridging the theoretical gap in
 identifying PR clauses, the PR clauses they produce are often not immediately useful
@@ -97,10 +69,7 @@ clauses. Returning to PHP, instead of the conditional autarky described above
 which produces a clause with at least $2n$ literals, it is possible through
 shrinking to learn a binary PR clause either forbidding pigeon $1$ in hole $2$ or
 pigeon $2$ in hole $1$.
-% todo: would like to say more about what these heuristics are
 
-% Integrating \pr clause learning into a SAT solver is still an active area of
-% study
 
 We make the following contributions: 
 
@@ -108,7 +77,7 @@ We make the following contributions:
     \item We introduce a method for learning PR clauses in linear time relative to the
     size of the formula. 
     \item We develop a number of shrinking and filtering heuristics to learn
-    concise and useful PR clauses.% from conditional autarkies.. 
+    concise and useful PR clauses. 
     \item We implement these techniques in a solver, \tool\footnote{\tool's code
     is available at \url{https://github.com/amarshah10/cautical}.} (a fork of
     the state-of-the-art SAT solver \cadical), and evaluate it on both PHP benchmarks 

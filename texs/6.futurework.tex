@@ -1,9 +1,5 @@
 \section{Future Work}~\label{sec:futurework}
 
-% The goal of this paper was to introduce the theory and provide a set of
-% heuristics that work. \tool is designed so that trying different heuristics
-% is easy. There are a number of interesting future directions to explore:
-
 We believe conditional autarkies provide a route to incorporate \pr learning
 as a regular part of state-of-the-art SAT solvers such as \cadical. However,
 there are a few important limitations that need to be addressed first.
@@ -28,13 +24,4 @@ there are a few important limitations that need to be addressed first.
     formula, including the learnt, redundant clauses. However, not all redundant clauses 
     must be considered. This could produce shorter clauses via conditional autarky.
     However, to realize this, we must modify the \pr proof checker.
-
-    % todo: what is the definition of redundant here
-    
-    % is \pr relative to the
-    % set of all clauses learnt so far. However, clauses that are \pr relative to
-    % the original set of clauses are still satisfiability preserving and our
-    % technique can learn easier clauses considering this notion of \pr. Resolving
-    % this is much more complicated and requires updating the \pr proof system and
-    % checker.
 \end{enumerate}
