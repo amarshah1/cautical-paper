@@ -122,9 +122,9 @@ clause $C \in \formula'$.
 
 % The propagation redundant (\pr)
 
-\textbf{Propagation Redundant:} While resolution is complete for propositional
-logic, more powerful proof steps can yield shorter proofs and faster runtimes.
-One such step is based on a type of redundant clause called a \pr clause.
+% \textbf{Propagation Redundant:} While resolution is complete for propositional
+% logic, more powerful proof steps can yield shorter proofs and faster runtimes.
+% One such step is based on a type of redundant clause called a \pr clause.
 
 \begin{definition}~\label{def:pr}[Propagation Redundant (\pr) clauses~\cite{prclauses}]
     For formula $\formula$, clause $C$ and assignment $\alpha$ blocked by $C$,
@@ -135,6 +135,17 @@ $$
     \formula|_\alpha \impunit \formula|_\omega.
 $$
 \end{definition}
+
+% \begin{definition}~\label{def:pr}[Propagation Redundant (\pr) clauses~\cite{prclauses}]
+
+%     For formula $\formula$, we say that clause $C$ is propagation redundant
+%     (PR) if there exists a \emph{witness} assignment $\omega$ such that
+%     $\omega$ satisfies $C$ and
+
+% $$
+%     \formula \land \lnot C \impunit (\formula \land C)|_\omega.
+% $$
+% \end{definition}
 
 
 Informally, a clause $C$ is $\pr$ if every assignment that satisfies

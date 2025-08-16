@@ -212,6 +212,8 @@ demonstrating that it learns useful \pr clauses regardless of the encoding.
 
 \begin{table}[h]
     \centering
+    \captionsetup{position=above}
+    \caption{Number of formulas that \cadical, \prelearn and \tool solve, divided between 0-10k clause and 10k-20M clause formulas, and SAT and UNSAT formulas. For \prelearn and \tool we include the number of benchmarks with \pr clauses learnt, more than $50$ \pr clauses learnt, improved on \cadical by 5\% or more; and solved that \cadical did not solve.}
     \sisetup{table-format=3}        % remove if you are not using siunitx
     \begin{tabular}{lrrrrr}
       \toprule
@@ -238,7 +240,6 @@ demonstrating that it learns useful \pr clauses regardless of the encoding.
       \; Unique from \cadical &   0 &  18 &   9 &   9 & 36 \\
       \bottomrule
     \end{tabular}
-    \caption{Number of formulas that \cadical, \prelearn and \tool solve, divided between 0-10k clause and 10k-20M clause formulas, and SAT and UNSAT formulas. For \prelearn and \tool we include the number of benchmarks with \pr clauses learnt, more than $50$ \pr clauses learnt, improved on \cadical by 5\% or more; and solved that \cadical did not solve.}
     \label{tab:solver-stats}
   \end{table}
 
@@ -446,6 +447,8 @@ benchmarks:
 
 \begin{table}[h]
     \centering
+    \captionsetup{position=above}
+    \caption{Overview of benchmark families used in evaluation}
     \begin{tabular}{lll}
         \hline
         Benchmark Family & Number of Clauses  & \tool \# \pr  \\
@@ -459,7 +462,7 @@ benchmarks:
         test\_configuration & 31K-64K & 0-0 \\
         \hline
     \end{tabular}
-    \caption{Overview of benchmark families used in evaluation}
+    
     \label{tab:benchmark-families}
 \end{table}
 
