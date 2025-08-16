@@ -21,10 +21,9 @@ x_{i, j}$ for each $1 \leq i \leq n+1$ and (2) as $\overline{x}_{i, j} \lor
 represent the pigeons and the columns represent the holes. The cell in row $i$
 and column $j$ represents the literal $x_{i, j}$.
 % i.e. whether the $i$-th pigeon is in the $j$-th hole.
-A $+$ in the $(i, j)$-th cell indicates that $x_{i, j}$ is set to true, and a
-$-$ symbol indicates falsehood. Thus, constraint (1) asks that each row has at
-least one $+$ cell and constraint (2) asks that at most one $+$ cell share a
-column.
+A $+$ in the $(i, j)$-th cell indicates that $x_{i, j}$ is set to $\top$, and a
+$-$ symbol indicates $\bot$. Thus, constraint (1) asks that each row has at
+least one $+$ and constraint (2) asks that each column has at most one $+$.
 
 % We only consider the case where $m = n + 1$ which we denote \ph{n}. 
 We achieve an $O(n^3)$ \pr proof for \ph{n}, matching the best known

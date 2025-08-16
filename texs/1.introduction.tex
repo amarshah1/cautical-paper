@@ -37,7 +37,7 @@ potential solution space, such as clauses that break symmetries.
 
 The power of this technique is tied to the strength of the underlying proof
 system. A more powerful proof system can admit shorter proofs, which can be
-found and checked quicker. Most SAT solvers rely on resolution-based proof
+found and checked faster. Most SAT solvers rely on resolution-based proof
 systems, which are ineffective for many hard instances. Consider the pigeonhole
 principle (PHP), which asks if it is possible to fit $n+1$ pigeons into $n$
 holes with at most one pigeon per hole. With a linear number of \pr reasoning
@@ -47,11 +47,11 @@ in hole 1}. Adding this clause restricts the search space for the first pigeon
 with all holes. 
 
 It is difficult to perform similar reasoning compactly with resolution, and in
-fact, PHP is known to require exponentially large resolution
+fact, PHP requires exponentially large resolution
 proofs~\cite{hakenpigeonhole}. Proof systems
 based on \pr clauses, however, have short proofs for such problems, including a
-cubic proof (in the number of pigeons) for PHP~\cite{prclauses}. PHP is especially
-important as it occurs frequently as a subproblem for many different SAT benchmarks.
+cubic proof (in the number of pigeons) for PHP~\cite{prclauses}. PHP frequently occurs
+as a subproblem for SAT benchmarks, so it is important to be able to solve it efficiently.
 
 The theoretical power of \pr learning comes at a cost, and efficiently learning
 useful \pr clauses is a challenge. State-of-the-art techniques such as
@@ -69,7 +69,7 @@ such as \cadical~\cite{cadical}, \kissat~\cite{kissat},
 
 % todo : should we explain what conditional autarkies are? or go more into depth
 % about globally blocked clauses?
-In this work, we propose a new, more efficient approach to learn \pr clauses
+In this work, we propose a new, efficient approach to learn \pr clauses
 based on conditional autarkies. Intuitively, a conditional autarky provides a
 way to force the value of certain variables given a set of assumptions, e.g., in
 PHP if pigeons $3 $ to $ n+1$ are not in hole $1$ or hole $2$ (see \autoref{subfig:pigeonholeclause-c}
@@ -87,7 +87,7 @@ will use conditional autarkies to construct and add \pr clauses.
 %linear time.
 
 While conditional autarkies present a means for bridging the theoretical gap in
-identifying \pr clauses, the \pr clauses they produce are not immediately useful
+identifying \pr clauses, the \pr clauses they produce are often not immediately useful
 in real SAT solving applications. There are two major practical limitations: (1)
 larger \pr clauses may not meaningfully constrain the search space, and (2) some
 smaller \pr clauses may be trivial and distract the solver. We solve (1) by
@@ -102,15 +102,15 @@ pigeon $2$ in hole $1$.
 % Integrating \pr clause learning into a SAT solver is still an active area of
 % study
 
-To summarize, we make the following contributions: 
+We make the following contributions: 
 
 \begin{enumerate} 
-    \item We introduce a method for learning \pr clauses in linear time in the
+    \item We introduce a method for learning \pr clauses in linear time relative to the
     size of the formula. 
-    \item We develop a number of shrinking and filtering heuristics, to learn
+    \item We develop a number of shrinking and filtering heuristics to learn
     concise and useful \pr clauses.% from conditional autarkies.. 
     \item We implement these techniques in a solver, \tool\footnote{\tool's code
     is available at \url{https://github.com/amarshah10/cautical}.} (a fork of
-    the state-of-the-art SAT solver \cadical), and evaluate it on pigeonhole 
-    principle benchmarks and a suite of benchmarks from the annual SAT competitions.
+    the state-of-the-art SAT solver \cadical), and evaluate it on both PHP benchmarks 
+    and a suite of benchmarks from the annual SAT competitions.
 \end{enumerate}

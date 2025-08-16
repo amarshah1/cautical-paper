@@ -13,17 +13,17 @@ formulas $\formula$ are in CNF.
 
 We use $var(\formula)$ to represent the set of variables occurring in formula
 $\formula$. An assignment $\alpha : V \rightarrow \{\top, \bot\}$ on
-$\formula$ maps variables $V \subseteq var(\formula)$ to \emph{true} or \emph{false}. If $V =
-var(\formula)$, then $\alpha$ is a total assignment. Often, an assignment that 
+$\formula$ maps variables $V \subseteq var(\formula)$ to $\top$ or $\bot$. If $V =
+var(\formula)$, then $\alpha$ is a total assignment. An assignment that 
 is not total is called a \emph{partial assignment}. For this paper, assignment 
-refers to both total and partial assignments. We abuse notation, to
+refers to both total and partial assignments. We abuse notation to
 extend $\alpha$ to literals, by denoting $\alpha(l) = \alpha(x)$
 if $l = x$ and $\alpha(l) = \neg \alpha(x)$ if $l = \overline{x}$.
 
 A formula restricted to an assignment $\formula|_\alpha$ is the formula
 resulting from mapping variables in the domain of $\alpha$ to their assignments.
-We can simplify such a formula by removing \emph{literals} assigned false and
-\emph{clauses} containing a literal assigned true (which are thus satisfied). For
+We can simplify such a formula by removing \emph{literals} assigned $\bot$ and
+\emph{clauses} containing a literal assigned $\top$ (which are thus satisfied). For
 example, with formula $\formula = (x_1 \lor \overline{x}_4 \lor x_6) \land (x_2
 \lor x_3) \land \overline{x}_5$ and assignment $\alpha$ mapping $x_1$ to $\bot$
 and $x_2$ to $\top$, we have $\formula|_\alpha = (\overline{x}_4 \lor x_6) \land
@@ -53,9 +53,9 @@ clause $\bot$ is a proof of unsatisfiability for formula $\formula$.
 % However, when solving, we do not know whether $\formula$ is satisfiable a
 % priori. Clausal proof systems can justify that a clause is redundant.
 
-Adding redundant clauses may be helpful to a solver if they greatly constrain
-the set of possible solutions, giving the solver less area to search; however,
-the addition of these clauses could negatively interact with solver heuristics,
+Adding a redundant clause may help a solver by greatly constraining the set of possible solutions,
+which gives the solver a smaller solution space to search; however,
+the addition of these clauses could also negatively interact with solver heuristics,
 increasing solve time.
 
 % \subsection{Reasoning Steps}~\label{subsec:reasoning-steps}
@@ -105,7 +105,7 @@ $\formula \impunit C$, read as ``$\formula$ implies $C$ via unit propagation,''
 if $\formula \land \overline{C} \equiv \formula \land \overline{l}_1 \land \dots
 \land \overline{l}_k$ derives a conflict after applying unit propagation. 
 Here, $C$ is a \emph{reverse unit propagation (RUP)}
-clause, a simple example of a redundant clause w.r.t. $\formula$. For some formula
+clause, a simple example of a redundant clause with respect to $\formula$. For some formula
 $\formula'$, we say $\formula \impunit \formula'$ if $\formula \impunit C$ for every 
 clause $C \in \formula'$.
 
@@ -137,7 +137,7 @@ $$
 \end{definition}
 
 
-Or more informally, a clause $C$ is $\pr$ if every assignment that satisfies
+Informally, a clause $C$ is $\pr$ if every assignment that satisfies
 $\formula$ but falsifies $C$ can be turned into an assignment that satisfies
 $\formula \land C$. While this property can be validated in polynomial time
 (by unit propagation), checking if a clause is \pr
@@ -346,7 +346,6 @@ implementation \tool to \sadical and \prelearn in \autoref{sec:evaluation}.
 
 Kiesl et al.~\cite{conditionalautarkies} first introduced conditional autarkies
 to identify a class of \pr clauses known as globally blocked clauses. They aimed
-to eliminate globally blocked clauses from a formula. This technique allowed
-them to simulate circuit-simplification techniques. Our work differs from this
-as we add clauses instead of removing them.
+to eliminate globally blocked clauses from a formula
+to simulate circuit-simplification techniques. Our work adds clauses instead of removing them.
 
